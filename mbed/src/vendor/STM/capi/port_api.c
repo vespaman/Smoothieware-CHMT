@@ -1,6 +1,6 @@
 /* mbed Microcontroller Library
  *******************************************************************************
- * Copyright (c) 2016, STMicroelectronics
+ * Copyright (c) 2014, STMicroelectronics
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,7 +34,7 @@
 
 #if DEVICE_PORTIN || DEVICE_PORTOUT
 
-extern GPIO_TypeDef *Set_GPIO_Clock(uint32_t port_idx);
+extern uint32_t Set_GPIO_Clock(uint32_t port_idx);
 
 // high nibble = port number (0=A, 1=B, 2=C, 3=D, 4=E, 5=F, ...)
 // low nibble  = pin number
@@ -48,7 +48,8 @@ void port_init(port_t *obj, PortName port, int mask, PinDirection dir)
     uint32_t port_index = (uint32_t)port;
 
     // Enable GPIO clock
-    GPIO_TypeDef *gpio =  Set_GPIO_Clock(port_index);
+    uint32_t gpio_add = Set_GPIO_Clock(port_index);
+    GPIO_TypeDef *gpio = (GPIO_TypeDef *)gpio_add;
 
     // Fill PORT object structure for future use
     obj->port      = port;

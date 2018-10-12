@@ -37,9 +37,7 @@ extern "C" {
 #endif
 
 typedef enum {
-    ADC_1 = (int)ADC1_BASE,
-    ADC_2 = (int)ADC2_BASE,
-    ADC_3 = (int)ADC3_BASE
+    ADC_1 = (int)ADC1_BASE
 } ADCName;
 
 typedef enum {
@@ -55,6 +53,10 @@ typedef enum {
     UART_5 = (int)UART5_BASE,
     UART_6 = (int)USART6_BASE,
 } UARTName;
+
+#define STDIO_UART_TX  PA_2
+#define STDIO_UART_RX  PA_3
+#define STDIO_UART     UART_2
 
 typedef enum {
     SPI_1 = (int)SPI1_BASE,
@@ -82,11 +84,6 @@ typedef enum {
     PWM_13 = (int)TIM13_BASE,
     PWM_14 = (int)TIM14_BASE
 } PWMName;
-
-typedef enum {
-    CAN_1 = (int)CAN1_BASE,
-    CAN_2 = (int)CAN2_BASE
-} CANName;
 
 #ifdef __cplusplus
 }

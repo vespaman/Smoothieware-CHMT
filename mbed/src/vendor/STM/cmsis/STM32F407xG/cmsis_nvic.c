@@ -1,6 +1,7 @@
 /* mbed Microcontroller Library
+ * CMSIS-style functionality to support dynamic vectors
  *******************************************************************************
- * Copyright (c) 2017, STMicroelectronics
+ * Copyright (c) 2014, STMicroelectronics
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -26,32 +27,29 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************
- */
-#ifndef MBED_PWMOUT_DEVICE_H
-#define MBED_PWMOUT_DEVICE_H
+ */ 
+#include "cmsis_nvic.h"
 
-#include "cmsis.h"
+#define NVIC_RAM_VECTOR_ADDRESS   (0x20000000)  // Vectors positioned at start of RAM
+#define NVIC_FLASH_VECTOR_ADDRESS (0x08000000)  // Initial vector position in flash
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+void NVIC_SetVector(IRQn_Type IRQn, uint32_t vector) {
+    uint32_t *vectors = (uint32_t *)SCB->VTOR;
+    uint32_t i;
 
-#ifdef DEVICE_PWMOUT
+    // Copy and switch to dynamic vectors if the first time called
+    if (SCB->VTOR == NVIC_FLASH_VECTOR_ADDRESS) {
+        uint32_t *old_vectors = vectors;
+        vectors = (uint32_t*)NVIC_RAM_VECTOR_ADDRESS;
+        for (i=0; i<NVIC_NUM_VECTORS; i++) {
+            vectors[i] = old_vectors[i];
+        }
+        SCB->VTOR = (uint32_t)NVIC_RAM_VECTOR_ADDRESS;
+    }
+    vectors[IRQn + NVIC_USER_IRQ_OFFSET] = vector;
+}
 
-typedef enum {
-    PWMOUT_ON_APB1 = 0,
-    PWMOUT_ON_APB2 = 1,
-    PWMOUT_UNKNOWN = 2
-} PwmoutApb;
-
-/*  Structure to describe Timers to APB */
-typedef struct pwm_apb_map {
-    PWMName pwm;   // an index entry for each EXIT line
-    PwmoutApb pwmoutApb;
-} pwm_apb_map_t;
-
-extern const pwm_apb_map_t pwm_apb_map_table[];
-
-#endif // DEVICE_PWMOUT
-
-#endif
+uint32_t NVIC_GetVector(IRQn_Type IRQn) {
+    uint32_t *vectors = (uint32_t*)SCB->VTOR;
+    return vectors[IRQn + NVIC_USER_IRQ_OFFSET];
+}
