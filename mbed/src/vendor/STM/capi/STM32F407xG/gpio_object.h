@@ -1,8 +1,6 @@
-// The 'features' section in 'target.json' is now used to create the device's hardware preprocessor switches.
-// Check the 'features' section of the target description in 'targets.json' for more details.
 /* mbed Microcontroller Library
  *******************************************************************************
- * Copyright (c) 2014, STMicroelectronics
+ * Copyright (c) 2016, STMicroelectronics
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,14 +27,60 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *******************************************************************************
  */
-#ifndef MBED_DEVICE_H
-#define MBED_DEVICE_H
+#ifndef MBED_GPIO_OBJECT_H
+#define MBED_GPIO_OBJECT_H
 
-//=======================================
-#define DEVICE_ID_LENGTH       24
+#include "mbed_assert.h"
+#include "cmsis.h"
+#include "PortNames.h"
+#include "PeripheralNames.h"
+#include "PinNames.h"
 
-#include "objects.h"
-/*  WORKAROUND waiting for mbed-os issue 4408 to be addressed */
-#include "stm32f4xx_ll_usart.h"
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/*
+ * Note: reg_clr might actually be same as reg_set.
+ * Depends on family whether BRR is available on top of BSRR
+ * if BRR does not exist, family shall define GPIO_IP_WITHOUT_BRR
+ */
+typedef struct {
+    uint32_t mask;
+    __IO uint32_t *reg_in;
+    __IO uint32_t *reg_set;
+    __IO uint32_t *reg_clr;
+    PinName  pin;
+    GPIO_TypeDef *gpio;
+    uint32_t ll_pin;
+} gpio_t;
+
+static inline void gpio_write(gpio_t *obj, int value)
+{
+    if (value) {
+        *obj->reg_set = obj->mask;
+    } else {
+#ifdef GPIO_IP_WITHOUT_BRR
+        *obj->reg_clr = obj->mask << 16;
+#else
+        *obj->reg_clr = obj->mask;
+#endif
+    }
+}
+
+static inline int gpio_read(gpio_t *obj)
+{
+    return ((*obj->reg_in & obj->mask) ? 1 : 0);
+}
+
+static inline int gpio_is_connected(const gpio_t *obj)
+{
+    return obj->pin != (PinName)NC;
+}
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
