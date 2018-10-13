@@ -29,13 +29,13 @@ class Pin {
 
         inline Pin* as_output(){
             if (this->valid)
-                this->port->FIODIR |= 1<<this->pin;
+                this->port->MODER = (this->port->MODER & ~(0x3<<(2*this->pin))) | (0x1<<(2*this->pin));
             return this;
         }
 
         inline Pin* as_input(){
             if (this->valid)
-                this->port->FIODIR &= ~(1<<this->pin);
+                this->port->MODER &= ~(0x3<<(2*this->pin));
             return this;
         }
 
@@ -51,16 +51,16 @@ class Pin {
 
         inline bool get() const{
             if (!this->valid) return false;
-            return this->inverting ^ (( this->port->FIOPIN >> this->pin ) & 1);
+            return this->inverting ^ (( this->port->IDR >> this->pin ) & 1);
         }
 
         inline void set(bool value)
         {
             if (!this->valid) return;
             if ( this->inverting ^ value )
-                this->port->FIOSET = 1 << this->pin;
+                this->port->BSRR = 1 << this->pin;
             else
-                this->port->FIOCLR = 1 << this->pin;
+                this->port->BSRR = (1 << 16) << this->pin;
         }
 
         mbed::PwmOut *hardware_pwm();
@@ -71,7 +71,7 @@ class Pin {
         void set_inverting(bool f) { inverting= f; }
 
         // these should be private, and use getters
-        LPC_GPIO_TypeDef* port;
+        GPIO_TypeDef* port;
 
         unsigned char pin;
         char port_number;
