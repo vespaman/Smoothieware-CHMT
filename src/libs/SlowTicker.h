@@ -14,7 +14,8 @@
 #include "libs/Hook.h"
 #include "libs/Pin.h"
 
-#include "system_LPC17xx.h" // for SystemCoreClock
+//#include "system_LPC17xx.h" // for SystemCoreClock
+#include "system_stm32f4xx.h"
 #include <math.h>
 
 class SlowTicker : public Module{

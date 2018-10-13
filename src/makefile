@@ -1,6 +1,6 @@
 PROJECT=main
 BUILD_DIR=../build
-DEVICES=lpc1768
+DEVICES=stm32f407xg
 
 # BUILD_TYPE can be set to the following values:
 #  Checked - Optimizations enabled with MRI debug monitor support. (Recommended Type)
@@ -61,7 +61,7 @@ endif
 # include an optional default set of excludes
 # add any modules that you do not want included in the build
 # e.g for a CNC machine
-#export EXCLUDE_MODULES = tools/laser tools/temperaturecontrol tools/extruder
+export EXCLUDE_MODULES = tools/laser tools/temperaturecontrol tools/drillingcycles tools/filamentdetector tools/rotarydeltacalibration tools/scaracal tools/spindle tools/zprobe
 -include default_excludes.mk
 
 # override any default excludes by setting NODEFAULTEXCLUDES=1
@@ -101,7 +101,7 @@ DEFINES += -DN_PRIMARY_AXIS=$(PAXIS)
 endif
 
 # set to not compile in any network support
-#export NONETWORK = 1
+export NONETWORK = 1
 
 include $(BUILD_DIR)/build.mk
 
