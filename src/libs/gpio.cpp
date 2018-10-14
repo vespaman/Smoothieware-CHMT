@@ -1,8 +1,5 @@
 #include "gpio.h"
 
-//#include "LPC17xx.h"
-//#include "lpc17xx_pinsel.h"
-//#include "lpc17xx_gpio.h"
 #include "stm32f4xx.h"
 
 static GPIO_TypeDef* const gpios[] = {GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF, GPIOG, GPIOH, GPIOI};
