@@ -9,7 +9,7 @@
 extern "C" {
     static GPIO_TypeDef* const gpios[] = {GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF, GPIOG, GPIOH, GPIOI};
 
-    #define GPIO_PORT_COUNT     (sizeof(gpios)/sizeof(gpios[0]))
+    #define GPIO_PORT_COUNT     ((int)(sizeof(gpios)/sizeof(gpios[0])))
     #define GPIO_PIN_MAX        16
 
     static uint32_t _set_high_on_debug[GPIO_PORT_COUNT] = {
