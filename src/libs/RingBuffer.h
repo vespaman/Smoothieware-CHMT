@@ -32,6 +32,7 @@ template<class kind, int length> class RingBuffer {
 };
 
 //#include "sLPC17xx.h"
+#include "cmsis.h"
 
 template<class kind, int length> RingBuffer<kind, length>::RingBuffer(){
     this->tail = this->head = 0;
