@@ -54,6 +54,7 @@
 #include "ToolManager.h"
 
 #include "libs/Watchdog.h"
+#include "libs/gpio.h"
 
 #include "version.h"
 //#include "system_LPC17xx.h"
@@ -82,18 +83,18 @@
 
 //SDFAT mounter __attribute__ ((section ("AHBSRAM0"))) ("sd", &sd);
 
-GPIO leds[5] = {
-    GPIO(P1_18),
-    GPIO(P1_19),
-    GPIO(P1_20),
-    GPIO(P1_21),
-    GPIO(P4_28)
+GPIO leds[] = {
+    GPIO(PA_0),
+//    GPIO(P1_19),
+//    GPIO(P1_20),
+//    GPIO(P1_21),
+//    GPIO(P4_28)
 };
 
 void init() {
 
     // Default pins to low status
-    for (int i = 0; i < 5; i++){
+    for (uint8_t i = 0; i < sizeof(leds)/sizeof(leds[0]); i++){
         leds[i].output();
         leds[i]= 0;
     }
@@ -267,7 +268,7 @@ int main()
     while(1){
         if(THEKERNEL->is_using_leds()) {
             // flash led 2 to show we are alive
-            leds[1]= (cnt++ & 0x1000) ? 1 : 0;
+            leds[0]= (cnt++ & 0x1000) ? 1 : 0;
         }
         THEKERNEL->call_event(ON_MAIN_LOOP);
         THEKERNEL->call_event(ON_IDLE);

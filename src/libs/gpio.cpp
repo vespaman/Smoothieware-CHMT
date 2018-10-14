@@ -1,12 +1,12 @@
 #include "gpio.h"
 
-#include "LPC17xx.h"
-#include "lpc17xx_pinsel.h"
-#include "lpc17xx_gpio.h"
+//#include "LPC17xx.h"
+//#include "lpc17xx_pinsel.h"
+//#include "lpc17xx_gpio.h"
 
 GPIO::GPIO(PinName pin) {
-    this->port = (pin >> 5) & 7;
-    this->pin = pin & 0x1F;
+    this->port = STM_PORT(pin);
+    this->pin = STM_PIN(pin);
 
     setup();
 }
