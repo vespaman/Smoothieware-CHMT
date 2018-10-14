@@ -41,8 +41,8 @@
 #include "utils.h"
 #include "AutoPushPop.h"
 
-#include "system_LPC17xx.h"
-#include "LPC17xx.h"
+//#include "system_LPC17xx.h"
+//#include "LPC17xx.h"
 
 #include "mbed.h" // for wait_ms()
 
