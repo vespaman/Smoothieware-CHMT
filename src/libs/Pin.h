@@ -74,8 +74,8 @@ class Pin {
         // these should be private, and use getters
         GPIO_TypeDef* port;
 
-        unsigned char pin;
-        char port_number;
+        uint8_t pin;
+        uint8_t port_number;
 
     private:
         struct {
