@@ -3,7 +3,9 @@ MEMORY
 { 
   FLASH (rx) : ORIGIN = 0x08000000, LENGTH = 1024K
   CCM (rwx) : ORIGIN = 0x10000000, LENGTH = 64K
-  RAM (rwx) : ORIGIN = 0x20000188, LENGTH = 128k - 0x188 
+  RAM (rwx) : ORIGIN = 0x20000188, LENGTH = 96K - 0x188 
+  SRAM1 (rwx) : ORIGIN = 0x20018000, LENGTH = 16K
+  SRAM2 (rwx) : ORIGIN = 0x2001C000, LENGTH = 16K
 }
 
 /* Linker script to place sections and symbol values. Should be used together
@@ -153,4 +155,28 @@ SECTIONS
 
     /* Check if data + heap + stack exceeds RAM limit */
     ASSERT(__StackLimit >= __HeapLimit, "region RAM overflowed with stack")
+
+    /* Code can explicitly ask for data to be 
+       placed in these higher RAM banks where
+       they will be left uninitialized. 
+    */
+    .AHBSRAM0 (NOLOAD):
+    {
+        Image$$RW_IRAM2$$Base = . ;
+        PROVIDE(__AHB0_block_start = .);
+        *(AHBSRAM0)
+        Image$$RW_IRAM2$$ZI$$Limit = .;
+        PROVIDE(__AHB0_dyn_start = .);
+        PROVIDE(__AHB0_end = ORIGIN(SRAM1) + LENGTH(SRAM1));
+    } > SRAM1
+
+    .AHBSRAM1 (NOLOAD):
+    {
+        Image$$RW_IRAM3$$Base = . ;
+        PROVIDE(__AHB1_block_start = .);
+        *(AHBSRAM1)
+        Image$$RW_IRAM3$$ZI$$Limit = .;
+        PROVIDE(__AHB1_dyn_start = .);
+        PROVIDE(__AHB1_end = ORIGIN(SRAM2) + LENGTH(SRAM2));
+    } > SRAM2
 }
