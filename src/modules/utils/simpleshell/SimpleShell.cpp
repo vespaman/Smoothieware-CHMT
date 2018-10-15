@@ -325,12 +325,12 @@ void SimpleShell::ls_command( string parameters, StreamOutput *stream )
     }
 }
 
-extern SDFAT mounter;
+//extern SDFAT mounter; // no SD on chmt
 
 void SimpleShell::remount_command( string parameters, StreamOutput *stream )
 {
-    mounter.remount();
-    stream->printf("remounted\r\n");
+    //mounter.remount();
+    stream->printf("no SD device\r\n");
 }
 
 // Delete a file
