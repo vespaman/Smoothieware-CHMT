@@ -37,10 +37,8 @@ StepTicker::StepTicker()
 
     // Configure the timer
     TIM2->CR1 = TIM_CR1_URS;    // int on overflow
-    TIM2->DIER = TIM_DIER_UIE;  // update interrupt en
 
     TIM5->CR1 = TIM_CR1_URS | TIM_CR1_OPM;  // int on overflow, one-shot mode
-    TIM5->DIER = TIM_DIER_UIE;              // update interrupt en
 
     // Default start values
     this->set_frequency(100000);
@@ -66,9 +64,13 @@ StepTicker::~StepTicker()
 //called when everything is setup and interrupts can start
 void StepTicker::start()
 {
+    TIM2->DIER = TIM_DIER_UIE;     // update interrupt en
+    TIM5->DIER = TIM_DIER_UIE;     // update interrupt en
     NVIC_EnableIRQ(TIM2_IRQn);     // Enable interrupt handler
     NVIC_EnableIRQ(TIM5_IRQn);     // Enable interrupt handler
+
     current_tick= 0;
+    TIM2->CR1 |= TIM_CR1_CEN;      // start step timer
 }
 
 // Set the base stepping frequency
@@ -77,9 +79,7 @@ void StepTicker::set_frequency( float frequency )
     this->frequency = frequency;
     this->period = floorf((SystemCoreClock / 4.0F) / frequency); // SystemCoreClock/4 = Timer increments in a second
 
-    TIM2->CR1 &= ~TIM_CR1_CEN; // disable
     TIM2->ARR = this->period;
-    TIM2->CR1 |= TIM_CR1_CEN;  // start
 }
 
 // Set the reset delay, must be called after set_frequency
