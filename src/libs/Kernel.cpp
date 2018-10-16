@@ -135,8 +135,8 @@ Kernel::Kernel()
     // LPC17xx-specific
     NVIC_SetPriorityGrouping(0);
     NVIC_SetPriority(TIM2_IRQn, 2); // 0
-    NVIC_SetPriority(TIM3_IRQn, 1); // 1
-    NVIC_SetPriority(TIM4_IRQn, 4); // 2
+    NVIC_SetPriority(TIM5_IRQn, 1); // 1
+    NVIC_SetPriority(TIM3_IRQn, 4); // 2
     NVIC_SetPriority(PendSV_IRQn, 3);
 
     // Set other priorities lower than the timers

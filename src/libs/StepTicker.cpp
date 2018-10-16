@@ -16,7 +16,7 @@
 #include "Block.h"
 #include "Conveyor.h"
 
-#include "system_LPC17xx.h" // mbed.h lib
+#include "stm32f407xx.h" // mbed.h lib
 #include <math.h>
 #include <mri.h>
 
@@ -36,18 +36,15 @@ StepTicker::StepTicker()
     instance = this; // setup the Singleton instance of the stepticker
 
     // Configure the timer
-    LPC_TIM0->MR0 = 10000000;       // Initial dummy value for Match Register
-    LPC_TIM0->MCR = 3;              // Match on MR0, reset on MR0
-    LPC_TIM0->TCR = 0;              // Disable interrupt
+    TIM2->CR1 = TIM_CR1_URS;    // int on overflow
+    TIM2->DIER = TIM_DIER_UIE;  // update interrupt en
 
-    LPC_SC->PCONP |= (1 << 2);      // Power Ticker ON
-    LPC_TIM1->MR0 = 1000000;
-    LPC_TIM1->MCR = 5;              // match on Mr0, stop on match
-    LPC_TIM1->TCR = 0;              // Disable interrupt
+    TIM5->CR1 = TIM_CR1_URS | TIM_CR1_OPM;  // int on overflow, one-shot mode
+    TIM5->DIER = TIM_DIER_UIE;              // update interrupt en
 
     // Default start values
     this->set_frequency(100000);
-    this->set_unstep_time(100);
+    this->set_unstep_time(5);
 
     this->unstep.reset();
     this->num_motors = 0;
@@ -69,8 +66,8 @@ StepTicker::~StepTicker()
 //called when everything is setup and interrupts can start
 void StepTicker::start()
 {
-    NVIC_EnableIRQ(TIMER0_IRQn);     // Enable interrupt handler
-    NVIC_EnableIRQ(TIMER1_IRQn);     // Enable interrupt handler
+    NVIC_EnableIRQ(TIM2_IRQn);     // Enable interrupt handler
+    NVIC_EnableIRQ(TIM5_IRQn);     // Enable interrupt handler
     current_tick= 0;
 }
 
@@ -79,16 +76,17 @@ void StepTicker::set_frequency( float frequency )
 {
     this->frequency = frequency;
     this->period = floorf((SystemCoreClock / 4.0F) / frequency); // SystemCoreClock/4 = Timer increments in a second
-    LPC_TIM0->MR0 = this->period;
-    LPC_TIM0->TCR = 3;  // Reset
-    LPC_TIM0->TCR = 1;  // start
+
+    TIM2->CR1 &= ~TIM_CR1_CEN; // disable
+    TIM2->ARR = this->period;
+    TIM2->CR1 |= TIM_CR1_CEN;  // start
 }
 
 // Set the reset delay, must be called after set_frequency
 void StepTicker::set_unstep_time( float microseconds )
 {
     uint32_t delay = floorf((SystemCoreClock / 4.0F) * (microseconds / 1000000.0F)); // SystemCoreClock/4 = Timer increments in a second
-    LPC_TIM1->MR0 = delay;
+    TIM5->ARR = delay;
 
     // TODO check that the unstep time is less than the step period, if not slow down step ticker
 }
@@ -104,17 +102,17 @@ void StepTicker::unstep_tick()
     this->unstep.reset();
 }
 
-extern "C" void TIMER1_IRQHandler (void)
+extern "C" void TIM5_IRQHandler (void)
 {
-    LPC_TIM1->IR |= 1 << 0;
+    TIM5->SR = ~TIM_SR_UIF;
     StepTicker::getInstance()->unstep_tick();
 }
 
 // The actual interrupt handler where we do all the work
-extern "C" void TIMER0_IRQHandler (void)
+extern "C" void TIM2_IRQHandler (void)
 {
     // Reset interrupt register
-    LPC_TIM0->IR |= 1 << 0;
+    TIM2->SR = ~TIM_SR_UIF;
     StepTicker::getInstance()->step_tick();
 }
 
@@ -213,8 +211,8 @@ void StepTicker::step_tick (void)
     // right now it takes about 3-4us but if the unstep were near 10uS or greater it would be an issue
     // also it takes at least 2us to get here so even when set to 1us pulse width it will still be about 3us
     if( unstep.any()) {
-        LPC_TIM1->TCR = 3;
-        LPC_TIM1->TCR = 1;
+        // CEN should have cleared by one-shot mode
+        TIM5->CR1 |= TIM_CR1_CEN;
     }
 
 
