@@ -2,6 +2,10 @@
  * Copyright (c) 2010, sblandford
  * released under MIT license http://mbed.org/licence/mit
  */
+
+#include "stm32f407xx.h"
+#undef ADC
+
 #include "mbed.h"
 #include "adc.h"
 
@@ -11,7 +15,7 @@ ADC *ADC::instance;
 
 ADC::ADC(int sample_rate, int cclk_div)
     {
-
+/*
     int i, adc_clk_freq, pclk, clock_div, max_div=1;
 
     //Work out CCLK
@@ -73,7 +77,6 @@ ADC::ADC(int sample_rate, int cclk_div)
     //Default no channels enabled
     LPC_ADC->ADCR &= ~0xFF;
     //Default NULL global custom isr
-    _adc_g_isr = NULL;
     //Initialize arrays
     for (i=7; i>=0; i--) {
         _adc_data[i] = 0;
@@ -81,12 +84,14 @@ ADC::ADC(int sample_rate, int cclk_div)
     }
 
 
-    //* Attach IRQ
-    instance = this;
+    // Attach IRQ
     NVIC_SetVector(ADC_IRQn, (uint32_t)&_adcisr);
 
     //Disable global interrupt
     LPC_ADC->ADINTEN &= ~0x100;
+*/
+    _adc_g_isr = NULL;
+    instance = this;
 
 };
 
@@ -98,9 +103,9 @@ void ADC::_adcisr(void)
 
 void ADC::adcisr(void)
 {
-    uint32_t stat;
-    int chan;
-
+//    uint32_t stat;
+    int chan = 0;
+/*
     // Read status
     stat = LPC_ADC->ADSTAT;
     //Scan channels for over-run or done and update array
@@ -115,6 +120,7 @@ void ADC::adcisr(void)
 
     // Channel that triggered interrupt
     chan = (LPC_ADC->ADGDR >> 24) & 0x07;
+*/
     //User defined interrupt handlers
     if (_adc_isr[chan] != NULL)
         _adc_isr[chan](_adc_data[chan]);
@@ -126,11 +132,11 @@ void ADC::adcisr(void)
 int ADC::_pin_to_channel(PinName pin) {
     int chan;
     switch (pin) {
-        case p15://=p0.23 of LPC1768
+        //case p15://=p0.23 of LPC1768
         default:
             chan=0;
             break;
-        case p16://=p0.24 of LPC1768
+/*        case p16://=p0.24 of LPC1768
             chan=1;
             break;
         case p17://=p0.25 of LPC1768
@@ -145,32 +151,34 @@ int ADC::_pin_to_channel(PinName pin) {
         case p20://=p1.31 of LPC1768
             chan=5;
             break;
-    }
+*/    }
     return(chan);
 }
 
 PinName ADC::channel_to_pin(int chan) {
-    const PinName pin[8]={p15, p16, p17, p18, p19, p20, p15, p15};
+/*    const PinName pin[8]={p15, p16, p17, p18, p19, p20, p15, p15};
 
     if ((chan < 0) || (chan > 5))
         fprintf(stderr, "ADC channel %u is outside range available to MBED pins.\n", chan);
-    return(pin[chan & 0x07]);
+*/
+    return PA_0;// (pin[chan & 0x07]);
 }
 
 
 int ADC::channel_to_pin_number(int chan) {
-    const int pin[8]={15, 16, 17, 18, 19, 20, 0, 0};
+/*    const int pin[8]={15, 16, 17, 18, 19, 20, 0, 0};
 
     if ((chan < 0) || (chan > 5))
         fprintf(stderr, "ADC channel %u is outside range available to MBED pins.\n", chan);
-    return(pin[chan & 0x07]);
+        */
+    return 0; //(pin[chan & 0x07]);
 }
 
 
 uint32_t ADC::_data_of_pin(PinName pin) {
     //If in burst mode and at least one interrupt enabled then
     //take all values from _adc_data
-    if (burst() && (LPC_ADC->ADINTEN & 0x3F)) {
+/*    if (burst() && (LPC_ADC->ADINTEN & 0x3F)) {
         return(_adc_data[_pin_to_channel(pin)]);
     } else {
         //Return current register value or last value from interrupt
@@ -189,14 +197,16 @@ uint32_t ADC::_data_of_pin(PinName pin) {
             case p20://=p1.31 of LPC1768
                 return(LPC_ADC->ADINTEN & 0x20?_adc_data[5]:LPC_ADC->ADDR5);
         }
-    }
+    }*/
+    return 0;
 }
 
 //Enable or disable an ADC pin
 void ADC::setup(PinName pin, int state) {
-    int chan;
-    chan=_pin_to_channel(pin);
+//    int chan = 0;
+//    chan=_pin_to_channel(pin);
     if ((state & 1) == 1) {
+    /*
         switch(pin) {
             case p15://=p0.23 of LPC1768
             default:
@@ -240,8 +250,10 @@ void ADC::setup(PinName pin, int state) {
         if (!burst()) LPC_ADC->ADCR &= ~0xFF;
         //Select channel
         LPC_ADC->ADCR |= (1 << chan);
+        */
     }
     else {
+    /*
         switch(pin) {
             case p15://=p0.23 of LPC1768
             default:
@@ -270,29 +282,32 @@ void ADC::setup(PinName pin, int state) {
                 break;
         }
         LPC_ADC->ADCR &= ~(1 << chan);
+        */
     }
 }
 //Return channel enabled/disabled state
 int ADC::setup(PinName pin) {
-    int chan;
+    //int chan;
 
-    chan = _pin_to_channel(pin);
-    return((LPC_ADC->ADCR & (1 << chan)) >> chan);
+    //chan = _pin_to_channel(pin);
+    return 0; //((LPC_ADC->ADCR & (1 << chan)) >> chan);
 }
 
 //Select channel already setup
 void ADC::select(PinName pin) {
-    int chan;
+    //int chan;
 
     //Only one channel can be selected at a time if not in burst mode
-    if (!burst()) LPC_ADC->ADCR &= ~0xFF;
+/*    if (!burst()) LPC_ADC->ADCR &= ~0xFF;
     //Select channel
     chan = _pin_to_channel(pin);
     LPC_ADC->ADCR |= (1 << chan);
+*/
 }
 
 //Enable or disable burst mode
 void ADC::burst(int state) {
+/*
     if ((state & 1) == 1) {
         if (startmode(0) != 0)
             fprintf(stderr, "ADC Warning. startmode is %u. Must be 0 for burst mode.\n", startmode(0));
@@ -300,25 +315,28 @@ void ADC::burst(int state) {
     }
     else
         LPC_ADC->ADCR &= ~(1 << 16);
+*/
 }
 //Return burst mode state
 int  ADC::burst(void) {
-    return((LPC_ADC->ADCR & (1 << 16)) >> 16);
+    return 0; //((LPC_ADC->ADCR & (1 << 16)) >> 16);
 }
 
 //Set startmode and edge
 void ADC::startmode(int mode, int edge) {
-    int lpc_adc_temp;
+/*    int lpc_adc_temp;
 
     //Reset start mode and edge bit,
     lpc_adc_temp = LPC_ADC->ADCR & ~(0x0F << 24);
     //Write with new values
     lpc_adc_temp |= ((mode & 7) << 24) | ((edge & 1) << 27);
     LPC_ADC->ADCR = lpc_adc_temp;
+    */
 }
 
 //Return startmode state according to mode_edge=0: mode and mode_edge=1: edge
 int ADC::startmode(int mode_edge){
+/*
     switch (mode_edge) {
         case 0:
         default:
@@ -326,6 +344,8 @@ int ADC::startmode(int mode_edge){
         case 1:
             return((LPC_ADC->ADCR >> 27) & 0x01);
     }
+    */
+    return 0;
 }
 
 //Start ADC conversion
@@ -336,13 +356,13 @@ void ADC::start(void) {
 
 //Set interrupt enable/disable for pin to state
 void ADC::interrupt_state(PinName pin, int state) {
-    int chan;
+/*    int chan;
 
     chan = _pin_to_channel(pin);
     if (state == 1) {
         LPC_ADC->ADINTEN &= ~0x100;
         LPC_ADC->ADINTEN |= 1 << chan;
-        /* Enable the ADC Interrupt */
+        // Enable the ADC Interrupt
         NVIC_EnableIRQ(ADC_IRQn);
     } else {
         LPC_ADC->ADINTEN &= ~( 1 << chan );
@@ -350,14 +370,15 @@ void ADC::interrupt_state(PinName pin, int state) {
         if ((LPC_ADC->ADINTEN & 0xFF) == 0)
             NVIC_DisableIRQ(ADC_IRQn);
     }
+    */
 }
 
 //Return enable/disable state of interrupt for pin
 int ADC::interrupt_state(PinName pin) {
-    int chan;
+//    int chan;
 
-    chan = _pin_to_channel(pin);
-    return((LPC_ADC->ADINTEN >> chan) & 0x01);
+//    chan = _pin_to_channel(pin);
+    return 0; //((LPC_ADC->ADINTEN >> chan) & 0x01);
 }
 
 
@@ -403,13 +424,13 @@ void ADC::unappend() {
 
 //Set ADC offset
 void ADC::offset(int offset) {
-    LPC_ADC->ADTRM &= ~(0x07 << 4);
-    LPC_ADC->ADTRM |= (offset & 0x07) << 4;
+//    LPC_ADC->ADTRM &= ~(0x07 << 4);
+//    LPC_ADC->ADTRM |= (offset & 0x07) << 4;
 }
 
 //Return current ADC offset
 int ADC::offset(void) {
-    return((LPC_ADC->ADTRM >> 4) & 0x07);
+    return 0; //((LPC_ADC->ADTRM >> 4) & 0x07);
 }
 
 //Return value of ADC on pin
