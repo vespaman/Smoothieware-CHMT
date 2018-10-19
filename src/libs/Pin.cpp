@@ -7,6 +7,8 @@
 #include "PinNames.h"
 #include "port_api.h"
 
+extern "C" uint32_t Set_GPIO_Clock(uint32_t);
+
 static GPIO_TypeDef* const gpios[] = {GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF, GPIOG, GPIOH, GPIOI};
 
 Pin::Pin(){
@@ -33,6 +35,8 @@ Pin* Pin::from_string(std::string value){
     this->port_number = strtol(cs, &cn, 10);
     // if cn > cs then strtol read at least one digit
     if ((cn > cs) && (port_number < (sizeof(gpios)/sizeof(gpios[0])))){
+        Set_GPIO_Clock(port_number); // enable clock domain
+
         // translate port index into something useful
         this->port = gpios[(unsigned int) this->port_number];
         // if the char after the first integer is a . then we should expect a pin index next

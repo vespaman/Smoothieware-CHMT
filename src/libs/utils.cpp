@@ -145,13 +145,14 @@ string get_arguments( const string& possible_command )
 // Returns true if the file exists
 bool file_exists( const string file_name )
 {
-    bool exists = false;
+    return false; // hopefully this pre-empts all fs related calls
+/*    bool exists = false;
     FILE *lp = fopen(file_name.c_str(), "r");
     if(lp) {
         exists = true;
     }
     fclose(lp);
-    return exists;
+    return exists; */
 }
 
 // Prepares and executes a watchdog reset for dfu or reboot
