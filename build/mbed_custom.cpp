@@ -64,8 +64,8 @@ extern "C" void _start(void)
             __debugbreak();
     }
 
+    SetSysClock();
     mbed_sdk_init();
-
 
     // MemoryPool stuff - needs to be initialised before __libc_init_array
     // so static ctors can use them
