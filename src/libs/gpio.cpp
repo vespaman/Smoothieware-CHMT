@@ -2,6 +2,8 @@
 
 #include "stm32f4xx.h"
 
+extern "C" uint32_t Set_GPIO_Clock(uint32_t);
+
 static GPIO_TypeDef* const gpios[] = {GPIOA, GPIOB, GPIOC, GPIOD, GPIOE, GPIOF, GPIOG, GPIOH, GPIOI};
 
 GPIO::GPIO(PinName pin) {
@@ -29,6 +31,8 @@ GPIO::GPIO(uint8_t port, uint8_t pin, uint8_t direction) {
 // GPIO::~GPIO() {}
 
 void GPIO::setup() {
+    Set_GPIO_Clock(port);
+
     gpios[port]->OTYPER &= ~(1 << pin);
     gpios[port]->PUPDR &= ~(0x3 << (2*pin));
 }
