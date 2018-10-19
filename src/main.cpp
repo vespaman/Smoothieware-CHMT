@@ -85,6 +85,7 @@
 
 GPIO leds[] = {
     GPIO(PB_7),
+    GPIO(PB_14),
 //    GPIO(P1_19),
 //    GPIO(P1_20),
 //    GPIO(P1_21),
