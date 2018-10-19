@@ -29,6 +29,7 @@ SlowTicker::SlowTicker(){
     // ISP button FIXME: WHy is this here?
     ispbtn.from_string("2.10")->as_input()->pull_up();
 
+    __TIM3_CLK_ENABLE();
     TIM3->CR1 = TIM_CR1_URS;    // int on overflow
 
     max_frequency = 5;  // initial max frequency is set to 5Hz

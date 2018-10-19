@@ -36,8 +36,10 @@ StepTicker::StepTicker()
     instance = this; // setup the Singleton instance of the stepticker
 
     // Configure the timer
+    __TIM2_CLK_ENABLE();
     TIM2->CR1 = TIM_CR1_URS;    // int on overflow
 
+    __TIM5_CLK_ENABLE();
     TIM5->CR1 = TIM_CR1_URS | TIM_CR1_OPM;  // int on overflow, one-shot mode
 
     // Default start values
