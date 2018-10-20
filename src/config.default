@@ -9,7 +9,7 @@
 
 # Robot module configurations : general handling of movement G-codes and slicing into moves
 default_feed_rate                            50000            # Default rate ( mm/minute ) for G1/G2/G3 moves
-default_seek_rate                            50000            # Default rate ( mm/minute ) for G0 moves
+default_seek_rate                            100000            # Default rate ( mm/minute ) for G0 moves
 
 # Arm solution configuration : Cartesian robot. Translates mm positions into stepper positions
 alpha_steps_per_mm                           53.3886          # Steps per mm for alpha stepper
@@ -29,11 +29,19 @@ junction_deviation                           0                # Similar to the o
 z_junction_deviation                         0.0              # for Z only moves, -1 uses junction_deviation, zero disables junction_deviation on z moves DO NOT SET ON A DELTA
 
 # Stepper module configuration
+<<<<<<< Updated upstream
 microseconds_per_step_pulse                  1                # Duration of step pulses to stepper drivers, in microseconds
 base_stepping_frequency                      100000           # Base frequency for stepping, higher gives smoother movement
 
 # Cartesian axis speed limits
 x_axis_max_speed                             30000            # mm/min
+=======
+microseconds_per_step_pulse                  0.5                # Duration of step pulses to stepper drivers, in microseconds
+base_stepping_frequency                      100000           # Base frequency for stepping, higher gives smoother movement
+
+# Cartesian axis speed limits
+x_axis_max_speed                             100000            # mm/min
+>>>>>>> Stashed changes
 y_axis_max_speed                             15000            # mm/min
 z_axis_max_speed                             10000            # mm/min
 
@@ -42,7 +50,11 @@ alpha_step_pin                               1.8              # Pin for alpha st
 alpha_dir_pin                                1.9!             # Pin for alpha stepper direction
 alpha_en_pin                                 0.5              # Pin for alpha enable pin
 alpha_current                                1.0              # X stepper motor current
+<<<<<<< Updated upstream
 alpha_max_rate                               30000.0          # mm/min
+=======
+alpha_max_rate                               100000.0          # mm/min
+>>>>>>> Stashed changes
 
 beta_step_pin                                0.6              # Pin for beta stepper step signal
 beta_dir_pin                                 0.7!             # Pin for beta stepper direction
