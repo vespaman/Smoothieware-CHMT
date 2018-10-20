@@ -33,6 +33,7 @@ GPIO stepticker_debug_pin(STEPTICKER_DEBUG_PIN);
 
 extern "C" void TIM5_IRQHandler(void);
 extern "C" void TIM4_IRQHandler(void);
+extern "C" void PendSV_Handler(void);
 
 StepTicker *StepTicker::instance;
 
@@ -48,6 +49,8 @@ StepTicker::StepTicker()
     __TIM5_CLK_ENABLE();
     TIM5->CR1 = TIM_CR1_URS | TIM_CR1_OPM;  // int on overflow, one-shot mode
     NVIC_SetVector(TIM5_IRQn, (uint32_t)TIM5_IRQHandler);
+
+    NVIC_SetVector(PendSV_IRQn, (uint32_t)PendSV_Handler);
 
     // Default start values
     this->set_frequency(100000);
@@ -75,8 +78,10 @@ void StepTicker::start()
 {
     TIM4->DIER = TIM_DIER_UIE;     // update interrupt en
     TIM5->DIER = TIM_DIER_UIE;     // update interrupt en
-    NVIC_EnableIRQ(TIM4_IRQn);     // Enable interrupt handler
-    NVIC_EnableIRQ(TIM5_IRQn);     // Enable interrupt handler
+    NVIC_EnableIRQ(TIM4_IRQn);     // enable interrupt handler
+    NVIC_EnableIRQ(TIM5_IRQn);     // enable interrupt handler
+
+    NVIC_EnableIRQ(PendSV_IRQn);     // enable interrupt handler
 
     current_tick= 0;
     TIM4->CR1 |= TIM_CR1_CEN;      // start step timer
@@ -247,8 +252,8 @@ void StepTicker::step_tick (void)
 
         // all moves finished
         // we delegate the slow stuff to the pendsv handler which will run as soon as this interrupt exits
-        //NVIC_SetPendingIRQ(PendSV_IRQn); this doesn't work
-        //SCB->ICSR = 0x10000000; // SCB_ICSR_PENDSVSET_Msk;
+        //NVIC_SetPendingIRQ(PendSV_IRQn); //this doesn't work
+        SCB->ICSR = SCB_ICSR_PENDSVSET_Msk;
     }
 }
 
