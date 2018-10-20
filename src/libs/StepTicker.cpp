@@ -29,8 +29,10 @@ GPIO stepticker_debug_pin(STEPTICKER_DEBUG_PIN);
 #define SET_STEPTICKER_DEBUG_PIN(n)
 #endif
 
+#define TIM4_PRESCALER      15
+
 extern "C" void TIM5_IRQHandler(void);
-extern "C" void TIM2_IRQHandler(void);
+extern "C" void TIM4_IRQHandler(void);
 
 StepTicker *StepTicker::instance;
 
@@ -39,9 +41,9 @@ StepTicker::StepTicker()
     instance = this; // setup the Singleton instance of the stepticker
 
     // Configure the timer
-    __TIM2_CLK_ENABLE();
-    TIM2->CR1 = TIM_CR1_URS;    // int on overflow
-    NVIC_SetVector(TIM2_IRQn, (uint32_t)TIM2_IRQHandler);
+    __TIM4_CLK_ENABLE();
+    TIM4->CR1 = TIM_CR1_URS;    // int on overflow
+    NVIC_SetVector(TIM4_IRQn, (uint32_t)TIM4_IRQHandler);
 
     __TIM5_CLK_ENABLE();
     TIM5->CR1 = TIM_CR1_URS | TIM_CR1_OPM;  // int on overflow, one-shot mode
@@ -71,22 +73,23 @@ StepTicker::~StepTicker()
 //called when everything is setup and interrupts can start
 void StepTicker::start()
 {
-    TIM2->DIER = TIM_DIER_UIE;     // update interrupt en
+    TIM4->DIER = TIM_DIER_UIE;     // update interrupt en
     TIM5->DIER = TIM_DIER_UIE;     // update interrupt en
-    NVIC_EnableIRQ(TIM2_IRQn);     // Enable interrupt handler
+    NVIC_EnableIRQ(TIM4_IRQn);     // Enable interrupt handler
     NVIC_EnableIRQ(TIM5_IRQn);     // Enable interrupt handler
 
     current_tick= 0;
-    TIM2->CR1 |= TIM_CR1_CEN;      // start step timer
+    TIM4->CR1 |= TIM_CR1_CEN;      // start step timer
 }
 
 // Set the base stepping frequency
 void StepTicker::set_frequency( float frequency )
 {
     this->frequency = frequency;
-    this->period = floorf((SystemCoreClock >> 1) / frequency); // SystemCoreClock/2 = Timer increments in a second
+    this->period = floorf((SystemCoreClock >> 1) / TIM4_PRESCALER / frequency); // SystemCoreClock/2 = Timer increments in a second
 
-    TIM2->ARR = this->period;
+    TIM4->PSC = TIM4_PRESCALER-1;
+    TIM4->ARR = this->period;
 }
 
 // Set the reset delay, must be called after set_frequency
@@ -116,10 +119,10 @@ extern "C" void TIM5_IRQHandler (void)
 }
 
 // The actual interrupt handler where we do all the work
-extern "C" void TIM2_IRQHandler (void)
+extern "C" void TIM4_IRQHandler (void)
 {
     // Reset interrupt register
-    TIM2->SR = ~TIM_SR_UIF;
+    TIM4->SR = ~TIM_SR_UIF;
     StepTicker::getInstance()->step_tick();
 }
 
