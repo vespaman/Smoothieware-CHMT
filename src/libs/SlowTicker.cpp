@@ -21,6 +21,10 @@
 // This module uses a Timer to periodically call hooks
 // Modules register with a function ( callback ) and a frequency, and we then call that function at the given frequency.
 
+#define SLOWTICKER_PRESCALER    (1 << 13)
+
+extern "C" void TIM3_IRQHandler(void);
+
 SlowTicker* global_slow_ticker;
 
 SlowTicker::SlowTicker(){
@@ -31,6 +35,7 @@ SlowTicker::SlowTicker(){
 
     __TIM3_CLK_ENABLE();
     TIM3->CR1 = TIM_CR1_URS;    // int on overflow
+    NVIC_SetVector(TIM3_IRQn, (uint32_t)TIM3_IRQHandler);
 
     max_frequency = 5;  // initial max frequency is set to 5Hz
     set_frequency(max_frequency);
@@ -50,11 +55,12 @@ void SlowTicker::on_module_loaded(){
 
 // Set the base frequency we use for all sub-frequencies
 void SlowTicker::set_frequency( int frequency ){
-    this->interval = (SystemCoreClock >> 2) / frequency;   // SystemCoreClock/4 = Timer increments in a second
+    this->interval = ((SystemCoreClock >> 2) / SLOWTICKER_PRESCALER) / frequency;   // SystemCoreClock/4 = Timer increments in a second
 
+    TIM3->PSC = SLOWTICKER_PRESCALER - 1;
     TIM3->ARR = this->interval;
 
-    flag_1s_count= SystemCoreClock>>2;
+    flag_1s_count= (SystemCoreClock >> 2) / SLOWTICKER_PRESCALER;
 }
 
 // The actual interrupt being called by the timer, this is where work is done
@@ -76,7 +82,7 @@ void SlowTicker::tick(){
     if (flag_1s_count < 0)
     {
         // add a second to our counter
-        flag_1s_count += SystemCoreClock >> 2;
+        flag_1s_count += (SystemCoreClock >> 2) / SLOWTICKER_PRESCALER;
         // and set a flag for idle event to pick up
         flag_1s_flag++;
     }

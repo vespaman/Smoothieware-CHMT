@@ -7,4 +7,5 @@
 # git update-index --assume-unchanged src/config.default
 #
 
+uart0.baud_rate 115200 
 

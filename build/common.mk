@@ -331,7 +331,7 @@ $(OUTDIR)/%.o : %.s makefile
 	$(Q) $(AS) $(AS_FLAGS) -o $@ $<
 
 # objcopy can't create m4 compatible object files, replace with assembler
-#$(OUTDIR)/configdefault.o : config.default
+$(OUTDIR)/configdefault.o : config.default
 #	$(Q) $(OBJCOPY) -I binary -O elf32-littlearm -B arm --readonly-text --rename-section .data=.rodata.configdefault $< $@
 
 #########################################################################
