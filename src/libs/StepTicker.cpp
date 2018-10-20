@@ -84,7 +84,7 @@ void StepTicker::start()
 void StepTicker::set_frequency( float frequency )
 {
     this->frequency = frequency;
-    this->period = floorf((SystemCoreClock / 4.0F) / frequency); // SystemCoreClock/4 = Timer increments in a second
+    this->period = floorf((SystemCoreClock >> 1) / frequency); // SystemCoreClock/2 = Timer increments in a second
 
     TIM2->ARR = this->period;
 }
@@ -92,7 +92,7 @@ void StepTicker::set_frequency( float frequency )
 // Set the reset delay, must be called after set_frequency
 void StepTicker::set_unstep_time( float microseconds )
 {
-    uint32_t delay = floorf((SystemCoreClock / 4.0F) * (microseconds / 1000000.0F)); // SystemCoreClock/4 = Timer increments in a second
+    uint32_t delay = floorf((SystemCoreClock >> 1) * (microseconds / 1000000.0F)); // SystemCoreClock/2 = Timer increments in a second
     TIM5->ARR = delay;
 
     // TODO check that the unstep time is less than the step period, if not slow down step ticker
