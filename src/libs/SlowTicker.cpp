@@ -21,6 +21,8 @@
 // This module uses a Timer to periodically call hooks
 // Modules register with a function ( callback ) and a frequency, and we then call that function at the given frequency.
 
+extern "C" void TIM3_IRQHandler(void);
+
 SlowTicker* global_slow_ticker;
 
 SlowTicker::SlowTicker(){
@@ -31,6 +33,7 @@ SlowTicker::SlowTicker(){
 
     __TIM3_CLK_ENABLE();
     TIM3->CR1 = TIM_CR1_URS;    // int on overflow
+    NVIC_SetVector(TIM3_IRQn, (uint32_t)TIM3_IRQHandler);
 
     max_frequency = 5;  // initial max frequency is set to 5Hz
     set_frequency(max_frequency);

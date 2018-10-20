@@ -29,6 +29,9 @@ GPIO stepticker_debug_pin(STEPTICKER_DEBUG_PIN);
 #define SET_STEPTICKER_DEBUG_PIN(n)
 #endif
 
+extern "C" void TIM5_IRQHandler(void);
+extern "C" void TIM2_IRQHandler(void);
+
 StepTicker *StepTicker::instance;
 
 StepTicker::StepTicker()
@@ -38,9 +41,11 @@ StepTicker::StepTicker()
     // Configure the timer
     __TIM2_CLK_ENABLE();
     TIM2->CR1 = TIM_CR1_URS;    // int on overflow
+    NVIC_SetVector(TIM2_IRQn, (uint32_t)TIM2_IRQHandler);
 
     __TIM5_CLK_ENABLE();
     TIM5->CR1 = TIM_CR1_URS | TIM_CR1_OPM;  // int on overflow, one-shot mode
+    NVIC_SetVector(TIM5_IRQn, (uint32_t)TIM5_IRQHandler);
 
     // Default start values
     this->set_frequency(100000);
