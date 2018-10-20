@@ -28,6 +28,7 @@
 #include <stddef.h>
 #include "us_ticker_api.h"
 #include "PeripheralNames.h"
+#include "stm32f4xx_hal.h"
 
 #define TIM_MST TIM2
 

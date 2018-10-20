@@ -33,6 +33,7 @@
   ******************************************************************************
   */
 #include "hal_tick.h"
+#include "stm32f4xx_hal.h"
 
 TIM_HandleTypeDef TimMasterHandle;
 uint32_t PreviousVal = 0;
@@ -64,7 +65,7 @@ void timer_irq_handler(void) {
 }
 
 // Reconfigure the HAL tick using a standard timer instead of systick.
-HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority) {
+HAL_StatusTypeDef HAL_InitTick (uint32_t TickPriority) {
     // Enable timer clock
     TIM_MST_RCC;
 
