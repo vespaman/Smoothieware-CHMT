@@ -23,7 +23,7 @@
 
 #define SLOWTICKER_PRESCALER    (1 << 14)
 
-extern "C" void TIM3_IRQHandler(void);
+extern "C" void TIM6_DAC_IRQHandler(void);
 
 SlowTicker* global_slow_ticker;
 
@@ -33,9 +33,9 @@ SlowTicker::SlowTicker(){
     // ISP button FIXME: WHy is this here?
     ispbtn.from_string("2.10")->as_input()->pull_up();
 
-    __TIM3_CLK_ENABLE();
-    TIM3->CR1 = TIM_CR1_URS;    // int on overflow
-    NVIC_SetVector(TIM3_IRQn, (uint32_t)TIM3_IRQHandler);
+    __TIM6_CLK_ENABLE();
+    TIM6->CR1 = TIM_CR1_URS;    // int on overflow
+    NVIC_SetVector(TIM6_DAC_IRQn, (uint32_t)TIM6_DAC_IRQHandler);
 
     max_frequency = 5;  // initial max frequency is set to 5Hz
     set_frequency(max_frequency);
@@ -44,9 +44,9 @@ SlowTicker::SlowTicker(){
 
 void SlowTicker::start()
 {
-    TIM3->DIER = TIM_DIER_UIE;      // update interrupt en
-    NVIC_EnableIRQ(TIM3_IRQn);    // Enable interrupt handler
-    TIM3->CR1 |= TIM_CR1_CEN;  // start
+    TIM6->DIER = TIM_DIER_UIE;      // update interrupt en
+    NVIC_EnableIRQ(TIM6_DAC_IRQn);    // Enable interrupt handler
+    TIM6->CR1 |= TIM_CR1_CEN;  // start
 }
 
 void SlowTicker::on_module_loaded(){
@@ -57,8 +57,8 @@ void SlowTicker::on_module_loaded(){
 void SlowTicker::set_frequency( int frequency ){
     this->interval = ((SystemCoreClock >> 1) / SLOWTICKER_PRESCALER) / frequency;   // SystemCoreClock/4 = Timer increments in a second
 
-    TIM3->PSC = SLOWTICKER_PRESCALER - 1;
-    TIM3->ARR = this->interval;
+    TIM6->PSC = SLOWTICKER_PRESCALER - 1;
+    TIM6->ARR = this->interval;
 
     flag_1s_count= (SystemCoreClock >> 1) / SLOWTICKER_PRESCALER;
 }
@@ -129,8 +129,8 @@ void SlowTicker::on_idle(void*)
         THEKERNEL->call_event(ON_SECOND_TICK);
 }
 
-extern "C" void TIM3_IRQHandler (void){
-    TIM3->SR = ~TIM_SR_UIF;
+extern "C" void TIM6_DAC_IRQHandler (void){
+    TIM6->SR = ~TIM_SR_UIF;
 
     global_slow_ticker->tick();
 }
