@@ -163,13 +163,7 @@ mbed::InterruptIn* Pin::interrupt_pin()
     // set as input
     as_input();
 
-    // TODO STM32 INT
-    if (port_number == 0 || port_number == 2) {
-        PinName pinname = port_pin((PortName)port_number, pin);
-        return new mbed::InterruptIn(pinname);
-
-    }else{
-        this->valid= false;
-        return nullptr;
-    }
+    // all pins support interrupts on stm32
+    PinName pinname = port_pin((PortName)port_number, pin);
+    return new mbed::InterruptIn(pinname);
 }
