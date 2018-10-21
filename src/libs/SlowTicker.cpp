@@ -31,7 +31,7 @@ SlowTicker::SlowTicker(){
     global_slow_ticker = this;
 
     // ISP button FIXME: WHy is this here?
-    ispbtn.from_string("2.10")->as_input()->pull_up();
+    //ispbtn.from_string("2.10")->as_input()->pull_up();
 
     __TIM6_CLK_ENABLE();
     TIM6->CR1 = TIM_CR1_URS;    // int on overflow
@@ -89,8 +89,8 @@ void SlowTicker::tick(){
 
     // Enter MRI mode if the ISP button is pressed
     // TODO: This should have it's own module
-    if (ispbtn.get() == 0)
-        __debugbreak();
+    //if (ispbtn.get() == 0)
+    //    __debugbreak();
 
 }
 
