@@ -29,10 +29,10 @@ GPIO stepticker_debug_pin(STEPTICKER_DEBUG_PIN);
 #define SET_STEPTICKER_DEBUG_PIN(n)
 #endif
 
-#define TIM4_PRESCALER      15
+#define TIM7_PRESCALER      15
 
 extern "C" void TIM5_IRQHandler(void);
-extern "C" void TIM4_IRQHandler(void);
+extern "C" void TIM7_IRQHandler(void);
 extern "C" void PendSV_Handler(void);
 
 StepTicker *StepTicker::instance;
@@ -42,9 +42,9 @@ StepTicker::StepTicker()
     instance = this; // setup the Singleton instance of the stepticker
 
     // Configure the timer
-    __TIM4_CLK_ENABLE();
-    TIM4->CR1 = TIM_CR1_URS;    // int on overflow
-    NVIC_SetVector(TIM4_IRQn, (uint32_t)TIM4_IRQHandler);
+    __TIM7_CLK_ENABLE();
+    TIM7->CR1 = TIM_CR1_URS;    // int on overflow
+    NVIC_SetVector(TIM7_IRQn, (uint32_t)TIM7_IRQHandler);
 
     __TIM5_CLK_ENABLE();
     TIM5->CR1 = TIM_CR1_URS | TIM_CR1_OPM;  // int on overflow, one-shot mode
@@ -76,25 +76,25 @@ StepTicker::~StepTicker()
 //called when everything is setup and interrupts can start
 void StepTicker::start()
 {
-    TIM4->DIER = TIM_DIER_UIE;     // update interrupt en
+    TIM7->DIER = TIM_DIER_UIE;     // update interrupt en
     TIM5->DIER = TIM_DIER_UIE;     // update interrupt en
-    NVIC_EnableIRQ(TIM4_IRQn);     // enable interrupt handler
+    NVIC_EnableIRQ(TIM7_IRQn);     // enable interrupt handler
     NVIC_EnableIRQ(TIM5_IRQn);     // enable interrupt handler
 
     NVIC_EnableIRQ(PendSV_IRQn);     // enable interrupt handler
 
     current_tick= 0;
-    TIM4->CR1 |= TIM_CR1_CEN;      // start step timer
+    TIM7->CR1 |= TIM_CR1_CEN;      // start step timer
 }
 
 // Set the base stepping frequency
 void StepTicker::set_frequency( float frequency )
 {
     this->frequency = frequency;
-    this->period = floorf((SystemCoreClock >> 1) / TIM4_PRESCALER / frequency); // SystemCoreClock/2 = Timer increments in a second
+    this->period = floorf((SystemCoreClock >> 1) / TIM7_PRESCALER / frequency); // SystemCoreClock/2 = Timer increments in a second
 
-    TIM4->PSC = TIM4_PRESCALER-1;
-    TIM4->ARR = this->period;
+    TIM7->PSC = TIM7_PRESCALER-1;
+    TIM7->ARR = this->period;
 }
 
 // Set the reset delay, must be called after set_frequency
@@ -124,10 +124,10 @@ extern "C" void TIM5_IRQHandler (void)
 }
 
 // The actual interrupt handler where we do all the work
-extern "C" void TIM4_IRQHandler (void)
+extern "C" void TIM7_IRQHandler (void)
 {
     // Reset interrupt register
-    TIM4->SR = ~TIM_SR_UIF;
+    TIM7->SR = ~TIM_SR_UIF;
     StepTicker::getInstance()->step_tick();
 }
 
