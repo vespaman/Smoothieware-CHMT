@@ -135,7 +135,7 @@ Kernel::Kernel()
     // LPC17xx-specific
     NVIC_SetPriorityGrouping(0);
     NVIC_SetPriority(TIM7_IRQn, 2); // 0
-    NVIC_SetPriority(TIM5_IRQn, 1); // 1
+    NVIC_SetPriority(TIM8_TRG_COM_TIM14_IRQn, 1); // 1
     NVIC_SetPriority(TIM6_DAC_IRQn, 4); // 2
     NVIC_SetPriority(PendSV_IRQn, 3);
 

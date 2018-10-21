@@ -30,8 +30,9 @@ GPIO stepticker_debug_pin(STEPTICKER_DEBUG_PIN);
 #endif
 
 #define TIM7_PRESCALER      15
+#define TIM14_PRESCALER     1
 
-extern "C" void TIM5_IRQHandler(void);
+extern "C" void TIM8_TRG_COM_TIM14_IRQHandler(void);
 extern "C" void TIM7_IRQHandler(void);
 extern "C" void PendSV_Handler(void);
 
@@ -46,9 +47,9 @@ StepTicker::StepTicker()
     TIM7->CR1 = TIM_CR1_URS;    // int on overflow
     NVIC_SetVector(TIM7_IRQn, (uint32_t)TIM7_IRQHandler);
 
-    __TIM5_CLK_ENABLE();
-    TIM5->CR1 = TIM_CR1_URS | TIM_CR1_OPM;  // int on overflow, one-shot mode
-    NVIC_SetVector(TIM5_IRQn, (uint32_t)TIM5_IRQHandler);
+    __TIM14_CLK_ENABLE();
+    TIM14->CR1 = TIM_CR1_URS | TIM_CR1_OPM;  // int on overflow, one-shot mode
+    NVIC_SetVector(TIM8_TRG_COM_TIM14_IRQn, (uint32_t)TIM8_TRG_COM_TIM14_IRQHandler);
 
     NVIC_SetVector(PendSV_IRQn, (uint32_t)PendSV_Handler);
 
@@ -77,9 +78,9 @@ StepTicker::~StepTicker()
 void StepTicker::start()
 {
     TIM7->DIER = TIM_DIER_UIE;     // update interrupt en
-    TIM5->DIER = TIM_DIER_UIE;     // update interrupt en
+    TIM14->DIER = TIM_DIER_UIE;     // update interrupt en
     NVIC_EnableIRQ(TIM7_IRQn);     // enable interrupt handler
-    NVIC_EnableIRQ(TIM5_IRQn);     // enable interrupt handler
+    NVIC_EnableIRQ(TIM8_TRG_COM_TIM14_IRQn);     // enable interrupt handler
 
     NVIC_EnableIRQ(PendSV_IRQn);     // enable interrupt handler
 
@@ -100,8 +101,8 @@ void StepTicker::set_frequency( float frequency )
 // Set the reset delay, must be called after set_frequency
 void StepTicker::set_unstep_time( float microseconds )
 {
-    uint32_t delay = floorf((SystemCoreClock >> 1) * (microseconds / 1000000.0F)); // SystemCoreClock/2 = Timer increments in a second
-    TIM5->ARR = delay;
+    uint32_t delay = floorf(((SystemCoreClock >> 1) / TIM14_PRESCALER) * (microseconds / 1000000.0F)); // SystemCoreClock/2 = Timer increments in a second
+    TIM14->ARR = delay;
 
     // TODO check that the unstep time is less than the step period, if not slow down step ticker
 }
@@ -117,9 +118,9 @@ void StepTicker::unstep_tick()
     this->unstep.reset();
 }
 
-extern "C" void TIM5_IRQHandler (void)
+extern "C" void TIM8_TRG_COM_TIM14_IRQHandler (void)
 {
-    TIM5->SR = ~TIM_SR_UIF;
+    TIM14->SR = ~TIM_SR_UIF;
     StepTicker::getInstance()->unstep_tick();
 }
 
@@ -227,7 +228,7 @@ void StepTicker::step_tick (void)
     // also it takes at least 2us to get here so even when set to 1us pulse width it will still be about 3us
     if( unstep.any()) {
         // CEN should have cleared by one-shot mode
-        TIM5->CR1 |= TIM_CR1_CEN;
+        TIM14->CR1 |= TIM_CR1_CEN;
     }
 
 
