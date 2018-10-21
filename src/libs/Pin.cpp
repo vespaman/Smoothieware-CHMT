@@ -5,6 +5,7 @@
 #include "PwmOut.h"
 #include "InterruptIn.h"
 #include "PinNames.h"
+#include "PeripheralPins.h"
 #include "port_api.h"
 
 extern "C" uint32_t Set_GPIO_Clock(uint32_t);
@@ -148,30 +149,10 @@ Pin* Pin::pull_down(){
 // If available on this pin, return mbed hardware pwm class for this pin
 mbed::PwmOut* Pin::hardware_pwm()
 {
-    /* TODO STM32 PWM
-    if (port_number == 1)
-    {
-        if (pin == 18) { return new mbed::PwmOut(P1_18); }
-        if (pin == 20) { return new mbed::PwmOut(P1_20); }
-        if (pin == 21) { return new mbed::PwmOut(P1_21); }
-        if (pin == 23) { return new mbed::PwmOut(P1_23); }
-        if (pin == 24) { return new mbed::PwmOut(P1_24); }
-        if (pin == 26) { return new mbed::PwmOut(P1_26); }
-    }
-    else if (port_number == 2)
-    {
-        if (pin == 0) { return new mbed::PwmOut(P2_0); }
-        if (pin == 1) { return new mbed::PwmOut(P2_1); }
-        if (pin == 2) { return new mbed::PwmOut(P2_2); }
-        if (pin == 3) { return new mbed::PwmOut(P2_3); }
-        if (pin == 4) { return new mbed::PwmOut(P2_4); }
-        if (pin == 5) { return new mbed::PwmOut(P2_5); }
-    }
-    else if (port_number == 3)
-    {
-        if (pin == 25) { return new mbed::PwmOut(P3_25); }
-        if (pin == 26) { return new mbed::PwmOut(P3_26); }
-    } */
+    PinName pin = port_pin((PortName)this->port_number, this->pin);
+    if (pinmap_find_peripheral(pin, PinMap_PWM) != (uint32_t)NC)
+        return new mbed::PwmOut(pin);
+
     return nullptr;
 }
 
@@ -182,13 +163,7 @@ mbed::InterruptIn* Pin::interrupt_pin()
     // set as input
     as_input();
 
-    // TODO STM32 INT
-    if (port_number == 0 || port_number == 2) {
-        PinName pinname = port_pin((PortName)port_number, pin);
-        return new mbed::InterruptIn(pinname);
-
-    }else{
-        this->valid= false;
-        return nullptr;
-    }
+    // all pins support interrupts on stm32
+    PinName pinname = port_pin((PortName)port_number, pin);
+    return new mbed::InterruptIn(pinname);
 }
