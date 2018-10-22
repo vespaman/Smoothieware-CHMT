@@ -7,9 +7,11 @@
 #define MBED_ADC_H
 
 #include "PinNames.h" // mbed.h lib
+
 #define XTAL_FREQ       12000000
 #define MAX_ADC_CLOCK   13000000
 #define CLKS_PER_SAMPLE 64
+#define ADC_CHANNEL_COUNT   16
 
 namespace mbed {
 class ADC {
@@ -36,9 +38,10 @@ public:
     //Append custom global interrupt handler
     void append(void(*fptr)(int chan, uint32_t value));
 
-    int _pin_to_channel(PinName pin);
+    uint8_t _pin_to_channel(PinName pin);
 
 private:
+    uint8_t scan_chan_lut[ADC_CHANNEL_COUNT];
     uint8_t scan_count;
     uint8_t scan_index;
 

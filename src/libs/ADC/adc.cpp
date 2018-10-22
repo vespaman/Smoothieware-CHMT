@@ -10,6 +10,9 @@
 #include "adc.h"
 #include "mri.h"
 
+#include "pinmap.h"
+#include "PeripheralPins.h"
+
 #define STM_ADC ADC1
 
 using namespace mbed;
@@ -20,6 +23,8 @@ ADC::ADC(int sample_rate, int cclk_div)
 {
     scan_count = 0;
     scan_index = 0;
+
+    memset(scan_chan_lut, 0xFF, sizeof(scan_chan_lut));
 /*
     int i, adc_clk_freq, pclk, clock_div, max_div=1;
 
@@ -132,30 +137,14 @@ void ADC::adcisr(void)
     }
 }
 
-int ADC::_pin_to_channel(PinName pin) {
-    int chan;
-    switch (pin) {
-        //case p15://=p0.23 of LPC1768
-        default:
-            chan=0;
-            break;
-/*        case p16://=p0.24 of LPC1768
-            chan=1;
-            break;
-        case p17://=p0.25 of LPC1768
-            chan=2;
-            break;
-        case p18://=p0.26 of LPC1768
-            chan=3;
-            break;
-        case p19://=p1.30 of LPC1768
-            chan=4;
-            break;
-        case p20://=p1.31 of LPC1768
-            chan=5;
-            break;
-*/    }
-    return(chan);
+uint8_t ADC::_pin_to_channel(PinName pin) {
+    uint32_t function = pinmap_find_function(pin, PinMap_ADC);
+    uint8_t chan = 0xFF;
+
+    if (function != (uint32_t)NC)
+        chan = scan_chan_lut[STM_PIN_CHANNEL(function)];
+
+    return chan;
 }
 
 //Enable or disable an ADC pin
