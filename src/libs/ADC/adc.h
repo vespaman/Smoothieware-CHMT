@@ -39,17 +39,16 @@ public:
     int _pin_to_channel(PinName pin);
 
 private:
+    uint8_t scan_count;
+    uint8_t scan_index;
+
     uint32_t _data_of_pin(PinName pin);
 
-    int _adc_clk_freq;
     void adcisr(void);
     static void _adcisr(void);
     static ADC *instance;
 
-    uint32_t _adc_data[8];
-    void(*_adc_isr[8])(uint32_t value);
     void(*_adc_g_isr)(int chan, uint32_t value);
-    void(*_adc_m_isr)(void);
 };
 }
 

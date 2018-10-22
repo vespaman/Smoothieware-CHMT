@@ -8,13 +8,18 @@
 
 #include "mbed.h"
 #include "adc.h"
+#include "mri.h"
+
+#define STM_ADC ADC1
 
 using namespace mbed;
 
 ADC *ADC::instance;
 
 ADC::ADC(int sample_rate, int cclk_div)
-    {
+{
+    scan_count = 0;
+    scan_index = 0;
 /*
     int i, adc_clk_freq, pclk, clock_div, max_div=1;
 
@@ -103,30 +108,28 @@ void ADC::_adcisr(void)
 
 void ADC::adcisr(void)
 {
-//    uint32_t stat;
-    int chan = 0;
-/*
-    // Read status
-    stat = LPC_ADC->ADSTAT;
-    //Scan channels for over-run or done and update array
-    if (stat & 0x0101) _adc_data[0] = LPC_ADC->ADDR0;
-    if (stat & 0x0202) _adc_data[1] = LPC_ADC->ADDR1;
-    if (stat & 0x0404) _adc_data[2] = LPC_ADC->ADDR2;
-    if (stat & 0x0808) _adc_data[3] = LPC_ADC->ADDR3;
-    if (stat & 0x1010) _adc_data[4] = LPC_ADC->ADDR4;
-    if (stat & 0x2020) _adc_data[5] = LPC_ADC->ADDR5;
-    if (stat & 0x4040) _adc_data[6] = LPC_ADC->ADDR6;
-    if (stat & 0x8080) _adc_data[7] = LPC_ADC->ADDR7;
+    uint16_t data;
+    
+    // must read data before checking overflow bit
+    data = STM_ADC->DR; // to be sure we are valid
 
-    // Channel that triggered interrupt
-    chan = (LPC_ADC->ADGDR >> 24) & 0x07;
-*/
-    //User defined interrupt handlers
-    if (_adc_isr[chan] != NULL)
-        _adc_isr[chan](_adc_data[chan]);
-    if (_adc_g_isr != NULL)
-        _adc_g_isr(chan, _adc_data[chan]);
-    return;
+    if (STM_ADC->SR & ADC_SR_OVR) {
+        // conversion was clobbered by overflow, clear its flag too
+        STM_ADC->SR &= ~(ADC_SR_OVR | ADC_SR_EOC);
+
+        // overrun will abort scan sequence, next start will resume from beginning
+        scan_index = 0;
+        __debugbreak();
+
+    } else if (STM_ADC->SR & ADC_SR_EOC) {
+        STM_ADC->SR &= ~ADC_SR_EOC;
+
+        if (_adc_g_isr != NULL)
+            _adc_g_isr(scan_index++, data);
+        
+        if (scan_index >= scan_count)
+            scan_index = 0;
+    }
 }
 
 int ADC::_pin_to_channel(PinName pin) {
@@ -272,7 +275,7 @@ void ADC::interrupt_state(PinName pin, int state) {
     */
 }
 
-//Unappend global interrupt handler to function isr
+// append global interrupt handler to function isr
 void ADC::append(void(*fptr)(int chan, uint32_t value)) {
     _adc_g_isr = fptr;
 }
