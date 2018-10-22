@@ -11,23 +11,27 @@ extern GPIO leds[];
 // TODO : comment this
 // Basically, when stuff stop answering, reset, or enter MRI mode, or something
 
+extern "C" void WWDG_IRQHandler(void);
+
 static WWDG_HandleTypeDef m_wdt_handle;
 
 Watchdog::Watchdog(uint32_t timeout, WDT_ACTION action)
 {
     m_wdt_handle.Instance         = WWDG;
-    m_wdt_handle.Init.Prescaler   = WWDG_CFR_WDGTB0 | WWDG_CFR_WDGTB1; // prescale /8
+    m_wdt_handle.Init.Prescaler   = WWDG_CFR_WDGTB; // prescale /8
     m_wdt_handle.Init.Window      = WWDG_CFR_W; // load max values, still timeout ~ 100ms
     m_wdt_handle.Init.Counter     = WWDG_CR_T;  // TODO rewrite to use IWDG for longer timeouts
-    m_wdt_handle.Init.EWIMode     = (action == WDT_MRI) ? WWDG_SR_EWIF : 0;   
+    m_wdt_handle.Init.EWIMode     = (action == WDT_MRI) ? WWDG_CFR_EWI : 0;   
+
+    __HAL_RCC_WWDG_CLK_ENABLE();
 
     HAL_WWDG_Init(&m_wdt_handle);
     feed();
 
     if(action == WDT_MRI) {
         // enable the interrupt
+        NVIC_SetVector(WWDG_IRQn, (uint32_t)WWDG_IRQHandler);
         NVIC_EnableIRQ(WWDG_IRQn);
-        NVIC_SetPriority(WWDG_IRQn, 1);
     }
 }
 
@@ -61,6 +65,6 @@ extern "C" void WWDG_IRQHandler(void)
     }
 
     HAL_WWDG_IRQHandler(&m_wdt_handle); // clears int flag
-    HAL_WWDG_Refresh(&m_wdt_handle);
-    __debugbreak();
+    //HAL_WWDG_Refresh(&m_wdt_handle);  // don't refresh, let wdt reset device
+    __debugbreak();                     // but trigger breakpoint if we're on a debugger
 }
