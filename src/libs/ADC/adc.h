@@ -28,20 +28,23 @@ public:
     //Enable/disable burst mode according to state
     void burst(int state);
 
-    //Return burst mode enabled/disabled
-    int burst(void);
-
     //Set interrupt enable/disable for pin to state
     void interrupt_state(PinName pin, int state);
 
     //Append custom global interrupt handler
     void append(void(*fptr)(int chan, uint32_t value));
 
+    //Callback for attaching to slowticker as scan start timer 
+    uint32_t on_tick(uint32_t dummy);
+
     uint8_t _pin_to_channel(PinName pin);
 
 private:
+    uint8_t attached;
+
     uint8_t scan_chan_lut[ADC_CHANNEL_COUNT];
-    uint8_t scan_count;
+    uint8_t scan_count_active;
+    uint8_t scan_count_next;
     uint8_t scan_index;
 
     uint32_t interrupt_mask;

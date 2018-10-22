@@ -13,6 +13,10 @@
 #include "pinmap.h"
 #include "PeripheralPins.h"
 
+#include <vector>
+#include "SlowTicker.h"
+#include "Kernel.h"
+
 #define STM_ADC ADC1
 
 using namespace mbed;
@@ -21,8 +25,9 @@ ADC *ADC::instance;
 
 ADC::ADC(int sample_rate, int cclk_div)
 {
-    scan_count = 0;
+    scan_count_active = scan_count_next = 0;
     scan_index = 0;
+    attached = 0;
 
     memset(scan_chan_lut, 0xFF, sizeof(scan_chan_lut));
 
@@ -48,7 +53,11 @@ ADC::ADC(int sample_rate, int cclk_div)
     // interrupt after every conversion
     STM_ADC->CR2 = ADC_CR2_EOCS;
 
+    // turn on adc
+    STM_ADC->CR2 |= ADC_CR2_ADON;
+
     NVIC_SetVector(ADC_IRQn, (uint32_t)&_adcisr);
+    NVIC_EnableIRQ(ADC_IRQn);
 
     _adc_g_isr = NULL;
     instance = this;
@@ -68,8 +77,8 @@ void ADC::adcisr(void)
     data = STM_ADC->DR; // to be sure we are valid
 
     if (STM_ADC->SR & ADC_SR_OVR) {
-        // conversion was clobbered by overflow, clear its flag too
-        STM_ADC->SR &= ~(ADC_SR_OVR | ADC_SR_EOC);
+        // conversion was clobbered by overflow, clear its flag too, clear strt so we restart
+        STM_ADC->SR &= ~(ADC_SR_OVR | ADC_SR_EOC | ADC_SR_STRT);
 
         // overrun will abort scan sequence, next start will resume from beginning
         scan_index = 0;
@@ -81,8 +90,10 @@ void ADC::adcisr(void)
         if (_adc_g_isr != NULL && (interrupt_mask & (1 << scan_index)))
             _adc_g_isr(scan_index, data);
         
-        if (++scan_index >= scan_count)
+        if (++scan_index >= scan_count_active) {
+            STM_ADC->SR &= ~(ADC_SR_STRT); // clear strt so next tick starts scan
             scan_index = 0;
+        }
     }
 }
 
@@ -103,11 +114,11 @@ uint8_t ADC::setup(PinName pin, int state) {
     uint8_t chan = 0xFF;
 
     // we don't support dealloc for now, exit early if all channels full or pin doesn't support adc
-    if (!state || scan_count >= ADC_CHANNEL_COUNT || function == (uint32_t)NC) 
+    if (!state || scan_count_next >= ADC_CHANNEL_COUNT || function == (uint32_t)NC) 
         return chan;
     
     stm_chan = STM_PIN_CHANNEL(function);
-    chan = scan_count++;
+    chan = scan_count_next++;
 
     scan_chan_lut[stm_chan] = chan;
 
@@ -120,16 +131,15 @@ uint8_t ADC::setup(PinName pin, int state) {
         STM_ADC->SQR1 |= (stm_chan << (chan - 12));
     }
 
-    // increase scan count
-    STM_ADC->SQR1 = (STM_ADC->SQR1 & (~ADC_SQR1_L)) | (chan << ADC_SQR1_L_Pos);
-
     return chan;
 }
 
 // enable or disable burst mode
 void ADC::burst(int state) {
-    // turn on adc
-    STM_ADC->CR2 |= ADC_CR2_ADON;
+    if (state && !attached) {
+        THEKERNEL->slow_ticker->attach(1000, this, &ADC::on_tick);
+        attached = 1;
+    }
 }
 
 // set interrupt enable/disable for pin to state
@@ -141,12 +151,6 @@ void ADC::interrupt_state(PinName pin, int state) {
             interrupt_mask |= (1 << chan);
         else
             interrupt_mask &= ~(1 << chan);
-
-        // should we set/clear ie bits here too?
-        if (interrupt_mask)
-            NVIC_EnableIRQ(ADC_IRQn);
-        else
-            NVIC_DisableIRQ(ADC_IRQn);
     }
 }
 
@@ -154,4 +158,23 @@ void ADC::interrupt_state(PinName pin, int state) {
 void ADC::append(void(*fptr)(int chan, uint32_t value)) {
     _adc_g_isr = fptr;
 }
+
+//Callback for attaching to slowticker as scan start timer 
+uint32_t ADC::on_tick(uint32_t dummy) {
+    // previous conversion still running
+    if (STM_ADC->SR & ADC_SR_STRT)
+        return dummy;
+
+    // synchronize scan_count_active used by isr and scan_count_next while adding channels
+    if (scan_count_active != scan_count_next) {
+        scan_count_active = scan_count_next;
+
+        // increase scan count
+        STM_ADC->SQR1 = (STM_ADC->SQR1 & (~ADC_SQR1_L)) | ((scan_count_active-1) << ADC_SQR1_L_Pos);
+    }
+    STM_ADC->CR2 |= ADC_CR2_SWSTART;
+
+    return dummy;
+}
+
 
