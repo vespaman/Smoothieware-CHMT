@@ -21,7 +21,6 @@
 // This module uses a Timer to periodically call hooks
 // Modules register with a function ( callback ) and a frequency, and we then call that function at the given frequency.
 
-#define SLOWTICKER_PRESCALER    (1 << 14)
 
 extern "C" void TIM6_DAC_IRQHandler(void);
 
