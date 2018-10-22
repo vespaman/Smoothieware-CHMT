@@ -25,84 +25,33 @@ ADC::ADC(int sample_rate, int cclk_div)
     scan_index = 0;
 
     memset(scan_chan_lut, 0xFF, sizeof(scan_chan_lut));
-/*
-    int i, adc_clk_freq, pclk, clock_div, max_div=1;
 
-    //Work out CCLK
-    adc_clk_freq=CLKS_PER_SAMPLE*sample_rate;
-    int m = (LPC_SC->PLL0CFG & 0xFFFF) + 1;
-    int n = (LPC_SC->PLL0CFG >> 16) + 1;
-    int cclkdiv = LPC_SC->CCLKCFG + 1;
-    int Fcco = (2 * m * XTAL_FREQ) / n;
-    int cclk = Fcco / cclkdiv;
+    __HAL_RCC_ADC1_CLK_ENABLE();
 
-    //Power up the ADC
-    LPC_SC->PCONP |= (1 << 12);
-    //Set clock at cclk / 1.
-    LPC_SC->PCLKSEL0 &= ~(0x3 << 24);
-    switch (cclk_div) {
-        case 1:
-            LPC_SC->PCLKSEL0 |= 0x1 << 24;
-            break;
-        case 2:
-            LPC_SC->PCLKSEL0 |= 0x2 << 24;
-            break;
-        case 4:
-            LPC_SC->PCLKSEL0 |= 0x0 << 24;
-            break;
-        case 8:
-            LPC_SC->PCLKSEL0 |= 0x3 << 24;
-            break;
-        default:
-            printf("ADC Warning: ADC CCLK clock divider must be 1, 2, 4 or 8. %u supplied.\n",
-                cclk_div);
-            printf("Defaulting to 1.\n");
-            LPC_SC->PCLKSEL0 |= 0x1 << 24;
-            break;
-    }
-    pclk = cclk / cclk_div;
-    clock_div=pclk / adc_clk_freq;
+    // adcclk /8 prescaler
+    ADC123_COMMON->CCR |= ADC_CCR_ADCPRE;
 
-    if (clock_div > 0xFF) {
-        printf("ADC Warning: Clock division is %u which is above 255 limit. Re-Setting at limit.\n", clock_div);
-        clock_div=0xFF;
-    }
-    if (clock_div == 0) {
-        printf("ADC Warning: Clock division is 0. Re-Setting to 1.\n");
-        clock_div=1;
-    }
+    // use long sampling time to reduce isr call freq, to reduce chance of overflow
+    // 168 Mhz / 2 (APB CLK) / 8 (ADCCLK) / (480+15) = ~47 us conversion
+    // for max 16 scan channels, thats max sampling rate of ~1.3 kHz
+    STM_ADC->SMPR1 = ADC_SMPR1_SMP10 | ADC_SMPR1_SMP11 | ADC_SMPR1_SMP12 | ADC_SMPR1_SMP13 | 
+                     ADC_SMPR1_SMP14 | ADC_SMPR1_SMP15 | ADC_SMPR1_SMP16 | ADC_SMPR1_SMP17 | 
+                     ADC_SMPR1_SMP18;
 
-    _adc_clk_freq=pclk / clock_div;
-    if (_adc_clk_freq > MAX_ADC_CLOCK) {
-        printf("ADC Warning: Actual ADC sample rate of %u which is above %u limit\n",
-            _adc_clk_freq / CLKS_PER_SAMPLE, MAX_ADC_CLOCK / CLKS_PER_SAMPLE);
-        while ((pclk / max_div) > MAX_ADC_CLOCK) max_div++;
-        printf("ADC Warning: Maximum recommended sample rate is %u\n", (pclk / max_div) / CLKS_PER_SAMPLE);
-    }
+    STM_ADC->SMPR2 = ADC_SMPR2_SMP0 | ADC_SMPR2_SMP1 | ADC_SMPR2_SMP2 | ADC_SMPR2_SMP3 | 
+                     ADC_SMPR2_SMP4 | ADC_SMPR2_SMP5 | ADC_SMPR2_SMP6 | ADC_SMPR2_SMP7 | 
+                     ADC_SMPR2_SMP8 | ADC_SMPR2_SMP9;
 
-    LPC_ADC->ADCR =
-        ((clock_div - 1 ) << 8 ) |    //Clkdiv
-        ( 1 << 21 );                  //A/D operational
+    // overrun ie, scan mode, end of conv. ie
+    STM_ADC->CR1 = ADC_CR1_OVRIE | ADC_CR1_SCAN | ADC_CR1_EOCIE;
 
-    //Default no channels enabled
-    LPC_ADC->ADCR &= ~0xFF;
-    //Default NULL global custom isr
-    //Initialize arrays
-    for (i=7; i>=0; i--) {
-        _adc_data[i] = 0;
-        _adc_isr[i] = NULL;
-    }
+    // interrupt after every conversion
+    STM_ADC->CR2 = ADC_CR2_EOCS;
 
-
-    // Attach IRQ
     NVIC_SetVector(ADC_IRQn, (uint32_t)&_adcisr);
 
-    //Disable global interrupt
-    LPC_ADC->ADINTEN &= ~0x100;
-*/
     _adc_g_isr = NULL;
     instance = this;
-
 };
 
 void ADC::_adcisr(void)
@@ -177,7 +126,8 @@ void ADC::setup(PinName pin, int state) {
 
 // enable or disable burst mode
 void ADC::burst(int state) {
-    // this is the only mode we support, do nothing as we were configured in the constructor
+    // turn on adc
+    STM_ADC->CR2 |= ADC_CR2_ADON;
 }
 
 // set interrupt enable/disable for pin to state

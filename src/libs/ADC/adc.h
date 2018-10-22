@@ -8,9 +8,8 @@
 
 #include "PinNames.h" // mbed.h lib
 
-#define XTAL_FREQ       12000000
-#define MAX_ADC_CLOCK   13000000
 #define CLKS_PER_SAMPLE 64
+
 #define ADC_CHANNEL_COUNT   16
 
 namespace mbed {
