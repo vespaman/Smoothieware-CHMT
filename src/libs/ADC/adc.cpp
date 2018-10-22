@@ -129,10 +129,10 @@ void ADC::adcisr(void)
     } else if (STM_ADC->SR & ADC_SR_EOC) {
         STM_ADC->SR &= ~ADC_SR_EOC;
 
-        if (_adc_g_isr != NULL)
-            _adc_g_isr(scan_index++, data);
+        if (_adc_g_isr != NULL && (interrupt_mask & (1 << scan_index)))
+            _adc_g_isr(scan_index, data);
         
-        if (scan_index >= scan_count)
+        if (++scan_index >= scan_count)
             scan_index = 0;
     }
 }
@@ -149,103 +149,38 @@ uint8_t ADC::_pin_to_channel(PinName pin) {
 
 //Enable or disable an ADC pin
 void ADC::setup(PinName pin, int state) {
-//    int chan = 0;
-//    chan=_pin_to_channel(pin);
-    if ((state & 1) == 1) {
-    /*
-        switch(pin) {
-            case p15://=p0.23 of LPC1768
-            default:
-                LPC_PINCON->PINSEL1 &= ~((unsigned int)0x3 << 14);
-                LPC_PINCON->PINSEL1 |= (unsigned int)0x1 << 14;
-                LPC_PINCON->PINMODE1 &= ~((unsigned int)0x3 << 14);
-                LPC_PINCON->PINMODE1 |= (unsigned int)0x2 << 14;
-                break;
-            case p16://=p0.24 of LPC1768
-                LPC_PINCON->PINSEL1 &= ~((unsigned int)0x3 << 16);
-                LPC_PINCON->PINSEL1 |= (unsigned int)0x1 << 16;
-                LPC_PINCON->PINMODE1 &= ~((unsigned int)0x3 << 16);
-                LPC_PINCON->PINMODE1 |= (unsigned int)0x2 << 16;
-                break;
-            case p17://=p0.25 of LPC1768
-                LPC_PINCON->PINSEL1 &= ~((unsigned int)0x3 << 18);
-                LPC_PINCON->PINSEL1 |= (unsigned int)0x1 << 18;
-                LPC_PINCON->PINMODE1 &= ~((unsigned int)0x3 << 18);
-                LPC_PINCON->PINMODE1 |= (unsigned int)0x2 << 18;
-                break;
-            case p18://=p0.26 of LPC1768:
-                LPC_PINCON->PINSEL1 &= ~((unsigned int)0x3 << 20);
-                LPC_PINCON->PINSEL1 |= (unsigned int)0x1 << 20;
-                LPC_PINCON->PINMODE1 &= ~((unsigned int)0x3 << 20);
-                LPC_PINCON->PINMODE1 |= (unsigned int)0x2 << 20;
-                break;
-            case p19://=p1.30 of LPC1768
-                LPC_PINCON->PINSEL3 &= ~((unsigned int)0x3 << 28);
-                LPC_PINCON->PINSEL3 |= (unsigned int)0x3 << 28;
-                LPC_PINCON->PINMODE3 &= ~((unsigned int)0x3 << 28);
-                LPC_PINCON->PINMODE3 |= (unsigned int)0x2 << 28;
-                break;
-            case p20://=p1.31 of LPC1768
-                LPC_PINCON->PINSEL3 &= ~((unsigned int)0x3 << 30);
-                LPC_PINCON->PINSEL3 |= (unsigned int)0x3 << 30;
-                LPC_PINCON->PINMODE3 &= ~((unsigned int)0x3 << 30);
-                LPC_PINCON->PINMODE3 |= (unsigned int)0x2 << 30;
-               break;
-        }
-        //Only one channel can be selected at a time if not in burst mode
-        if (!burst()) LPC_ADC->ADCR &= ~0xFF;
-        //Select channel
-        LPC_ADC->ADCR |= (1 << chan);
-        */
+    uint32_t function = pinmap_find_function(pin, PinMap_ADC);
+    uint8_t stm_chan = 0xFF;
+    uint8_t chan = 0xFF;
+
+    // we don't support dealloc for now, exit early if all channels full or pin doesn't support adc
+    if (!state || scan_count >= ADC_CHANNEL_COUNT || function == (uint32_t)NC) 
+        return;
+    
+    stm_chan = STM_PIN_CHANNEL(function);
+    chan = scan_count++;
+
+    scan_chan_lut[stm_chan] = chan;
+
+    // configure adc scan channel
+    if (chan <= 5) {
+        STM_ADC->SQR3 |= (stm_chan << chan);
+    } else if (chan <= 11) {
+        STM_ADC->SQR2 |= (stm_chan << (chan - 6));
+    } else if (chan <= 15) {
+        STM_ADC->SQR1 |= (stm_chan << (chan - 12));
     }
-    else {
-    /*
-        switch(pin) {
-            case p15://=p0.23 of LPC1768
-            default:
-                LPC_PINCON->PINSEL1 &= ~((unsigned int)0x3 << 14);
-                LPC_PINCON->PINMODE1 &= ~((unsigned int)0x3 << 14);
-                break;
-            case p16://=p0.24 of LPC1768
-                LPC_PINCON->PINSEL1 &= ~((unsigned int)0x3 << 16);
-                LPC_PINCON->PINMODE1 &= ~((unsigned int)0x3 << 16);
-                break;
-            case p17://=p0.25 of LPC1768
-                LPC_PINCON->PINSEL1 &= ~((unsigned int)0x3 << 18);
-                LPC_PINCON->PINMODE1 &= ~((unsigned int)0x3 << 18);
-                break;
-            case p18://=p0.26 of LPC1768:
-                LPC_PINCON->PINSEL1 &= ~((unsigned int)0x3 << 20);
-                LPC_PINCON->PINMODE1 &= ~((unsigned int)0x3 << 20);
-                break;
-            case p19://=p1.30 of LPC1768
-                LPC_PINCON->PINSEL3 &= ~((unsigned int)0x3 << 28);
-                LPC_PINCON->PINMODE3 &= ~((unsigned int)0x3 << 28);
-                break;
-            case p20://=p1.31 of LPC1768
-                LPC_PINCON->PINSEL3 &= ~((unsigned int)0x3 << 30);
-                LPC_PINCON->PINMODE3 &= ~((unsigned int)0x3 << 30);
-                break;
-        }
-        LPC_ADC->ADCR &= ~(1 << chan);
-        */
-    }
+
+    // increase scan count
+    STM_ADC->SQR1 = (STM_ADC->SQR1 & (~ADC_SQR1_L)) | (chan << ADC_SQR1_L_Pos);
 }
 
-//Enable or disable burst mode
+// enable or disable burst mode
 void ADC::burst(int state) {
-/*
-    if ((state & 1) == 1) {
-        if (startmode(0) != 0)
-            fprintf(stderr, "ADC Warning. startmode is %u. Must be 0 for burst mode.\n", startmode(0));
-        LPC_ADC->ADCR |= (1 << 16);
-    }
-    else
-        LPC_ADC->ADCR &= ~(1 << 16);
-*/
+    // this is the only mode we support, do nothing as we were configured in the constructor
 }
 
-//Set interrupt enable/disable for pin to state
+// set interrupt enable/disable for pin to state
 void ADC::interrupt_state(PinName pin, int state) {
     int chan = _pin_to_channel(pin);
 
