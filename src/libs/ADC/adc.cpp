@@ -96,15 +96,15 @@ uint8_t ADC::_pin_to_channel(PinName pin) {
     return chan;
 }
 
-//Enable or disable an ADC pin
-void ADC::setup(PinName pin, int state) {
+// enable or disable an ADC pin
+uint8_t ADC::setup(PinName pin, int state) {
     uint32_t function = pinmap_find_function(pin, PinMap_ADC);
     uint8_t stm_chan = 0xFF;
     uint8_t chan = 0xFF;
 
     // we don't support dealloc for now, exit early if all channels full or pin doesn't support adc
     if (!state || scan_count >= ADC_CHANNEL_COUNT || function == (uint32_t)NC) 
-        return;
+        return chan;
     
     stm_chan = STM_PIN_CHANNEL(function);
     chan = scan_count++;
@@ -122,6 +122,8 @@ void ADC::setup(PinName pin, int state) {
 
     // increase scan count
     STM_ADC->SQR1 = (STM_ADC->SQR1 & (~ADC_SQR1_L)) | (chan << ADC_SQR1_L_Pos);
+
+    return chan;
 }
 
 // enable or disable burst mode

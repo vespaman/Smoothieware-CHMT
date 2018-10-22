@@ -23,7 +23,7 @@ public:
 
     //Enable/disable ADC on pin according to state
     //and also select/de-select for next conversion
-    void setup(PinName pin, int state);
+    uint8_t setup(PinName pin, int state);
 
     //Enable/disable burst mode according to state
     void burst(int state);
