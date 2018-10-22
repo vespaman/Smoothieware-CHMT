@@ -76,7 +76,7 @@ void Adc::new_sample(int chan, uint32_t value)
 {
     // circular buffer to overwrite oldest reading
     if(chan < num_channels) {
-        sample_buffers[chan][sample_indexs[chan]++] = (value >> 4) & 0xFFF; // the 12 bit ADC reading
+        sample_buffers[chan][sample_indexs[chan]++] = (value) & 0xFFF; // the 12 bit ADC reading
         if (sample_indexs[chan] >= num_samples)
             sample_indexs[chan] = 0;
     }
