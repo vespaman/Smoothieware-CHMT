@@ -45,6 +45,8 @@ private:
     uint8_t scan_count;
     uint8_t scan_index;
 
+    uint32_t interrupt_mask;
+
     uint32_t _data_of_pin(PinName pin);
 
     void adcisr(void);

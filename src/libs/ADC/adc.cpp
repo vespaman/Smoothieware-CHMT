@@ -247,21 +247,20 @@ void ADC::burst(int state) {
 
 //Set interrupt enable/disable for pin to state
 void ADC::interrupt_state(PinName pin, int state) {
-/*    int chan;
+    int chan = _pin_to_channel(pin);
 
-    chan = _pin_to_channel(pin);
-    if (state == 1) {
-        LPC_ADC->ADINTEN &= ~0x100;
-        LPC_ADC->ADINTEN |= 1 << chan;
-        // Enable the ADC Interrupt
-        NVIC_EnableIRQ(ADC_IRQn);
-    } else {
-        LPC_ADC->ADINTEN &= ~( 1 << chan );
-        //Disable interrrupt if no active pins left
-        if ((LPC_ADC->ADINTEN & 0xFF) == 0)
+    if (chan < ADC_CHANNEL_COUNT) {
+        if (state)
+            interrupt_mask |= (1 << chan);
+        else
+            interrupt_mask &= ~(1 << chan);
+
+        // should we set/clear ie bits here too?
+        if (interrupt_mask)
+            NVIC_EnableIRQ(ADC_IRQn);
+        else
             NVIC_DisableIRQ(ADC_IRQn);
     }
-    */
 }
 
 // append global interrupt handler to function isr
