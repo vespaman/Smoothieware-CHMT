@@ -29,19 +29,11 @@ junction_deviation                           0                # Similar to the o
 z_junction_deviation                         0.0              # for Z only moves, -1 uses junction_deviation, zero disables junction_deviation on z moves DO NOT SET ON A DELTA
 
 # Stepper module configuration
-<<<<<<< Updated upstream
 microseconds_per_step_pulse                  1                # Duration of step pulses to stepper drivers, in microseconds
 base_stepping_frequency                      100000           # Base frequency for stepping, higher gives smoother movement
 
 # Cartesian axis speed limits
-x_axis_max_speed                             30000            # mm/min
-=======
-microseconds_per_step_pulse                  0.5                # Duration of step pulses to stepper drivers, in microseconds
-base_stepping_frequency                      100000           # Base frequency for stepping, higher gives smoother movement
-
-# Cartesian axis speed limits
 x_axis_max_speed                             100000            # mm/min
->>>>>>> Stashed changes
 y_axis_max_speed                             15000            # mm/min
 z_axis_max_speed                             10000            # mm/min
 
@@ -50,11 +42,7 @@ alpha_step_pin                               1.8              # Pin for alpha st
 alpha_dir_pin                                1.9!             # Pin for alpha stepper direction
 alpha_en_pin                                 0.5              # Pin for alpha enable pin
 alpha_current                                1.0              # X stepper motor current
-<<<<<<< Updated upstream
-alpha_max_rate                               30000.0          # mm/min
-=======
 alpha_max_rate                               100000.0          # mm/min
->>>>>>> Stashed changes
 
 beta_step_pin                                0.6              # Pin for beta stepper step signal
 beta_dir_pin                                 0.7!             # Pin for beta stepper direction
@@ -173,6 +161,18 @@ switch.led.input_on_command                  M810
 switch.led.input_off_command                 M811
 switch.led.output_pin                        0.0
 switch.led.output_type                       pwm
+
+temperature_control.analog.enable            true
+temperature_control.analog.thermistor_pin    2.2
+temperature_control.analog.heater_pin        nc
+temperature_control.analog.thermistor        EPCOS100K
+temperature_control.analog.designator        T
+
+temperature_control.analog2.enable            true
+temperature_control.analog2.thermistor_pin    1.1
+temperature_control.analog2.heater_pin        nc
+temperature_control.analog2.thermistor        EPCOS100K
+temperature_control.analog2.designator        M
 
 # Only needed on a smoothieboard
 currentcontrol_module_enable                 false             #
