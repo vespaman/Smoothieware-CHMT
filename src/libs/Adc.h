@@ -11,13 +11,9 @@
 #define ADC_H
 
 #include "PinNames.h" // mbed.h lib
+#include "ADC/adc.h"
 
 #include <cmath>
-
-class Pin;
-namespace mbed {
-    class ADC;
-}
 
 // define how many bits of extra resolution required
 // 2 bits means the 12bit ADC is 14 bits of resolution
@@ -43,7 +39,7 @@ private:
     PinName _pin_to_pinname(Pin *pin);
     mbed::ADC *adc;
 
-    static const int num_channels= 6;
+    static const int num_channels= ADC_CHANNEL_COUNT;
 #ifdef OVERSAMPLE
     // we need 4^n sample to oversample and we get double that to filter out spikes
     static const int num_samples= powf(4, OVERSAMPLE)*2;
@@ -52,6 +48,7 @@ private:
 #endif
     // buffers storing the last num_samples readings for each channel
     uint16_t sample_buffers[num_channels][num_samples];
+    uint16_t sample_indexs[num_channels];
 };
 
 #endif

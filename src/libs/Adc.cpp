@@ -57,22 +57,28 @@ AD7 P0.2    0-GPIO,     1-TXD0, 2-AD0[7], 3-                4,5 bits of PINSEL0
 void Adc::enable_pin(Pin *pin)
 {
     PinName pin_name = this->_pin_to_pinname(pin);
-    int channel = adc->_pin_to_channel(pin_name);
-    memset(sample_buffers[channel], 0, sizeof(sample_buffers[0]));
+    uint8_t channel;
 
-    this->adc->burst(1);
-    this->adc->setup(pin_name, 1);
-    this->adc->interrupt_state(pin_name, 1);
+    channel = this->adc->setup(pin_name, 1);
+
+    if (channel < ADC_CHANNEL_COUNT) {
+        memset(sample_buffers[channel], 0, sizeof(sample_buffers[0]));
+        sample_indexs[channel] = 0;
+
+        this->adc->interrupt_state(pin_name, 1);
+        this->adc->burst(1);
+    }
 }
 
-// Keeps the last 8 values for each channel
+// Keeps the last num_samples values for each channel
 // This is called in an ISR, so sample_buffers needs to be accessed atomically
 void Adc::new_sample(int chan, uint32_t value)
 {
-    // Shuffle down and add new value to the end
+    // circular buffer to overwrite oldest reading
     if(chan < num_channels) {
-        memmove(&sample_buffers[chan][0], &sample_buffers[chan][1], sizeof(sample_buffers[0]) - sizeof(sample_buffers[0][0]));
-        sample_buffers[chan][num_samples - 1] = (value >> 4) & 0xFFF; // the 12 bit ADC reading
+        sample_buffers[chan][sample_indexs[chan]++] = (value) & 0xFFF; // the 12 bit ADC reading
+        if (sample_indexs[chan] >= num_samples)
+            sample_indexs[chan] = 0;
     }
 }
 
