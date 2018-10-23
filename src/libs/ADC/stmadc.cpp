@@ -7,7 +7,7 @@
 #undef ADC
 
 #include "mbed.h"
-#include "adc.h"
+#include "stmadc.h"
 #include "mri.h"
 
 #include "pinmap.h"

@@ -11,7 +11,7 @@
 #define ADC_H
 
 #include "PinNames.h" // mbed.h lib
-#include "ADC/adc.h"
+#include "ADC/stmadc.h"
 
 #include <cmath>
 
