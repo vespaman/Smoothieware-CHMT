@@ -11,7 +11,7 @@
 #include "Adc.h"
 #include "libs/nuts_bolts.h"
 #include "libs/Kernel.h"
-#include "libs/ADC/adc.h"
+#include "libs/ADC/stmadc.h"
 #include "libs/Median.h"
 
 #include <cstring>
