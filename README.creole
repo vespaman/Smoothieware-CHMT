@@ -5,34 +5,36 @@ Current build status: {{https://travis-ci.org/Smoothieware/Smoothieware.svg?bran
 To build, follow normal smoothie build process to get setup.  Then checkout chmt branch and rebuild.
 
 ===Port Status:
-* mbed hooks - Added, compiles, untested
-* stm32f4xx libs - Added, compiles, untested
-* timers - Ported, compiles, untested (clock freq calc is most likely wrong)
-* wdt - Ported, compiles, untested
-* gpio - Ported, compiles, untested
-* adc - Not Started
+* mbed hooks - Added, compiles, tested
+* stm32f4xx libs - Added, compiles, tested
+* timers - Ported, compiles, tested
+* wdt - Ported, compiles, tested
+* gpio - Ported, compiles, tested
+* adc - Ported, compiles, tested
+* pwm - Ported, compiles, tested
 * build scripts - Added, project builds successfully
 
 ===CHMT Status:
-* config file - Not Started
+* config file - Rough file for testing in nucleo-144 branch
 * pin map - Not Started
 * operation/verfication - Not Started
 * machine testing - Not Started
 
 ===TODO:
-* Target initialization and board bringup (clocks, mpu, etc)
-* Verification of ported peripherals (step generation, watchdog, gpios)
-* Debug/Comm uart setup
-* CHMT controller specific configuration
+* DONE: Target initialization and board bringup (clocks, mpu, etc)
+* DONE: Verification of ported peripherals (step generation, watchdog, gpios)
+* DONE: Debug/Comm uart setup
+* Not Started: CHMT controller specific configuration
 
 ===Notes/Caveats/Gotchas:
-* ADC not yet ported
 * smoothie mbed was ancient, so the oldest stm32 mbed available was integrated to reduce friction -- incompatibilities, and bugs from dated mbed may have been introduced
-* mbed had some mpu code that may or may not work with stm32
 * MRI (gdb over serial) is not supported on stm32, use SWD/JTAG
+* config file must be hardcoded into firmware build
 
 ===Next Steps/Priority
-Board Bringup: Load firmware onto a dev board and start walking through device init, fixing issues.
+* CHMT Pinout Reversing
+* CHMT Config File Development
+* CHMT Machine Testing
 
 =Smoothie
 
