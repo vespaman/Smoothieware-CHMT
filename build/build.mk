@@ -33,7 +33,7 @@
 #                  default: Release
 #   DEVICES: List of devices for which to build.  This list be space delimited
 #            and can include the following devices:
-#            LPC1768, LPC11U24, STM32407XG
+#            LPC1768, LPC11U24, STM32F407XG
 #            default: LPC1768
 #   GPFLAGS: Additional compiler flags used when building C++ sources.
 #   GCFLAGS: Additional compiler flags used when building C sources.
