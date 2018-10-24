@@ -101,7 +101,7 @@ $(CLEAN_DEVICES): %.clean:
 ifdef STM_DEPLOY
 deploy deploy-stm32f407xg:
 	@echo Deploying to target.
-	$(subst PROJECT,STM32F407XG/$(PROJECT),$(STM_DEPLOY))
+	$(subst PROJECT,STM32F407xG/$(PROJECT),$(STM_DEPLOY))
 endif
 
 ifdef LPC_DEPLOY

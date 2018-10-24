@@ -20,7 +20,7 @@ endif
 
 
 # Set build customizations for this device.
-DEVICE=STM32F407XG
+DEVICE=STM32F407xG
 ARCHITECTURE=armv7e-m
 DEVICE_FLAGS=-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16
 DEVICE_CFLAGS=$(DEVICE_FLAGS) -mthumb-interwork
