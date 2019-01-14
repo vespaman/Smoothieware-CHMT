@@ -43,40 +43,44 @@ z_axis_max_speed                             10000            # mm/min
 alpha_step_pin                               5.5              # Pin for alpha stepper step signal # TBD
 alpha_dir_pin                                5.0!             # Pin for alpha stepper direction
 alpha_en_pin                                 6.1!             # Pin for alpha enable pin # XYZ EN
-alpha_current                                1.0              # X stepper motor current
 alpha_max_rate                               20000.0          # mm/min
 
 beta_step_pin                                5.4              # Pin for beta stepper step signal
-beta_dir_pin                                 5.1!              # Pin for beta stepper direction
-beta_en_pin                                  1.12             # Pin for beta enable # unused
-beta_current                                 1.5              # Y stepper motor current
+beta_dir_pin                                 5.1!             # Pin for beta stepper direction
+beta_en_pin                                  nc               # Pin for beta enable # unused
 beta_max_rate                                20000.0          # mm/min
 
 gamma_step_pin                               5.13              # Pin for gamma stepper step signal
 gamma_dir_pin                                5.8             # Pin for gamma stepper direction
 gamma_en_pin                                 6.0!              # Pin for gamma enable # BCD EN
-gamma_current                                0.5              # Z stepper motor current
 gamma_max_rate                               20000.0          # mm/min
 
-extruder.hotend.enable                       true             # Whether to activate the extruder module at all. All configuration is ignored if false
-extruder.hotend.steps_per_mm                 8.8888           # Steps per mm for extruder stepper
-extruder.hotend.default_feed_rate            20000            # Default rate ( mm/minute ) for moves where only the extruder moves
-extruder.hotend.acceleration                 1000             # Acceleration for the stepper motor, as of 0.6, arbitrary ratio
-extruder.hotend.max_speed                    180              # mm/s
-extruder.hotend.step_pin                     5.14              # Pin for extruder step signal
-extruder.hotend.dir_pin                      5.9!             # Pin for extruder dir signal
-extruder.hotend.en_pin                       0.2              # Pin for extruder enable signal # unused pin
-delta_current                                0.6              # First extruder stepper motor current
+extruder.n1.enable                           true             # Whether to activate the extruder module at all. All configuration is ignored if false
+extruder.n1.steps_per_mm                     8.8888           # Steps per mm for extruder stepper
+extruder.n1.default_feed_rate                20000            # Default rate ( mm/minute ) for moves where only the extruder moves
+extruder.n1.acceleration                     1000             # Acceleration for the stepper motor, as of 0.6, arbitrary ratio
+extruder.n1.max_speed                        180              # mm/s
+extruder.n1.step_pin                         5.14             # Pin for extruder step signal
+extruder.n1.dir_pin                          5.9!             # Pin for extruder dir signal
+extruder.n1.en_pin                           nc               # Pin for extruder enable signal # unused pin
 
-extruder.hotend2.enable                      true             # Whether to activate the extruder module at all. All configuration is ignored if false
-extruder.hotend2.steps_per_mm                8.8888           # Steps per mm for extruder stepper
-extruder.hotend2.default_feed_rate           20000            # Default rate ( mm/minute ) for moves where only the extruder moves
-extruder.hotend2.acceleration                1000             # Acceleration for the stepper motor, as of 0.6, arbitrary ratio
-extruder.hotend2.max_speed                   180              # mm/s
-extruder.hotend2.step_pin                    5.15             # Pin for extruder step signal
-extruder.hotend2.dir_pin                     5.10!            # Pin for extruder dir signal
-extruder.hotend2.en_pin                      4.10              # Pin for extruder enable signal # unused pin
-epsilon_current                              0.6              # Second extruder stepper motor current
+extruder.n2.enable                           true             # Whether to activate the extruder module at all. All configuration is ignored if false
+extruder.n2.steps_per_mm                     8.8888           # Steps per mm for extruder stepper
+extruder.n2.default_feed_rate                20000            # Default rate ( mm/minute ) for moves where only the extruder moves
+extruder.n2.acceleration                     1000             # Acceleration for the stepper motor, as of 0.6, arbitrary ratio
+extruder.n2.max_speed                        180              # mm/s
+extruder.n2.step_pin                         5.15             # Pin for extruder step signal
+extruder.n2.dir_pin                          5.10!            # Pin for extruder dir signal
+extruder.n2.en_pin                           nc               # Pin for extruder enable signal # unused pin
+
+extruder.f1.enable                           true             # Whether to activate the extruder module at all. All configuration is ignored if false
+extruder.f1.steps_per_mm                     8.8888           # Steps per mm for extruder stepper
+extruder.f1.default_feed_rate                20000            # Default rate ( mm/minute ) for moves where only the extruder moves
+extruder.f1.acceleration                     1000             # Acceleration for the stepper motor, as of 0.6, arbitrary ratio
+extruder.f1.max_speed                        180              # mm/s
+extruder.f1.step_pin                         5.3              # Pin for extruder step signal
+extruder.f1.dir_pin                          5.2              # Pin for extruder dir signal
+extruder.f1.en_pin                           nc               # Pin for extruder enable signal # unused pin
 
 
 # Serial communications configuration ( baud rate default to 9600 if undefined )
@@ -201,13 +205,13 @@ temperature_control.v1sense.enable            true
 temperature_control.v1sense.thermistor_pin    0.6
 temperature_control.v1sense.heater_pin        nc
 temperature_control.v1sense.thermistor        EPCOS100K
-temperature_control.v1sense.designator        T
+temperature_control.v1sense.designator        V1
 
 temperature_control.v2sense.enable           true
 temperature_control.v2sense.thermistor_pin   0.5
 temperature_control.v2sense.heater_pin       nc
 temperature_control.v2sense.thermistor       EPCOS100K
-temperature_control.v2sense.designator       M
+temperature_control.v2sense.designator       V2
 
 # Only needed on a smoothieboard
 currentcontrol_module_enable                 false            #
