@@ -56,7 +56,7 @@ gamma_en_pin                                 6.0!              # Pin for gamma e
 gamma_max_rate                               20000.0          # mm/min
 
 extruder.n1.enable                           true             # Whether to activate the extruder module at all. All configuration is ignored if false
-extruder.n1.steps_per_mm                     8.8888           # Steps per mm for extruder stepper
+extruder.n1.steps_per_mm                     4.4444           # Steps per mm for extruder stepper # 1/8 ms
 extruder.n1.default_feed_rate                20000            # Default rate ( mm/minute ) for moves where only the extruder moves
 extruder.n1.acceleration                     1000             # Acceleration for the stepper motor, as of 0.6, arbitrary ratio
 extruder.n1.max_speed                        180              # mm/s
@@ -65,7 +65,7 @@ extruder.n1.dir_pin                          5.9!             # Pin for extruder
 extruder.n1.en_pin                           nc               # Pin for extruder enable signal # unused pin
 
 extruder.n2.enable                           true             # Whether to activate the extruder module at all. All configuration is ignored if false
-extruder.n2.steps_per_mm                     8.8888           # Steps per mm for extruder stepper
+extruder.n2.steps_per_mm                     4.4444           # Steps per mm for extruder stepper # 1/8 ms
 extruder.n2.default_feed_rate                20000            # Default rate ( mm/minute ) for moves where only the extruder moves
 extruder.n2.acceleration                     1000             # Acceleration for the stepper motor, as of 0.6, arbitrary ratio
 extruder.n2.max_speed                        180              # mm/s
