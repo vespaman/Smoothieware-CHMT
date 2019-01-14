@@ -155,7 +155,7 @@ switch.n2_vac.output_type                    digital
 switch.vac.enable                            true
 switch.vac.input_on_command                  M808
 switch.vac.input_off_command                 M809
-switch.vac.output_pin                        4.5
+switch.vac.output_pin                        4.5!
 switch.vac.output_type                       digital
 
 switch.ledup.enable                          true
@@ -167,7 +167,7 @@ switch.ledup.output_type                     pwm
 switch.blow.enable                           true
 switch.blow.input_on_command                 M812
 switch.blow.input_off_command                M813
-switch.blow.output_pin                       4.6
+switch.blow.output_pin                       4.6!
 switch.blow.output_type                      digital
 
 switch.leddown.enable                        true
@@ -192,17 +192,22 @@ switch.xyzbcden.output_pin                   4.7
 switch.xyzbcden.output_type                  digital
 switch.xyzbcden.startup_state                false
 
-temperature_control.analog.enable            true
-temperature_control.analog.thermistor_pin    0.6
-temperature_control.analog.heater_pin        nc
-temperature_control.analog.thermistor        EPCOS100K
-temperature_control.analog.designator        T
+switch.oten.enable                           true
+switch.oten.output_pin                       3.11
+switch.oten.output_type                      digital
+switch.oten.startup_state                    false
 
-temperature_control.analog2.enable           true
-temperature_control.analog2.thermistor_pin   0.5
-temperature_control.analog2.heater_pin       nc
-temperature_control.analog2.thermistor       EPCOS100K
-temperature_control.analog2.designator       M
+temperature_control.v1sense.enable            true
+temperature_control.v1sense.thermistor_pin    0.6
+temperature_control.v1sense.heater_pin        nc
+temperature_control.v1sense.thermistor        EPCOS100K
+temperature_control.v1sense.designator        T
+
+temperature_control.v2sense.enable           true
+temperature_control.v2sense.thermistor_pin   0.5
+temperature_control.v2sense.heater_pin       nc
+temperature_control.v2sense.thermistor       EPCOS100K
+temperature_control.v2sense.designator       M
 
 # Only needed on a smoothieboard
 currentcontrol_module_enable                 false            #
