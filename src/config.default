@@ -180,10 +180,10 @@ switch.dragpin.input_off_command             M817
 switch.dragpin.output_pin                    3.14
 switch.dragpin.output_type                   digital
 
-switch.rs422en.enable                        true
-switch.rs422en.output_pin                    2.1
-switch.rs422en.output_type                   digital
-switch.rs422en.startup_state                 true
+#switch.rs422en.enable                        true
+#switch.rs422en.output_pin                    2.1
+#switch.rs422en.output_type                   digital
+#switch.rs422en.startup_state                 true
 
 temperature_control.analog.enable            true
 temperature_control.analog.thermistor_pin    0.6
