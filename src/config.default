@@ -194,18 +194,20 @@ switch.dragpin.output_type                   digital
 switch.xyzbcden.enable                       true
 switch.xyzbcden.output_pin                   4.7
 switch.xyzbcden.output_type                  digital
-switch.xyzbcden.startup_state                false
 
 switch.oten.enable                           true
 switch.oten.output_pin                       3.11
 switch.oten.output_type                      digital
-switch.oten.startup_state                    false
 
-temperature_control.v1sense.enable            true
-temperature_control.v1sense.thermistor_pin    0.6
-temperature_control.v1sense.heater_pin        nc
-temperature_control.v1sense.thermistor        EPCOS100K
-temperature_control.v1sense.designator        V1
+switch.camsw.enable                          true
+switch.camsw.output_pin                      6.10
+switch.camsw.output_type                     digital
+
+temperature_control.v1sense.enable           true
+temperature_control.v1sense.thermistor_pin   0.6
+temperature_control.v1sense.heater_pin       nc
+temperature_control.v1sense.thermistor       EPCOS100K
+temperature_control.v1sense.designator       V1
 
 temperature_control.v2sense.enable           true
 temperature_control.v2sense.thermistor_pin   0.5
