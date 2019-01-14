@@ -12,6 +12,7 @@
 #include "libs/Module.h"
 #include "libs/Config.h"
 #include "libs/nuts_bolts.h"
+#include "libs/gpio.h"
 #include "libs/SlowTicker.h"
 #include "libs/Adc.h"
 #include "libs/StreamOutputPool.h"
@@ -67,7 +68,10 @@ Kernel::Kernel()
 
     // serial first at fixed baud rate (DEFAULT_SERIAL_BAUD_RATE) so config can report errors to serial
     // Set to UART0, this will be changed to use the same UART as MRI if it's enabled
-    this->serial = new SerialConsole(PD_5, PD_6, DEFAULT_SERIAL_BAUD_RATE);
+    //this->serial = new SerialConsole(PD_5, PD_6, DEFAULT_SERIAL_BAUD_RATE);
+    GPIO rs422en = GPIO(PC_1);
+    rs422en.write(1);
+    this->serial = new SerialConsole(PA_9, PA_10, DEFAULT_SERIAL_BAUD_RATE);
 
     // Config next, but does not load cache yet
     this->config = new Config();
@@ -106,7 +110,8 @@ Kernel::Kernel()
 #endif
     // default
     if(this->serial == NULL) {
-        this->serial = new(AHB0) SerialConsole(PD_5, PD_6, this->config->value(uart0_checksum, baud_rate_setting_checksum)->by_default(DEFAULT_SERIAL_BAUD_RATE)->as_number());
+        //this->serial = new(AHB0) SerialConsole(PD_5, PD_6, this->config->value(uart0_checksum, baud_rate_setting_checksum)->by_default(DEFAULT_SERIAL_BAUD_RATE)->as_number());
+        this->serial = new(AHB0) SerialConsole(PA_9, PA_10, this->config->value(uart0_checksum, baud_rate_setting_checksum)->by_default(DEFAULT_SERIAL_BAUD_RATE)->as_number());
     }
 
     //some boards don't have leds.. TOO BAD!
