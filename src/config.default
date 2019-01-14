@@ -12,8 +12,8 @@ default_feed_rate                            12000            # Default rate ( m
 default_seek_rate                            20000            # Default rate ( mm/minute ) for G0 moves
 
 # Arm solution configuration : Cartesian robot. Translates mm positions into stepper positions
-alpha_steps_per_mm                           15.3846          # Steps per mm for alpha stepper # for now assume 1/4 stepping, 26T, 1.8deg
-beta_steps_per_mm                            15.3846          # Steps per mm for beta stepper
+alpha_steps_per_mm                           32.0             # Steps per mm for alpha stepper # 1/8 stepping, 25T?, 1.8deg
+beta_steps_per_mm                            32.0             # Steps per mm for beta stepper
 gamma_steps_per_mm                           8.8888           # Steps per mm for gamma stepper
 
 # Planner module configuration : Look-ahead and acceleration configuration
@@ -74,7 +74,7 @@ extruder.n2.dir_pin                          5.10!            # Pin for extruder
 extruder.n2.en_pin                           nc               # Pin for extruder enable signal # unused pin
 
 extruder.f1.enable                           true             # Whether to activate the extruder module at all. All configuration is ignored if false
-extruder.f1.steps_per_mm                     8.8888           # Steps per mm for extruder stepper
+extruder.f1.steps_per_mm                     4.4444           # Steps per mm for extruder stepper # 1/8 ms
 extruder.f1.default_feed_rate                20000            # Default rate ( mm/minute ) for moves where only the extruder moves
 extruder.f1.acceleration                     1000             # Acceleration for the stepper motor, as of 0.6, arbitrary ratio
 extruder.f1.max_speed                        180              # mm/s
