@@ -103,30 +103,32 @@ alpha_min_endstop                            4.4!^            # add a ! to inver
 alpha_max_endstop                            nc               # NOTE set to nc if this is not installed
 alpha_homing_direction                       home_to_min      # or set to home_to_max and set alpha_max
 alpha_min                                    0                # this gets loaded after homing when home_to_min is set
-alpha_max                                    200              # this gets loaded after homing when home_to_max is set
-alpha_fast_homing_rate_mm_s                  50               # feedrates in mm/second
+alpha_max                                    510              # this gets loaded after homing when home_to_max is set
+alpha_fast_homing_rate_mm_s                  100               # feedrates in mm/second
 alpha_slow_homing_rate_mm_s                  25               # "
 alpha_homing_retract_mm                      5                # distance in mm
+alpha_max_travel                             525
 
 # Y
 beta_min_endstop                             4.3!^            #
 beta_max_endstop                             nc               #
 beta_homing_direction                        home_to_min      #
 beta_min                                     0                #
-beta_max                                     250              #
-beta_fast_homing_rate_mm_s                   50               # "
+beta_max                                     450              # TBD
+beta_fast_homing_rate_mm_s                   100               # "
 beta_slow_homing_rate_mm_s                   25               # "
 beta_homing_retract_mm                       5                # "
+beta_max_travel                              525
 
 # Z
-#gamma_min_endstop                            2.13!^           # if this is defined it will home z and introduce an offset
-#gamma_max_endstop                            4.2!^            #
-#gamma_homing_direction                       home_to_min      #
-gamma_min                                     -23             #
-gamma_max                                     23              #
-#gamma_fast_homing_rate_mm_s                  50               # "
-#gamma_slow_homing_rate_mm_s                  25               # "
-#gamma_homing_retract_mm                      10               # "
+gamma_min_endstop                            2.13!^           # if this is defined it will home z and introduce an offset
+gamma_max_endstop                            4.2!^            #
+gamma_homing_direction                       home_to_max      #
+gamma_min                                    -23             #
+gamma_max                                    0              #
+gamma_fast_homing_rate_mm_s                  50               # "
+gamma_slow_homing_rate_mm_s                  25               # "
+gamma_homing_retract_mm                      0               # "
 
 # optional order in which axis will home, default is they all home at the same time,
 # if this is set it will force each axis to home one at a time in the specified order
