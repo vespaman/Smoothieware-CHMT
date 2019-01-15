@@ -134,6 +134,15 @@ gamma_homing_retract_mm                      0                #
 # if this is set it will force each axis to home one at a time in the specified order
 homing_order                                 XY              # x axis followed by y
 
+soft_endstop.enable                          true
+soft_endstop.x_min                           -1
+soft_endstop.x_max                           511
+soft_endstop.y_min                           -1
+soft_endstop.y_max                           461
+soft_endstop.z_min                           -23.1
+soft_endstop.z_max                           23.1
+soft_endstop.halt                            false
+
 switch.n1_vac.enable                         true
 switch.n1_vac.input_on_command               M800
 switch.n1_vac.input_off_command              M801
