@@ -212,6 +212,8 @@ switch.oten.output_pin                       3.11
 switch.oten.output_type                      digital
 
 switch.camsw.enable                          true
+switch.camsw.input_on_command                M818
+switch.camsw.input_off_command               M819
 switch.camsw.output_pin                      6.10
 switch.camsw.output_type                     digital
 
