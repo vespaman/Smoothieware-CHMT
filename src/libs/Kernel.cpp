@@ -129,6 +129,8 @@ Kernel::Kernel()
     this->ok_per_line = this->config->value( ok_per_line_checksum )->by_default(true)->as_bool();
 
     this->add_module( this->serial );
+    this->add_module(new(AHB0) SerialConsole(PD_5, PD_6, this->config->value(uart0_checksum, baud_rate_setting_checksum)->by_default(DEFAULT_SERIAL_BAUD_RATE)->as_number()));
+    //this->add_module(new(AHB0) SerialConsole(PA_9, PA_10, this->config->value(uart0_checksum, baud_rate_setting_checksum)->by_default(DEFAULT_SERIAL_BAUD_RATE)->as_number()));
 
     // HAL stuff
     add_module( this->slow_ticker = new SlowTicker());
