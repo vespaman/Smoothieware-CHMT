@@ -82,6 +82,15 @@ extruder.f1.step_pin                         5.3              # Pin for extruder
 extruder.f1.dir_pin                          5.2              # Pin for extruder dir signal
 extruder.f1.en_pin                           nc               # Pin for extruder enable signal # unused pin
 
+extruder.f2.enable                           false            # Whether to activate the extruder module at all. All configuration is ignored if false
+extruder.f2.steps_per_mm                     69.2642          # Steps per mm for peeler stepper # 1/8 ms # linear distance of tape at 25mm min diameter
+extruder.f2.default_feed_rate                20000            # Default rate ( mm/minute ) for moves where only the extruder moves
+extruder.f2.acceleration                     1000             # Acceleration for the stepper motor, as of 0.6, arbitrary ratio
+extruder.f2.max_speed                        180              # mm/s
+extruder.f2.step_pin                         5.7              # Pin for extruder step signal # for some reason f2 has step connected to DIR
+extruder.f2.dir_pin                          5.6              # Pin for extruder dir signal # and not PLS on the CHMT controller
+extruder.f2.en_pin                           nc               # Pin for extruder enable signal # unused pin
+
 
 # Serial communications configuration ( baud rate default to 9600 if undefined )
 uart0.baud_rate                              115200           # Baud rate for the default hardware serial port
