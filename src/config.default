@@ -82,7 +82,7 @@ extruder.f1.step_pin                         5.3              # Pin for extruder
 extruder.f1.dir_pin                          5.2              # Pin for extruder dir signal
 extruder.f1.en_pin                           nc               # Pin for extruder enable signal # unused pin
 
-extruder.f2.enable                           false            # Whether to activate the extruder module at all. All configuration is ignored if false
+extruder.f2.enable                           true             # Whether to activate the extruder module at all. All configuration is ignored if false
 extruder.f2.steps_per_mm                     69.2642          # Steps per mm for peeler stepper # 1/8 ms # linear distance of tape at 25mm min diameter
 extruder.f2.default_feed_rate                20000            # Default rate ( mm/minute ) for moves where only the extruder moves
 extruder.f2.acceleration                     1000             # Acceleration for the stepper motor, as of 0.6, arbitrary ratio
