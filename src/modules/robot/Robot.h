@@ -75,6 +75,8 @@ class Robot : public Module {
         // Workspace coordinate systems
         wcs_t mcs2wcs(const wcs_t &pos) const;
         wcs_t mcs2wcs(const float *pos) const { return mcs2wcs(wcs_t(pos[X_AXIS], pos[Y_AXIS], pos[Z_AXIS])); }
+        wcs_t wcs2mcs(const wcs_t &pos) const;
+        wcs_t wcs2mcs(const float *pos) const { return wcs2mcs(wcs_t(pos[X_AXIS], pos[Y_AXIS], pos[Z_AXIS])); }
 
         struct {
             bool inch_mode:1;                                 // true for inch mode, false for millimeter mode ( default )
@@ -118,7 +120,7 @@ class Robot : public Module {
 
         std::array<wcs_t, MAX_WCS> wcs_offsets; // these are persistent once saved with M500
         uint8_t current_wcs{0}; // 0 means G54 is enabled this is persistent once saved with M500
-        wcs_t g92_offset;
+        float g92_offset[k_max_actuators];
         wcs_t tool_offset; // used for multiple extruders, sets the tool offset for the current extruder applied first
         std::tuple<float, float, float, uint8_t> last_probe_position{0,0,0,0};
 

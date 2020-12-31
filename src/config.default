@@ -7,82 +7,105 @@
 # git update-index --assume-unchanged src/config.default
 #
 
+on_boot_gcode_enable                         false
+mm_per_arc_segment                           0.5 
+
 # Robot module configurations : general handling of movement G-codes and slicing into moves
 default_feed_rate                            60000            # Default rate ( mm/minute ) for G1/G2/G3 moves
 default_seek_rate                            60000            # Default rate ( mm/minute ) for G0 moves
 
 # Arm solution configuration : Cartesian robot. Translates mm positions into stepper positions
-alpha_steps_per_mm                           32.0             # Steps per mm for alpha stepper # 1/8 stepping, 25T?, 1.8deg
-beta_steps_per_mm                            32.0             # Steps per mm for beta stepper
+alpha_steps_per_mm                           31.94            # Steps per mm for alpha stepper # 1/8 stepping, 25T?, 1.8deg
+beta_steps_per_mm                            31.94            # Steps per mm for beta stepper
 gamma_steps_per_mm                           4.4444           # Steps per mm for gamma stepper
 
 # Planner module configuration : Look-ahead and acceleration configuration
 planner_queue_size                           32               # DO NOT CHANGE THIS UNLESS YOU KNOW EXACTLY WHAT YOU ARE DOING
-acceleration                                 4000             # Acceleration in mm/second/second.
+acceleration                                 10000            # Acceleration in mm/second/second.
 z_acceleration                               8000             # Acceleration for Z only moves in mm/s^2, 0 uses acceleration which is the default. DO NOT SET ON A DELTA
 acceleration_ticks_per_second                1000             # Number of times per second the speed is updated
-junction_deviation                           0                # Similar to the old "max_jerk", in millimeters,
+junction_deviation                           0.005            # Similar to the old "max_jerk", in millimeters,
                                                               # see https://github.com/grbl/grbl/blob/master/planner.c
                                                               # and https://github.com/grbl/grbl/wiki/Configuring-Grbl-v0.8
                                                               # Lower values mean being more careful, higher values means being
                                                               # faster and have more jerk
-z_junction_deviation                         0.0              # for Z only moves, -1 uses junction_deviation, zero disables junction_deviation on z moves DO NOT SET ON A DELTA
+#z_junction_deviation                         0.005           # for Z only moves, -1 uses junction_deviation, zero disables junction_deviation on z moves DO NOT SET ON A DELTA
 
 # Stepper module configuration
-microseconds_per_step_pulse                  4                # Duration of step pulses to stepper drivers, in microseconds
-base_stepping_frequency                      100000           # Base frequency for stepping, higher gives smoother movement
+microseconds_per_step_pulse                  1                # Duration of step pulses to stepper drivers, in microseconds
+base_stepping_frequency                      200000           # Base frequency for stepping, higher gives smoother movement
 
 # Cartesian axis speed limits
-x_axis_max_speed                             60000            # mm/min
-y_axis_max_speed                             50000            # mm/min
-z_axis_max_speed                             50000            # mm/min
+x_axis_max_speed                             80000            # mm/min
+y_axis_max_speed                             80000            # mm/min
+z_axis_max_speed                             60000            # mm/min
 
 # Stepper module pins ( ports, and pin numbers, appending "!" to the number will invert a pin )
 # CHMT 5.3:LFeederStep 5.4:YStep 5.5:XStep 5.0:!XDir 5.1:!YDir 5.2:LFeederDir
 # CHMT 5.8:ZDir 5.13:ZStep 5.9:!LNozzleDir 5.14:LNozzleStep 5.10:!RNozzleDir 5.15:RNozzleStep
+
+# X axis
 alpha_step_pin                               5.5              # Pin for alpha stepper step signal # TBD
 alpha_dir_pin                                5.0!             # Pin for alpha stepper direction
 alpha_en_pin                                 6.1!             # Pin for alpha enable pin # XYZ EN
-alpha_max_rate                               60000.0          # mm/min
-alpha_acceleration                           4000.0
+alpha_max_rate                               80000.0          # mm/min
+alpha_acceleration                           10000.0
 
+# Y axis
 beta_step_pin                                5.4              # Pin for beta stepper step signal
 beta_dir_pin                                 5.1!             # Pin for beta stepper direction
 beta_en_pin                                  nc               # Pin for beta enable # unused
-beta_max_rate                                50000.0          # mm/min
-beta_acceleration                            1500.0
+beta_max_rate                                80000.0          # mm/min
+beta_acceleration                            7000.0
 
-gamma_step_pin                               5.13              # Pin for gamma stepper step signal
-gamma_dir_pin                                5.8             # Pin for gamma stepper direction
-gamma_en_pin                                 6.0!              # Pin for gamma enable # BCD EN
-gamma_max_rate                               50000.0          # mm/min
+# Z axis
+gamma_step_pin                               5.13             # Pin for gamma stepper step signal
+gamma_dir_pin                                5.8              # Pin for gamma stepper direction
+gamma_en_pin                                 6.0!             # Pin for gamma enable # BCD EN
+gamma_max_rate                               60000.0          # mm/min
+gamma_acceleration                           7000.0
 
-extruder.n1.enable                           true             # Whether to activate the extruder module at all. All configuration is ignored if false
-extruder.n1.steps_per_mm                     4.4444           # Steps per mm for extruder stepper # 1/8 ms
-extruder.n1.default_feed_rate                20000            # Default rate ( mm/minute ) for moves where only the extruder moves
-extruder.n1.acceleration                     1000             # Acceleration for the stepper motor, as of 0.6, arbitrary ratio
-extruder.n1.max_speed                        720              # mm/s
-extruder.n1.step_pin                         5.14             # Pin for extruder step signal
-extruder.n1.dir_pin                          5.9!             # Pin for extruder dir signal
-extruder.n1.en_pin                           nc               # Pin for extruder enable signal # unused pin
+# A axis: N1 rotation
+delta_steps_per_mm                           4.4444           # steps per degree: 160° per rev. @0.9° stepper = 400 steps/160° x 16 micros = 40
+delta_step_pin                               5.14             # Pin for delta stepper step signal
+delta_dir_pin                                5.9!             # Pin for delta stepper direction
+delta_en_pin                                 nc               # Pin for delta enable
+delta_current                                0.5              # Z stepper motor current
+a_axis_max_speed                             1000             # °/min
+delta_max_rate                               100000           # °/min
+delta_acceleration                           10000            # °/sec^2
+delta_enable                                 true
 
-extruder.n2.enable                           true             # Whether to activate the extruder module at all. All configuration is ignored if false
-extruder.n2.steps_per_mm                     4.4444           # Steps per mm for extruder stepper # 1/8 ms
-extruder.n2.default_feed_rate                20000            # Default rate ( mm/minute ) for moves where only the extruder moves
-extruder.n2.acceleration                     1000             # Acceleration for the stepper motor, as of 0.6, arbitrary ratio
-extruder.n2.max_speed                        720              # mm/s
-extruder.n2.step_pin                         5.15             # Pin for extruder step signal
-extruder.n2.dir_pin                          5.10!            # Pin for extruder dir signal
-extruder.n2.en_pin                           nc               # Pin for extruder enable signal # unused pin
+# B axis: N2 rotation
+epsilon_steps_per_mm                         4.4444           # steps per mm for epsilon stepper: 8mm spindle @ 1.8° stepper = 200 steps/8mm x 16 micros = 400
+epsilon_step_pin                             5.15             # Pin for delta stepper step signal
+epsilon_dir_pin                              5.10!            # Pin for delta stepper direction
+epsilon_en_pin                               nc               # Pin for delta enable
+epsilon_current                              0.5              # Z stepper motor current
+b_axis_max_speed                             1000             # mm/min
+epsilon_max_rate                             100000           # mm/min
+epsilon_acceleration                         10000            # mm/sec^2
+epsilon_enable                               true
 
-extruder.f1.enable                           true             # Whether to activate the extruder module at all. All configuration is ignored if false
-extruder.f1.steps_per_mm                     69.2642          # Steps per mm for peeler stepper # 1/8 ms # linear distance of tape at 25mm min diameter
-extruder.f1.default_feed_rate                20000            # Default rate ( mm/minute ) for moves where only the extruder moves
-extruder.f1.acceleration                     1000             # Acceleration for the stepper motor, as of 0.6, arbitrary ratio
-extruder.f1.max_speed                        180              # mm/s
-extruder.f1.step_pin                         5.3              # Pin for extruder step signal
-extruder.f1.dir_pin                          5.2              # Pin for extruder dir signal
-extruder.f1.en_pin                           nc               # Pin for extruder enable signal # unused pin
+# C axis: LPEELER
+zeta_steps_per_mm                            69.2642          # may be steps per degree for example
+zeta_step_pin                                5.3              # Pin for delta stepper step signal
+zeta_dir_pin                                 5.2              # Pin for delta stepper direction
+zeta_en_pin                                  nc               # Pin for delta enable
+zeta_current                                 0.5              # Z stepper motor current
+zeta_max_rate                                100000           # mm/min
+zeta_acceleration                            10000            # mm/sec^2
+zeta_enable                                  true
+
+# D axis: RPEELER
+#eta_steps_per_mm                             69.2642          # may be steps per degree for example
+#eta_step_pin                                 5.7              # Pin for delta stepper step signal
+#eta_dir_pin                                  5.6              # Pin for delta stepper direction
+#eta_en_pin                                   nc               # Pin for delta enable
+#eta_current                                  0.5              # Z stepper motor current
+#eta_max_rate                                 100000           # mm/min
+#eta_acceleration                             10000            # mm/sec^2
+#eta_enable                                   true
 
 extruder.f2.enable                           true             # Whether to activate the extruder module at all. All configuration is ignored if false
 extruder.f2.steps_per_mm                     69.2642          # Steps per mm for peeler stepper # 1/8 ms # linear distance of tape at 25mm min diameter
@@ -92,6 +115,7 @@ extruder.f2.max_speed                        180              # mm/s
 extruder.f2.step_pin                         5.7              # Pin for extruder step signal # for some reason f2 has step connected to DIR
 extruder.f2.dir_pin                          5.6              # Pin for extruder dir signal # and not PLS on the CHMT controller
 extruder.f2.en_pin                           nc               # Pin for extruder enable signal # unused pin
+
 
 
 # Serial communications configuration ( baud rate default to 9600 if undefined )
@@ -144,7 +168,7 @@ gamma_max_travel                             50
 
 # optional order in which axis will home, default is they all home at the same time,
 # if this is set it will force each axis to home one at a time in the specified order
-homing_order                                 XY              # x axis followed by y
+homing_order                                 XYZ              # x axis followed by y
 
 soft_endstop.enable                          true
 soft_endstop.x_min                           -1
