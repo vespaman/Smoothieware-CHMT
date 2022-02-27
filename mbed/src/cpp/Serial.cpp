@@ -19,8 +19,8 @@
 
 namespace mbed {
 
-Serial::Serial(PinName tx, PinName rx, const char *name) : Stream(name) {
-    serial_init(&_serial, tx, rx);
+Serial::Serial(PinName tx, PinName rx, PinName rts, PinName cts, const char *name) : Stream(name) {
+    serial_init(&_serial, tx, rx, rts, cts);
     serial_irq_handler(&_serial, Serial::_irq_handler, (uint32_t)this);
 }
 

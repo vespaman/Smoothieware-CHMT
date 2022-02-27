@@ -53,9 +53,9 @@ public:
      *  @param rx Receive pin
      *
      *  @note
-     *    Either tx or rx may be specified as NC if unused
+     *    Either tx, rx, rts or cts may be specified as NC if unused
      */
-    Serial(PinName tx, PinName rx, const char *name=NULL);
+    Serial(PinName tx, PinName rx, PinName rts, PinName cts, const char *name=NULL);
 
     /** Set the baud rate of the serial port
      *

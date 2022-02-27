@@ -57,7 +57,8 @@ static void init_uart(serial_t *obj)
     UartHandle.Init.WordLength = obj->databits;
     UartHandle.Init.StopBits   = obj->stopbits;
     UartHandle.Init.Parity     = obj->parity;
-    UartHandle.Init.HwFlowCtl  = UART_HWCONTROL_NONE;
+    UartHandle.Init.HwFlowCtl  = obj->hw_flowcontrol;
+  
 
     if (obj->pin_rx == NC) {
         UartHandle.Init.Mode = UART_MODE_TX;
@@ -72,7 +73,7 @@ static void init_uart(serial_t *obj)
     }
 }
 
-void serial_init(serial_t *obj, PinName tx, PinName rx)
+void serial_init(serial_t *obj, PinName tx, PinName rx, PinName rts, PinName cts)
 {
     // Determine the UART to use (UART_1, UART_2, ...)
     UARTName uart_tx = (UARTName)pinmap_peripheral(tx, PinMap_UART_TX);
@@ -130,9 +131,13 @@ void serial_init(serial_t *obj, PinName tx, PinName rx)
 #endif
     }
 
+
+
     // Configure the UART pins
     pinmap_pinout(tx, PinMap_UART_TX);
     pinmap_pinout(rx, PinMap_UART_RX);
+    pinmap_pinout(rts, PinMap_UART_RTS);
+    pinmap_pinout(cts, PinMap_UART_CTS);
     if (tx != NC) {
         pin_mode(tx, PullUp);
     }
@@ -140,6 +145,27 @@ void serial_init(serial_t *obj, PinName tx, PinName rx)
         pin_mode(rx, PullUp);
     }
 
+    if ( rts != NC && cts != NC )
+	{
+		pin_mode(rts, PullUp);
+		pin_mode(cts, PullUp );
+		obj->hw_flowcontrol = UART_HWCONTROL_RTS_CTS;
+	}
+	else if ( cts != NC )
+	{
+		pin_mode(cts, PullUp );
+		obj->hw_flowcontrol = UART_HWCONTROL_CTS;
+	}
+	else if ( rts != NC )
+	{
+		pin_mode(rts, PullUp);
+		obj->hw_flowcontrol = UART_HWCONTROL_RTS;
+	}
+	else
+	{
+		obj->hw_flowcontrol = UART_HWCONTROL_NONE;
+	}
+		
     // Configure UART
     obj->baudrate = 9600;
     obj->databits = UART_WORDLENGTH_8B;
