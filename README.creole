@@ -1,5 +1,31 @@
 Current build status: {{https://travis-ci.org/Smoothieware/Smoothieware.svg?branch=edge}}
 
+This fork is about RS232 hardware handshaking and increased throughput. 
+
+It will not work 'out of the box' on machines that has not been modified to also include the RTS/CTS signals 
+and updated the RS232 level shifter chip as described below.
+
+The 48 models are natively rs422, but in this fork, we [currently] uses the rs232 interface instead.
+===For the 48 models, the following needs to be done;
+* Add a 1+1 channel isolator chip to unpopulated position U31 e.g. ADUM121NOBRZ-RL7. Note; put a piece of kapton tape on pads 2 & 3, since they shall not be soldered to the board pads, but instead be connected to the wires described below.
+* Add a rs232 level shifter capable of 1mbit e.g. SN65C3232EDR to unpopulated position U33.
+* Add a few SMD 100nF caps around U31 and U33 on the unpopulated posistions.
+* Add a 4 pole through hole mount JST connector (board uses China brand Yeonho Electronics SMW250/SMH250 throughout, so if you have those at hand that would be nicer, but the JST are very similar in all aspects but the locking).
+* Pull two wires from an unpopulated U18 pin 4 & 1 (SO8) (rs485 transciever) to pin 2 & 3 of the new isosolator chip. These are the RTS/CTS signals.
+* Move the 0R resistor from position R132 to position R131. This is, since the 48 uses rs422 natively.
+
+With this change, you will no longer have the extra rs232 for debug available, if this is important for you. If if is, the debug could instead be moved to the rs422 interface.
+
+Note that the only thing you need to do, if you want to revert back to rs422, is to move the resistor back to position R132. 
+
+===For the 36 models, which already have the rs232 you need to;
+* Change position U33 to something faster.
+* disconnect pin 2 & 3 on U31 from board pads.
+* Pull the two wires as described.
+
+
+
+
 ==STM32/CHMT Notes
 
 To build, follow normal smoothie build process to get setup.  Then checkout chmt branch and rebuild.
