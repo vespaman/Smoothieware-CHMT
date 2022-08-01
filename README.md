@@ -10,6 +10,7 @@ The 48 models are natively rs422, but in this fork, we [currently] uses the rs23
 * Add a rs232 level shifter capable of 1mbit e.g. SN65C3232EDR to unpopulated position U33.
 * Add a few SMD 100nF caps around U31 and U33 on the unpopulated posistions.
 * Add a 4 pole through hole mount JST connector (board uses China brand Yeonho Electronics SMW250/SMH250 throughout, so if you have those at hand that would be nicer, but the JST are very similar in all aspects but the locking).
+* Add ESD protection components to the 'new' connector. Or simply make sure the signals comes out like I did in the picture.. :)
 * Pull two wires from an unpopulated U18 pin 4 & 1 (SO8) (rs485 transciever) to pin 2 & 3 of the new isosolator chip. These are the RTS/CTS signals.
 * Move the 0R resistor from position R132 to position R131. This is, since the 48 uses rs422 natively.
 
