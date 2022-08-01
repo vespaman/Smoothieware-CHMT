@@ -1,12 +1,11 @@
-Current build status: {{https://travis-ci.org/Smoothieware/Smoothieware.svg?branch=edge}}
 
-This fork is about RS232 hardware handshaking and increased throughput. 
+### This fork is about RS232 hardware handshaking and increased throughput. 
 
 It will not work 'out of the box' on machines that has not been modified to also include the RTS/CTS signals 
 and updated the RS232 level shifter chip as described below.
 
 The 48 models are natively rs422, but in this fork, we [currently] uses the rs232 interface instead.
-===For the 48 models, the following needs to be done;
+#### For the 48 models, the following needs to be done;
 * Add a 1+1 channel isolator chip to unpopulated position U31 e.g. ADUM121NOBRZ-RL7. Note; put a piece of kapton tape on pads 2 & 3, since they shall not be soldered to the board pads, but instead be connected to the wires described below.
 * Add a rs232 level shifter capable of 1mbit e.g. SN65C3232EDR to unpopulated position U33.
 * Add a few SMD 100nF caps around U31 and U33 on the unpopulated posistions.
@@ -18,19 +17,20 @@ With this change, you will no longer have the extra rs232 for debug available, i
 
 Note that the only thing you need to do, if you want to revert back to rs422, is to move the resistor back to position R132. 
 
-===For the 36 models, which already have the rs232 you need to;
+#### For the 36 models, which already have the rs232 you need to;
 * Change position U33 to something faster.
 * disconnect pin 2 & 3 on U31 from board pads.
 * Pull the two wires as described.
 
+A picture of the patch
+![rts_cts_patch](https://user-images.githubusercontent.com/18227864/158996475-5d222994-015a-4fb8-b81a-a45bb956cf9d.jpg)
 
 
-
-==STM32/CHMT Notes
+## STM32/CHMT Notes
 
 To build, follow normal smoothie build process to get setup.  Then checkout chmt branch and rebuild.
 
-===Port Status:
+### Port Status:
 * mbed hooks - Added, compiles, tested
 * stm32f4xx libs - Added, compiles, tested
 * timers - Ported, compiles, tested
@@ -40,24 +40,24 @@ To build, follow normal smoothie build process to get setup.  Then checkout chmt
 * pwm - Ported, compiles, tested
 * build scripts - Added, project builds successfully
 
-===CHMT Status:
+### CHMT Status:
 * config file - 48VB Complete
 * pin map - 48VB/36VA Complete
 * operation/verfication - All System Functions Operational (excl. axis encoders)
 * machine testing - 48VB All Systems Operational
 
-===TODO:
+### TODO:
 * DONE: Target initialization and board bringup (clocks, mpu, etc)
 * DONE: Verification of ported peripherals (step generation, watchdog, gpios)
 * DONE: Debug/Comm uart setup
 * DONE: CHMT controller specific configuration
 
-===Notes/Caveats/Gotchas:
+### Notes/Caveats/Gotchas:
 * smoothie mbed was ancient, so the oldest stm32 mbed available was integrated to reduce friction -- incompatibilities, and bugs from dated mbed may have been introduced
 * MRI (gdb over serial) is not supported on stm32, use SWD/JTAG
 * config file must be hardcoded into firmware build
 
-===Next Steps/Priority
+### Next Steps/Priority
 * CHMT Pinout Reversing -- Complete
 * CHMT Config File Development -- 48VB Complete
 * CHMT Machine Testing -- All Base Functions Operational, Long term and stability testing required.
@@ -65,16 +65,16 @@ To build, follow normal smoothie build process to get setup.  Then checkout chmt
 * Stability Testing Required.
 * WDT rewrite for longer timeout
 
-=Smoothie
+# Smoothie
 
-==Overview
+## Overview
 Smoothie is a free, opensource, high performance G-code interpreter and CNC controller written in Object-Oriented C++ for the LPC17xx micro-controller ( ARM Cortex M3 architecture ). It will run on a mBed, a LPCXpresso, a SmoothieBoard, R2C2 or any other LPC17xx-based board. The motion control part is a port of the awesome grbl.
 
 Documentation can be found here : [[http://smoothieware.org/]]
 
 NOTE it is not necessary to build Smoothie yourself unless you want to. prebuilt binaries are available here: [[http://triffid-hunter.no-ip.info/Smoothie.html|Nightly builds]] and here: [[https://github.com/Smoothieware/Smoothieware/blob/edge/FirmwareBin/firmware.bin?raw=true|recent stable build]]
 
-==Quick Start
+## Quick Start
 These are the quick steps to get Smoothie dependencies installed on your computer:
 * Pull down a clone of the Smoothie github project to your local machine.
 * In the root subdirectory of the cloned Smoothie project, there are install scripts for the supported platforms.  Run the install script appropriate for your platform:
@@ -83,7 +83,7 @@ These are the quick steps to get Smoothie dependencies installed on your compute
 ** Linux: linux_install
 * You can then run the BuildShell script which will be created during the install to properly configure the PATH environment variable to point to the required version of GCC for ARM which was just installed on your machine.  You may want to edit this script to further customize your development environment.
 
-==Building Smoothie
+## Building Smoothie
 Follow this guide... [[http://smoothieware.org/compiling-smoothie]]
 
 In short...
@@ -103,10 +103,10 @@ if you have dfu-util installed.
 
 Alternatively copy the file LPC1768/main.bin to the sdcard calling it firmware.bin and reset.
 
-== Filing issues (for bugs ONLY)
+## Filing issues (for bugs ONLY)
 Please follow this guide [[https://github.com/Smoothieware/Smoothieware/blob/edge/ISSUE_TEMPLATE.md]]
 
-==Contributing
+## Contributing
 
 Please take a look at : 
 
@@ -116,11 +116,11 @@ Please take a look at : 
 
 Contributions very welcome !
 
-==Donate
+## Donate
 The Smoothie firmware is free software developed by volunteers. If you find this software useful, want to say thanks and encourage development, please consider a 
 [[https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=9QDYFXXBPM6Y6&lc=US&item_name=Smoothieware%20development&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted|Donation]]
 
-==License
+## License
 
 Smoothieware is released under the GNU GPL v3, which you can find at http://www.gnu.org/licenses/gpl-3.0.en.html
 
