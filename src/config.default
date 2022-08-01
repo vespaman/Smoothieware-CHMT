@@ -119,7 +119,8 @@ extruder.f2.en_pin                           nc               # Pin for extruder
 
 
 # Serial communications configuration ( baud rate default to 9600 if undefined )
-uart0.baud_rate                              921600           # (was 115200) Baud rate for the default hardware serial port
+uart0.baud_rate                              576000           # Baud rate for the default hardware serial port
+rts_cts_handshake                            true             # use rts/cts signals for handshake. (Needs patched pcb) false will disable handshake.
 second_usb_serial_enable                     true             # This enables a second usb serial port (to have both pronterface
                                                               # and a terminal connected)
 msd_disable                                  true             # disable the MSD (USB SDCARD) when set to true (needs special binary)

@@ -36,6 +36,10 @@ int Serial::readable() {
     return serial_readable(&_serial);
 }
 
+int Serial::getrx() {
+    return serial_getc(&_serial);
+}
+
 
 int Serial::writeable() {
     return serial_writable(&_serial);

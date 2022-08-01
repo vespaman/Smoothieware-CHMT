@@ -33,14 +33,15 @@ class SerialConsole : public Module, public StreamOutput {
         int _putc(int c);
         int _getc(void);
         int puts(const char*);
-
         //string receive_buffer;                 // Received chars are stored here until a newline character is received
         //vector<std::string> received_lines;    // Received lines are stored here until they are requested
         RingBuffer<char,256> buffer;             // Receive buffer
         mbed::Serial* serial;
+        char rx_save;
         struct {
           bool query_flag:1;
           bool halt_flag:1;
+          bool rx_data_held_flag:1;
         };
 };
 

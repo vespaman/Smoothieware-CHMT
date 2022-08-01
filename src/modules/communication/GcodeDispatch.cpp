@@ -101,23 +101,23 @@ try_again:
             //Strip checksum value from possible_command
             size_t chkpos = possible_command.find_first_of("*");
 
-			//Calculate checksum
+            //Calculate checksum
             if ( chkpos != string::npos ) {
-				possible_command = possible_command.substr(0, chkpos);
+                possible_command = possible_command.substr(0, chkpos);
                 for (auto c = possible_command.cbegin(); *c != '*' && c != possible_command.cend(); c++)
                     cs = cs ^ *c;
                 cs &= 0xff;  // Defensive programming...
                 cs -= chksum;
-			}
+            }
 
             //Strip line number value from possible_command
-			size_t lnsize = possible_command.find_first_not_of("N0123456789.,- ");
-			if(lnsize != string::npos) {
-				possible_command = possible_command.substr(lnsize);
-			}else{
-				// it is a blank line
-				possible_command.clear();
-			}
+            size_t lnsize = possible_command.find_first_not_of("N0123456789.,- ");
+            if(lnsize != string::npos) {
+                possible_command = possible_command.substr(lnsize);
+            }else{
+                // it is a blank line
+                possible_command.clear();
+            }
 
         } else {
             //Assume checks succeeded
@@ -270,7 +270,7 @@ try_again:
                             case 115: { // M115 Get firmware version and capabilities
                                 Version vers;
 
-                                new_message.stream->printf("FIRMWARE_NAME:Smoothieware, FIRMWARE_URL:http%%3A//smoothieware.org, X-SOURCE_CODE_URL:https://github.com/Smoothieware/Smoothieware, FIRMWARE_VERSION:%s, X-FIRMWARE_BUILD_DATE:%s, X-SYSTEM_CLOCK:%ldMHz, X-AXES:%d, X-GRBL_MODE:%d", vers.get_build(), vers.get_build_date(), SystemCoreClock / 1000000, MAX_ROBOT_ACTUATORS, THEKERNEL->is_grbl_mode());
+                                new_message.stream->printf("FIRMWARE_NAME:Smoothieware, FIRMWARE_URL:http%%3A//smoothieware.org, X-SOURCE_CODE_URL:https%%3A//github.com/vespaman/Smoothieware-CHMT, FIRMWARE_VERSION:%s, X-FIRMWARE_BUILD_DATE:%s, X-SYSTEM_CLOCK:%ldMHz, X-AXES:%d, X-PAXES:%d, X-GRBL_MODE:%d, X-SERIAL_FLOW:%s", vers.get_build(), vers.get_build_date(), SystemCoreClock / 1000000, MAX_ROBOT_ACTUATORS, N_PRIMARY_AXIS, THEKERNEL->is_grbl_mode(), THEKERNEL->has_serial_rts_cts_handshake()?"RTS/CTS":"NONE");
 
                                 #ifdef CNC
                                 new_message.stream->printf(", X-CNC:1");
@@ -371,6 +371,10 @@ try_again:
                                 gcode->add_nl= true;
                                 break; // fall through to process by modules
                             }
+                            case 444: {
+                                new_message.stream->printf("UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n\r" );
+                                return;
+                            }
 
                         }
                     }
@@ -412,7 +416,7 @@ try_again:
                             if(THEKERNEL->is_ok_per_line() || THEKERNEL->is_grbl_mode()) {
                                 // only send ok once per line if this is a multi g code line send ok on the last one
                                 if(possible_command.empty())
-                                    new_message.stream->printf("ok\r\n");
+                                    new_message.stream->printf("ok M%d?\r\n",gcode->m);
                             } else {
                                 // maybe should do the above for all hosts?
                                 new_message.stream->printf("ok\r\n");

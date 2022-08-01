@@ -54,6 +54,7 @@ class Kernel {
         void set_feed_hold(bool f) { feed_hold= f; }
         bool get_feed_hold() const { return feed_hold; }
         bool is_feed_hold_enabled() const { return enable_feed_hold; }
+        bool has_serial_rts_cts_handshake() const { return serial_hw_handshake; }
 
         std::string get_query_string();
 
@@ -84,6 +85,7 @@ class Kernel {
             bool feed_hold:1;
             bool ok_per_line:1;
             bool enable_feed_hold:1;
+            bool serial_hw_handshake:1;
         };
 
 };

@@ -92,6 +92,7 @@ public:
      */
     int readable();
 
+	int getrx();
     /** Determine if there is space available to write a character
      *
      *  @returns

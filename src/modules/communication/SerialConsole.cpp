@@ -31,6 +31,7 @@ void SerialConsole::on_module_loaded() {
     this->serial->attach(this, &SerialConsole::on_serial_char_received, mbed::Serial::RxIrq);
     query_flag= false;
     halt_flag= false;
+    rx_data_held_flag = false;
 
     // We only call the command dispatcher in the main loop, nowhere else
     this->register_for_event(ON_MAIN_LOOP);
@@ -43,18 +44,34 @@ void SerialConsole::on_module_loaded() {
 // Called on Serial::RxIrq interrupt, meaning we have received a char
 void SerialConsole::on_serial_char_received(){
     while(this->serial->readable()){
-        char received = this->serial->getc();
-        if(received == '?') {
-            query_flag= true;
-            continue;
+
+        // Check if we have room for it
+        if ( (this->buffer.capacity())-this->buffer.size() > 0 )
+        {
+            char received = this->serial->getrx();
+            if(received == '?') {
+                query_flag= true;
+                continue;
+            }
+            if(received == 'X'-'A'+1) { // ^X
+                halt_flag= true;
+                continue;
+            }
+            // convert CR to NL (for host OSs that don't send NL)
+            if( received == '\r' ){ received = '\n'; }
+            this->buffer.push_back(received);
+            
         }
-        if(received == 'X'-'A'+1) { // ^X
-            halt_flag= true;
-            continue;
+        else // Buffer is full, defer until we dealt with some..
+        {
+            // disable interrupt
+            this->serial->attach( 0, mbed::Serial::RxIrq);
+            rx_save = this->serial->getrx();
+            // tell main loop there's data, and to enable interrupt again
+            rx_data_held_flag = true;
+            break;
         }
-        // convert CR to NL (for host OSs that don't send NL)
-        if( received == '\r' ){ received = '\n'; }
-        this->buffer.push_back(received);
+        
     }
 }
 
@@ -93,6 +110,26 @@ void SerialConsole::on_main_loop(void * argument){
                 received += c;
             }
         }
+    }
+    
+    if ( rx_data_held_flag && (this->buffer.capacity()-this->buffer.size() > 0) )
+    {
+#if 1
+        char received = rx_save;
+        if(received == '?') {
+            query_flag= true;
+        }
+        else if(received == 'X'-'A'+1) { // ^X
+            halt_flag= true;
+        }
+        else if( received == '\r' ) { 
+            received = '\n'; 
+        }
+        this->buffer.push_back(received);
+#endif
+        // enable interrupt again
+        rx_data_held_flag = false;
+        this->serial->attach(this, &SerialConsole::on_serial_char_received, mbed::Serial::RxIrq);
     }
 }
 

@@ -45,8 +45,9 @@
 #include <string>
 
 #define laser_checksum CHECKSUM("laser")
-#define baud_rate_setting_checksum CHECKSUM("baud_rate")
-#define uart0_checksum             CHECKSUM("uart0")
+#define baud_rate_setting_checksum                  CHECKSUM("baud_rate")
+#define uart0_checksum                              CHECKSUM("uart0")
+#define serial_hw_handshake_checksum                CHECKSUM("rts_cts_handshake")
 
 #define base_stepping_frequency_checksum            CHECKSUM("base_stepping_frequency")
 #define microseconds_per_step_pulse_checksum        CHECKSUM("microseconds_per_step_pulse")
@@ -54,7 +55,6 @@
 #define grbl_mode_checksum                          CHECKSUM("grbl_mode")
 #define feed_hold_enable_checksum                   CHECKSUM("enable_feed_hold")
 #define ok_per_line_checksum                        CHECKSUM("ok_per_line")
-
 Kernel* Kernel::instance;
 
 // The kernel is the central point in Smoothie : it stores modules, and handles event calls
@@ -82,7 +82,8 @@ Kernel::Kernel()
     // now config is loaded we can do normal setup for serial based on config
     
     // ..but we have to wait until it is all transmitted
-    //delete this->serial;
+    
+    delete this->serial;
     this->serial = NULL;
 
     this->streams = new StreamOutputPool();
@@ -110,11 +111,14 @@ Kernel::Kernel()
             break;
     }
 #endif
-    // default
+    
+    this->serial_hw_handshake = this->config->value( serial_hw_handshake_checksum )->by_default(false)->as_bool();
+    
     if(this->serial == NULL) {
-        //this->serial = new(AHB0) SerialConsole(PD_5, PD_6, this->config->value(uart0_checksum, baud_rate_setting_checksum)->by_default(DEFAULT_SERIAL_BAUD_RATE)->as_number());
-        // We need to only set RTS, since otherwise the machine will hang until PC is setting its comport correctly. (would not be an issue, if we can setup the IO pins correctly prior to this)
-        this->serial = new(AHB0) SerialConsole(PA_9, PA_10, PA_12, PA_11, this->config->value(uart0_checksum, baud_rate_setting_checksum)->by_default(DEFAULT_SERIAL_BAUD_RATE)->as_number());
+        if( this->serial_hw_handshake )
+            this->serial = new(AHB0) SerialConsole(PA_9, PA_10, PA_12, PA_11, this->config->value(uart0_checksum, baud_rate_setting_checksum)->by_default(DEFAULT_SERIAL_BAUD_RATE)->as_number());
+        else
+            this->serial = new(AHB0) SerialConsole(PA_9, PA_10, NC, NC, this->config->value(uart0_checksum, baud_rate_setting_checksum)->by_default(DEFAULT_SERIAL_BAUD_RATE)->as_number());
     }
 
     //some boards don't have leds.. TOO BAD!
