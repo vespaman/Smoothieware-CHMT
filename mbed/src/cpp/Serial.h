@@ -73,7 +73,10 @@ public:
 
     enum IrqType {
         RxIrq = 0,
-        TxIrq
+        TxIrq,
+		RxIdleIrq,
+        DmaHFIrq,
+        DmaTCIrq
     };
 
     /** Set the transmission format used by the Serial port
@@ -91,7 +94,7 @@ public:
      *    0 otherwise
      */
     int readable();
-
+    int get_dma_buffer_index();
 	int getrx();
     /** Determine if there is space available to write a character
      *
@@ -101,13 +104,15 @@ public:
      */
     int writeable();
 
+    /** Setup rx dma on our uart */
+    void dma_init( unsigned char* rx_buffer, int len );
+
     /** Attach a function to call whenever a serial interrupt is generated
      *
      *  @param fptr A pointer to a void function, or 0 to set as none
      *  @param type Which serial interrupt to attach the member function to (Seriall::RxIrq for receive, TxIrq for transmit buffer empty)
      */
     void attach(void (*fptr)(void), IrqType type=RxIrq);
-
     /** Attach a member function to call whenever a serial interrupt is generated
      *
      *  @param tptr pointer to the object to call the member function on
@@ -123,13 +128,14 @@ public:
     }
 
     static void _irq_handler(uint32_t id, SerialIrq irq_type);
+    void send_string(const char *s);
 
 protected:
     virtual int _getc();
     virtual int _putc(int c);
 
     serial_t        _serial;
-    FunctionPointer _irq[2];
+    FunctionPointer _irq[5];
 };
 
 } // namespace mbed

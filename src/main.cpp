@@ -102,8 +102,7 @@ void init() {
 
     Kernel* kernel = new Kernel();
 
-    //~ kernel->streams->printf("Smoothie Running @%ldMHz\r\n", SystemCoreClock / 1000000);
-    //~ SimpleShell::version_command("", kernel->streams);
+
 
     //bool sdok= (sd.disk_initialize() == 0);
     //if(!sdok) kernel->streams->printf("SDCard failed to initialize\r\n");
@@ -258,6 +257,7 @@ void init() {
     THEKERNEL->conveyor->start(THEROBOT->get_number_registered_motors());
     THEKERNEL->step_ticker->start();
     THEKERNEL->slow_ticker->start();
+
 }
 
 int main()

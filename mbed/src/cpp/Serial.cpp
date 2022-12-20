@@ -40,6 +40,9 @@ int Serial::getrx() {
     return serial_getc(&_serial);
 }
 
+int Serial::get_dma_buffer_index() {
+    return serial_get_dma_buffer_index(&_serial);
+}
 
 int Serial::writeable() {
     return serial_writable(&_serial);
@@ -54,7 +57,9 @@ void Serial::attach(void (*fptr)(void), IrqType type) {
     }
 }
 
-
+void Serial::dma_init( unsigned char* rx_buffer, int len ) {
+    serial_activate_rxdma( rx_buffer, len );
+}
 void Serial::_irq_handler(uint32_t id, SerialIrq irq_type) {
     Serial *handler = (Serial*)id;
     handler->_irq[irq_type].call();
@@ -67,6 +72,12 @@ int Serial::_getc() {
 int Serial::_putc(int c) {
     serial_putc(&_serial, c);
     return c;
+}
+
+void Serial::send_string(const char *s)
+{
+	serial_send_string(&_serial, s);
+    return;
 }
 
 } // namespace mbed

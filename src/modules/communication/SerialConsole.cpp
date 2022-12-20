@@ -4,7 +4,6 @@
       Smoothie is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
       You should have received a copy of the GNU General Public License along with Smoothie. If not, see <http://www.gnu.org/licenses/>.
 */
-
 #include <string>
 #include <stdarg.h>
 using std::string;
@@ -16,6 +15,14 @@ using std::string;
 #include "libs/SerialMessage.h"
 #include "libs/StreamOutput.h"
 #include "libs/StreamOutputPool.h"
+#include "libs/gpio.h"
+#include "port_api.h"
+
+GPIO rts_signal = GPIO(PA_12);
+
+#define RX_BUFF_SIZE 256
+unsigned char rx_buff[RX_BUFF_SIZE];
+
 
 // Serial reading module
 // Treats every received line as a command and passes it ( via event call ) to the command dispatcher.
@@ -23,15 +30,18 @@ using std::string;
 SerialConsole::SerialConsole( PinName rx_pin, PinName tx_pin, PinName rts_pin, PinName cts_pin, int baud_rate ){
     this->serial = new mbed::Serial( rx_pin, tx_pin, rts_pin, cts_pin );
     this->serial->baud(baud_rate);
+    rts_signal_is_set = false;
+    rts_signal = 0;
 }
 
 // Called when the module has just been loaded
 void SerialConsole::on_module_loaded() {
-    // We want to be called every time a new char is received
-    this->serial->attach(this, &SerialConsole::on_serial_char_received, mbed::Serial::RxIrq);
+    this->serial->attach(this, &SerialConsole::on_line_idle, mbed::Serial::RxIdleIrq);
+    this->serial->attach(this, &SerialConsole::on_buffer_half_full, mbed::Serial::DmaHFIrq);
+    this->serial->attach(this, &SerialConsole::on_buffer_full, mbed::Serial::DmaTCIrq);
+    this->serial->dma_init( rx_buff, RX_BUFF_SIZE );
     query_flag= false;
     halt_flag= false;
-    rx_data_held_flag = false;
 
     // We only call the command dispatcher in the main loop, nowhere else
     this->register_for_event(ON_MAIN_LOOP);
@@ -41,39 +51,101 @@ void SerialConsole::on_module_loaded() {
     THEKERNEL->streams->append_stream(this);
 }
 
-// Called on Serial::RxIrq interrupt, meaning we have received a char
-void SerialConsole::on_serial_char_received(){
-    while(this->serial->readable()){
 
-        // Check if we have room for it
-        if ( (this->buffer.capacity())-this->buffer.size() > 0 )
-        {
-            char received = this->serial->getrx();
-            if(received == '?') {
-                query_flag= true;
-                continue;
-            }
-            if(received == 'X'-'A'+1) { // ^X
-                halt_flag= true;
-                continue;
-            }
-            // convert CR to NL (for host OSs that don't send NL)
-            if( received == '\r' ){ received = '\n'; }
-            this->buffer.push_back(received);
-            
-        }
-        else // Buffer is full, defer until we dealt with some..
-        {
-            // disable interrupt
-            this->serial->attach( 0, mbed::Serial::RxIrq);
-            rx_save = this->serial->getrx();
-            // tell main loop there's data, and to enable interrupt again
-            rx_data_held_flag = true;
-            break;
-        }
-        
+
+void SerialConsole::manage_buffer( void )
+{
+    unsigned char *p;
+    int free_space;
+    
+    bool done = false;
+    static unsigned char *tail = rx_buff;
+    int remain_until_buf_top = this->serial->get_dma_buffer_index();
+    unsigned char *buf_start = rx_buff;
+    int buf_len = RX_BUFF_SIZE;
+    unsigned char *buf_end = buf_start + buf_len-1;
+    unsigned char *head = 1+buf_end - remain_until_buf_top;
+
+    
+    // Check if other end may continue to send while we deal with available..
+    if (head >= tail)
+        free_space = (remain_until_buf_top-1) + (tail-buf_start);
+    else
+        free_space = tail-head;
+
+    if (free_space <= RX_BUFF_SIZE/2 ) // Ask other end to relax a bit while we deal with this interrupt!
+    {
+        rts_signal_is_set = true;
+        rts_signal = 1; 
     }
+    
+    do
+    {
+        p = tail;
+        
+        do
+        {
+            if( p == head )
+            {
+                done = true;
+                break;
+            }
+
+            if ( (this->buffer.capacity())-this->buffer.size() > 0 )
+            {
+                
+                if( *p == '?') {
+                    query_flag= true;
+                    continue;
+                }
+                if( *p == 'X'-'A'+1) { // ^X
+                    halt_flag= true;
+                    continue;
+                }
+                if( *p == '\r' )
+                    *p = '\n';
+
+                this->buffer.push_back(*p);
+            }
+            else // no space in secondary buffer, so wait for application to consume!
+            {    // (application needs to release rts!)
+                rts_signal_is_set = true;
+                rts_signal = 1;
+                done = true;
+                break;
+            }
+
+            p++;
+            if( p > buf_end )
+                p = buf_start;
+
+                
+        } while ( !done );
+    
+
+        // update tail for next time
+        tail = p; 
+
+    } while ( !done ); // See if there's more complete messages in buffer
+
+
+    if (rts_signal_is_set) // Did we showel enough data to secondary buffer?
+    {
+        if (head >= tail)
+            free_space = (remain_until_buf_top-1) + (tail-buf_start);
+        else
+            free_space = tail-head;
+
+        if (free_space > RX_BUFF_SIZE/2 ) 
+        {
+            rts_signal_is_set = false;
+            rts_signal = 0; 
+        }
+    }
+
+
 }
+
 
 void SerialConsole::on_idle(void * argument)
 {
@@ -92,11 +164,13 @@ void SerialConsole::on_idle(void * argument)
     }
 }
 
-// Actual event calling must happen in the main loop because if it happens in the interrupt we will loose data
 void SerialConsole::on_main_loop(void * argument){
-    if( this->has_char('\n') ){
+
+    int len = this->has_char('\n');
+    
+    if( len ){
         string received;
-        received.reserve(20);
+        received.reserve(len+1);
         while(1){
            char c;
            this->buffer.pop_front(c);
@@ -105,58 +179,41 @@ void SerialConsole::on_main_loop(void * argument){
                 message.message = received;
                 message.stream = this;
                 THEKERNEL->call_event(ON_CONSOLE_LINE_RECEIVED, &message );
-                return;
+                break;
             }else{
                 received += c;
             }
         }
+        
+        if ( rts_signal_is_set )
+        {
+            if ( (this->buffer.capacity())-this->buffer.size() > 128 ) // If we have stopped other end, only start when we have consumed 
+            {                                                          // a good amount in order to never overflow the dma buffer.
+                rts_signal_is_set = false;                             
+                rts_signal = 0;
+            }
+        }
     }
     
-    if ( rx_data_held_flag && (this->buffer.capacity()-this->buffer.size() > 0) )
-    {
-#if 1
-        char received = rx_save;
-        if(received == '?') {
-            query_flag= true;
-        }
-        else if(received == 'X'-'A'+1) { // ^X
-            halt_flag= true;
-        }
-        else if( received == '\r' ) { 
-            received = '\n'; 
-        }
-        this->buffer.push_back(received);
-#endif
-        // enable interrupt again
-        rx_data_held_flag = false;
-        this->serial->attach(this, &SerialConsole::on_serial_char_received, mbed::Serial::RxIrq);
-    }
 }
-
 
 int SerialConsole::puts(const char* s)
 {
-    return fwrite(s, strlen(s), 1, (FILE*)(*this->serial));
-}
-
-int SerialConsole::_putc(int c)
-{
-    return this->serial->putc(c);
-}
-
-int SerialConsole::_getc()
-{
-    return this->serial->getc();
+    this->serial->send_string(s);
+    return 0;
 }
 
 // Does the queue have a given char ?
-bool SerialConsole::has_char(char letter){
+int SerialConsole::has_char(char letter){
+    int msg_len = 0;
     int index = this->buffer.tail;
     while( index != this->buffer.head ){
+        msg_len++;
         if( this->buffer.buffer[index] == letter ){
-            return true;
+            return msg_len;
         }
         index = this->buffer.next_block_index(index);
     }
-    return false;
+    
+    return 0;
 }

@@ -66,18 +66,18 @@ gamma_max_rate                               125000.0         # mm/min CGR: I co
 gamma_acceleration                           31000.0          #        CGR: I couldn't get any faster in OpenPnP than with 30000
 
 # A axis: N1 rotation
-delta_steps_per_mm                           4.4444           # steps per degree: 160° per rev. @0.9° stepper = 400 steps/160° x 16 micros = 40
+delta_steps_per_mm                           4.4444           # steps per degree: 160ï¿½ per rev. @0.9ï¿½ stepper = 400 steps/160ï¿½ x 16 micros = 40
 delta_step_pin                               5.14             # Pin for delta stepper step signal
 delta_dir_pin                                5.9!             # Pin for delta stepper direction
 delta_en_pin                                 nc               # Pin for delta enable
 delta_current                                0.5              # Z stepper motor current
-a_axis_max_speed                             120000           # °/min
-delta_max_rate                               120000           # °/min
-delta_acceleration                           100000           # °/sec^2
+a_axis_max_speed                             120000           # ï¿½/min
+delta_max_rate                               120000           # ï¿½/min
+delta_acceleration                           100000           # ï¿½/sec^2
 delta_enable                                 true
 
 # B axis: N2 rotation
-epsilon_steps_per_mm                         4.4444           # steps per mm for epsilon stepper: 8mm spindle @ 1.8° stepper = 200 steps/8mm x 16 micros = 400
+epsilon_steps_per_mm                         4.4444           # steps per mm for epsilon stepper: 8mm spindle @ 1.8ï¿½ stepper = 200 steps/8mm x 16 micros = 400
 epsilon_step_pin                             5.15             # Pin for delta stepper step signal
 epsilon_dir_pin                              5.10!            # Pin for delta stepper direction
 epsilon_en_pin                               nc               # Pin for delta enable
@@ -119,7 +119,7 @@ extruder.f2.en_pin                           nc               # Pin for extruder
 
 
 # Serial communications configuration ( baud rate default to 9600 if undefined )
-uart0.baud_rate                              576000           # Baud rate for the default hardware serial port
+uart0.baud_rate                              4000000          # Baud rate for the default hardware serial port.
 rts_cts_handshake                            true             # use rts/cts signals for handshake. (Needs patched pcb) false will disable handshake.
 second_usb_serial_enable                     true             # This enables a second usb serial port (to have both pronterface
                                                               # and a terminal connected)

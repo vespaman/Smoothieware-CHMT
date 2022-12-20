@@ -61,6 +61,16 @@ void GcodeDispatch::on_console_line_received(void *line)
     int ln = 0;
     int cs = 0;
 
+    if ( !THEKERNEL->was_normal_power_on_reset() )
+    {
+    	if(!THEKERNEL->is_halted()) {
+            new_message.stream->printf("Not POWER ON RESET, Halting Kernel! Power cycle or M999 to continue\r\n" );
+    		THEKERNEL->call_event(ON_HALT, nullptr);
+    	}
+        THEKERNEL->clear_reset_reason();
+        return;
+    }
+
     // just reply ok to empty lines
     if(possible_command.empty()) {
         new_message.stream->printf("ok\r\n");
@@ -161,9 +171,9 @@ try_again:
                         if(gcode->has_m && gcode->m == 999) {
                             if(THEKERNEL->is_halted()) {
                                 THEKERNEL->call_event(ON_HALT, (void *)1); // clears on_halt
-                                new_message.stream->printf("WARNING: After HALT you should HOME as position is currently unknown\n");
+                                new_message.stream->printf("WARNING: After HALT you should HOME as position is currently unknown\r\n");
                             }
-                            new_message.stream->printf("ok\n");
+                            new_message.stream->printf("ok\®\n");
                             delete gcode;
                             return;
 
@@ -284,7 +294,7 @@ try_again:
                                 new_message.stream->printf(", X-MSD:1");
                                 #endif
 
-                                new_message.stream->printf("\nok\n");
+                                new_message.stream->printf("\r\nok\r\n");
                                 return;
                             }
 
@@ -372,7 +382,7 @@ try_again:
                                 break; // fall through to process by modules
                             }
                             case 444: {
-                                new_message.stream->printf("UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n\r" );
+                                new_message.stream->printf("12345678UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n\r" );
                                 return;
                             }
 

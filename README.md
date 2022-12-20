@@ -1,20 +1,19 @@
 
 
-### This fork is about RS232 hardware handshaking and increased + more relaible throughput. 
+### This fork is about DMA on the serial/RS232 hardware with handshaking and increased + more relaible throughput. 
 
+With this branch, DMA is implemented on rx as well as tx with hardware flow control. 
 In order to benefit from higher thoughput and hardware flow control, you will need to modify your control board.
 The changes needed can be defined in two; one for the actual hardware flow control, and one for increased bitrate.
 The latter needs the former to be useful.
 
-This fork is meant to also work without the hardware board changes, but it has not been tested much by me. 
+If you want achieve >1Mbit, you will also need to remove the rs232 signalling level, and connect the USB-serial uart directly to the isolators.
 
 
 Both 36 and 48 models share the same control board, with a little difference; the 48 has a native rs422 interface populated, whereas the 36 has rs232.
 #### For the 48 models, the following needs to be done;
-Since we are going to change the 48 into rs232, we need to add the missing components to do so;
 * Add a 1+1 channel isolator chip to unpopulated position U31 e.g. ADUM121NOBRZ-RL7. Note; put a piece of kapton tape on pads 2 & 3, since they shall not be soldered to the board pads, but instead be connected to the wires described below.
-* Add a rs232 level shifter capable of 1mbit/s e.g. SN65C3232EDR to unpopulated position U33.
-* Add a few SMD 100nF caps around U31 and U33 on the unpopulated posistions.
+* Position U33 is made for a rs232 level shifter. The rx/tx/rts/cts path needs to be connected by wires, since we don't want 232 levels, in order to achieve higher speeds.
 * Add a 4 pole through hole mount JST connector (board uses China brand Yeonho Electronics SMW250/SMH250 throughout, so if you have those at hand that would be nicer, but the JST are very similar in all aspects but the locking).
 * Add ESD protection components to the 'new' connector. Or simply make sure the signals comes out like I did in the picture.. :) 
     Update: If you aim for highter speeds, I would recommend removing the ESD protection resistors, and possibly also the tranzil, since the signal integrity will be slightly better without, and anyway, the USB interface will anyway be between the surrounding world and the rs232 interface on this board.
@@ -23,10 +22,9 @@ Since we are going to change the 48 into rs232, we need to add the missing compo
 
 With this change, you will no longer have the extra rs232 for debug available, if this is important for you. If if is, the debug could instead be moved to the rs422 interface. 
 
-Note that the only thing you need to do, if you want to revert back to rs422, is to move the resistor back to position R132. 
 
 #### For the 36 models, which already have the rs232 you need to;
-* Change position U33 to something faster. The on board U33 is specified for max 115200 baud.
+* Remove U33 (see above)
 * disconnect pin 2 & 3 on U31 from board pads.
 * Pull the two wires as described.
 * Remove (or keep) the ESD protection network close to the connectors. (See benefits above).
@@ -37,19 +35,18 @@ In config.default there are two relevant lines; one for specifying the baudrate 
 In OpenPnP you will need to select RTS/CTS flow control, and uncheck the "Confirmation Flow Control" since we will not need it any more.
 
 #### A note of warning 
-Not all USB-RS232 adapters are good (and even the good ones can be configured differenctly) so it is strongly suggested to test everything once you are done, by connecting a serial comm's program and issue some tests.
-The author of this fork are using gtkcomm under linux, adding a 'macro' sending out a string "M115\nM114\nM115\nM114\nM115\nM114\n" (which will work on the orignial fw as well), or "M444\nM444\nM444\nM444\nM444\nM444\nM444\nM444\n" (not in other firmwares), which will result in a respons of 'U' and 'z' which are binary 0x55 and 0x5a.
-By putting the M-commands in a macro a good comms's program will send them rather rapidly, during also receiving the first results. 
-Check the result carefully for missed out response, or wrong respons characters. Repeat a few times.
+Chmt is rather noisy, and chasing higer bitrates might mean that the serial lines gets disturbed. Keep the wires between the USB-Serial board and the the mainboard as short as possible.
 
 
 A picture of the patch
 ![rts_cts_patch](https://user-images.githubusercontent.com/18227864/158996475-5d222994-015a-4fb8-b81a-a45bb956cf9d.jpg)
 
 
-
-Currently the serial is interrupt driven, so the actual throughput will be less than the selected baud rate. e.d. for 576000 baud the actual throughput is around 500 kbps.
-The idea is to enable DMA on the rx, but probably not on tx, since the tx is pacing the main loop, which we need to keep in sync with anyways.
+#### Things that can be improved in code 
+* The buffer management in this implementation is not very optimized, since it uses the original buffer as a secondary rx buffer. It would be more efficient to keep everything in the DMA buffer, with the main loop retreiving data directly from it. Or at least some more optimized secondary buffer. Not sure if this extra complexity is needed though.
+* The tx routing is waiting for DMA to finish, in order to mimic the original code. This might not be necessary. If so, the check that DMA and UART Tx is done could be checked before doing a tx.
+* Rx DMA is not using DMA FIFO, so DMA will use unnecessary much of the memory bus bandwidth. (tx DMA is already using DMA FIFO)
+* The UART & DMA interrupt level is currently being shared with ADC, which may not be good if ADC does not get serviced in time. UART/DMA should then be moved below ADC (or ADC raised above).
 
 
 

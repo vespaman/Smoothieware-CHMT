@@ -63,6 +63,12 @@ Kernel::Kernel()
     halted = false;
     feed_hold = false;
     enable_feed_hold = false;
+    normal_power_on_reset = true;
+
+    if ( !(RCC->CSR & RCC_CSR_PORRSTF) ) // Not Power on reset?
+        normal_power_on_reset = false;
+    RCC->CSR |= RCC_CSR_RMVF;
+
 
     instance = this; // setup the Singleton instance of the kernel
 
@@ -80,7 +86,7 @@ Kernel::Kernel()
     this->config->config_cache_load();
 
     // now config is loaded we can do normal setup for serial based on config
-    
+
     // ..but we have to wait until it is all transmitted
     
     delete this->serial;
@@ -136,7 +142,7 @@ Kernel::Kernel()
     this->ok_per_line = this->config->value( ok_per_line_checksum )->by_default(true)->as_bool();
 
     this->add_module( this->serial );
-    this->add_module(new(AHB0) SerialConsole(PD_5, PD_6, NC, NC, this->config->value(uart0_checksum, baud_rate_setting_checksum)->by_default(DEFAULT_SERIAL_BAUD_RATE)->as_number()));
+    //this->add_module(new(AHB0) SerialConsole(PD_5, PD_6, NC, NC, this->config->value(uart0_checksum, baud_rate_setting_checksum)->by_default(DEFAULT_SERIAL_BAUD_RATE)->as_number()));
     //this->add_module(new(AHB0) SerialConsole(PA_9, PA_10, this->config->value(uart0_checksum, baud_rate_setting_checksum)->by_default(DEFAULT_SERIAL_BAUD_RATE)->as_number()));
 
     // HAL stuff
@@ -170,6 +176,7 @@ Kernel::Kernel()
         NVIC_SetPriority(USART2_IRQn, 5);
         NVIC_SetPriority(USART3_IRQn, 5);
         NVIC_SetPriority(UART4_IRQn, 5);
+        NVIC_SetPriority(DMA2_Stream2_IRQn, 5); // DMA for USART1 rx
     }
 
     // Configure the step ticker
