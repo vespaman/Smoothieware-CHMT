@@ -173,7 +173,7 @@ try_again:
                                 THEKERNEL->call_event(ON_HALT, (void *)1); // clears on_halt
                                 new_message.stream->printf("WARNING: After HALT you should HOME as position is currently unknown\r\n");
                             }
-                            new_message.stream->printf("ok\®\n");
+                            new_message.stream->printf("ok\r\n");
                             delete gcode;
                             return;
 
@@ -278,8 +278,8 @@ try_again:
                                 return;
 
                             case 115: { // M115 Get firmware version and capabilities
+                                delete gcode;
                                 Version vers;
-
                                 new_message.stream->printf("FIRMWARE_NAME:Smoothieware, FIRMWARE_URL:http%%3A//smoothieware.org, X-SOURCE_CODE_URL:https%%3A//github.com/vespaman/Smoothieware-CHMT, FIRMWARE_VERSION:%s, X-FIRMWARE_BUILD_DATE:%s, X-SYSTEM_CLOCK:%ldMHz, X-AXES:%d, X-PAXES:%d, X-GRBL_MODE:%d, X-SERIAL_FLOW:%s", vers.get_build(), vers.get_build_date(), SystemCoreClock / 1000000, MAX_ROBOT_ACTUATORS, N_PRIMARY_AXIS, THEKERNEL->is_grbl_mode(), THEKERNEL->has_serial_rts_cts_handshake()?"RTS/CTS":"NONE");
 
                                 #ifdef CNC
