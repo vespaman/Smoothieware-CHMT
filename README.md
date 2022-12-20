@@ -1,6 +1,6 @@
 
 
-### This fork is about DMA on the serial/RS232 hardware with handshaking and increased + more relaible throughput. 
+### This fork is about DMA on the serial/RS232 hardware with handshaking and increased + more reliable throughput. 
 
 With this branch, DMA is implemented on rx as well as tx with hardware flow control. 
 In order to benefit from higher thoughput and hardware flow control, you will need to modify your control board.
@@ -38,7 +38,7 @@ In OpenPnP you will need to select RTS/CTS flow control, and uncheck the "Confir
 Chmt is rather noisy, and chasing higer bitrates might mean that the serial lines gets disturbed. Keep the wires between the USB-Serial board and the the mainboard as short as possible.
 
 
-A picture of the patch
+A picture of the patch prior removing the rs232 (U33) chip;
 ![rts_cts_patch](https://user-images.githubusercontent.com/18227864/158996475-5d222994-015a-4fb8-b81a-a45bb956cf9d.jpg)
 
 
