@@ -1,4 +1,7 @@
 
+Note; for proper speed enhancement, see serial-dma branch instead, which is where the fun stuff happens!
+This branch contains a major bugfix for the original serial communication on the smoothie chm-t code, that corrupts data if tx and rx are going on at the same time. This bug can be seen in all serial speeds, but I suspect it is (mostly?) hidden when enabling the serial confirmation fix in openPnP.
+Because of this, for now I'll leave this branch alone.
 
 ### This fork is about RS232 hardware handshaking and increased + more relaible throughput. 
 
