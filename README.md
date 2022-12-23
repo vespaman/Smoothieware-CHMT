@@ -48,7 +48,11 @@ A picture of the patch prior removing the rs232 (U33) chip;
 * Rx DMA is not using DMA FIFO, so DMA will use unnecessary much of the memory bus bandwidth. (tx DMA is already using DMA FIFO)
 * The UART & DMA interrupt level is currently being shared with ADC, which may not be good if ADC does not get serviced in time. UART/DMA should then be moved below ADC (or ADC raised above).
 
-
+#### Also included in this branch is;
+* Based on Chris Riegel's fork
+* Jan's (janm012012) additions for ligthing for down camera, and increased z-limits.
+* A reboot check in gcode dispatch, that will stop the machine if a software/watchdog etc reset has occurred. (non-hardware start)
+* A minor memory leak fix from smootheware upstream (M115)
 
 
 ## Old STM32/CHMT Notes from upstream
