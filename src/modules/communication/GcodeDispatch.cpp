@@ -381,10 +381,13 @@ try_again:
                                 gcode->add_nl= true;
                                 break; // fall through to process by modules
                             }
+                            #if 0
                             case 444: {
+                                delete gcode;
                                 new_message.stream->printf("12345678UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n\r" );
                                 return;
                             }
+                            #endif
 
                         }
                     }
@@ -426,7 +429,7 @@ try_again:
                             if(THEKERNEL->is_ok_per_line() || THEKERNEL->is_grbl_mode()) {
                                 // only send ok once per line if this is a multi g code line send ok on the last one
                                 if(possible_command.empty())
-                                    new_message.stream->printf("ok M%d?\r\n",gcode->m);
+                                    new_message.stream->printf("ok\r\n");
                             } else {
                                 // maybe should do the above for all hosts?
                                 new_message.stream->printf("ok\r\n");
