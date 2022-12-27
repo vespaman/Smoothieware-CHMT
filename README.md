@@ -46,12 +46,11 @@ A picture of the patch prior removing the rs232 (U33) chip;
 * The buffer management in this implementation is not very optimized, since it uses the original buffer as a secondary rx buffer. It would be more efficient to keep everything in the DMA buffer, with the main loop retreiving data directly from it. Or at least some more optimized secondary buffer. Not sure if this extra complexity is needed though.
 * The tx routing is waiting for DMA to finish, in order to mimic the original code. This might not be necessary. If so, the check that DMA and UART Tx is done could be checked before doing a tx.
 * Rx DMA is not using DMA FIFO, so DMA will use unnecessary much of the memory bus bandwidth. (tx DMA is already using DMA FIFO)
-* The UART & DMA interrupt level is currently being shared with ADC, which may not be good if ADC does not get serviced in time. UART/DMA should then be moved below ADC (or ADC raised above).
 
 #### Also included in this branch is;
 * Based on Chris Riegel's fork
-* Jan's (janm012012) additions for ligthing for down camera, and increased z-limits.
-* A reboot check in gcode dispatch, that will stop the machine if a software/watchdog etc reset has occurred. (non-hardware start)
+* Jan's (janm012012) additions for ligthing for down camera, and increased z-limits etc.
+* A reboot check in gcode dispatch, that will halt the machine if a software/watchdog etc reset has occurred. (non-power on start) and send a message why onto OpenPnP. (Clear with M999).
 * A minor memory leak fix from smootheware upstream (M115)
 
 
