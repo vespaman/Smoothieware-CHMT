@@ -64,10 +64,40 @@ Kernel::Kernel()
     feed_hold = false;
     enable_feed_hold = false;
     normal_power_on_reset = true;
+    unsigned int rcc_csr = RCC->CSR;
+
+    if (rcc_csr & RCC_CSR_BORRSTF)
+    {
+        reset_info += "BROWN-OUT ";
+    }
+    if (rcc_csr & RCC_CSR_PINRSTF)
+    {
+        reset_info += "PIN ";
+    }
+    if (rcc_csr & RCC_CSR_PORRSTF)
+    {
+        reset_info += "POWER-ON ";
+    }
+    if (rcc_csr & RCC_CSR_SFTRSTF)
+    {
+        reset_info += "SOFTWARE-RESET ";
+    }
+    if (rcc_csr & RCC_CSR_IWDGRSTF)
+    {
+        reset_info += "INDEPENDANT-WATCHDOG ";
+    }
+    if (rcc_csr & RCC_CSR_WWDGRSTF)
+    {
+        reset_info += "WINDOW-WATCHDOG ";
+    }
+    if (rcc_csr & RCC_CSR_LPWRRSTF)
+    {
+        reset_info += "LOW-POWER ";
+    }
 
     if ( !(RCC->CSR & RCC_CSR_PORRSTF) ) // Not Power on reset?
         normal_power_on_reset = false;
-    RCC->CSR |= RCC_CSR_RMVF;
+    RCC->CSR = RCC_CSR_RMVF;
 
 
     instance = this; // setup the Singleton instance of the kernel
@@ -172,11 +202,11 @@ Kernel::Kernel()
         if( NVIC_GetPriority(USART3_IRQn) > 0 ) { NVIC_SetPriority(USART3_IRQn, 5); }
         if( NVIC_GetPriority(UART4_IRQn) > 0 ) { NVIC_SetPriority(UART4_IRQn, 5); }
     } else {
-        NVIC_SetPriority(USART1_IRQn, 5);
-        NVIC_SetPriority(USART2_IRQn, 5);
-        NVIC_SetPriority(USART3_IRQn, 5);
-        NVIC_SetPriority(UART4_IRQn, 5);
-        NVIC_SetPriority(DMA2_Stream2_IRQn, 5); // DMA for USART1 rx
+        NVIC_SetPriority(USART1_IRQn, 6);
+        NVIC_SetPriority(USART2_IRQn, 6);
+        NVIC_SetPriority(USART3_IRQn, 6);
+        NVIC_SetPriority(UART4_IRQn, 6);
+        NVIC_SetPriority(DMA2_Stream2_IRQn, 6); // DMA for USART1 rx
     }
 
     // Configure the step ticker
@@ -384,4 +414,3 @@ void Kernel::unregister_for_event(_EVENT_ENUM id_event, Module *mod)
         }
     }
 }
-
