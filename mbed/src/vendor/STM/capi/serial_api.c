@@ -152,27 +152,14 @@ void serial_init(serial_t *obj, PinName tx, PinName rx, PinName rts, PinName cts
 
     if ( rts != NC )
     {
-        //pinmap_pinout(rts, PinMap_UART_RTS);
         pin_function( rts, STM_PIN_DATA(STM_MODE_OUTPUT_PP, GPIO_NOPULL, 0));   // In DMA mode, we set RTS output as discrete GPIO, and handle by software to deal with crappy usb-serial devices inability to do correct (prompt) rts hs.
     }
-    //~ if ( rts != NC && cts != NC )
-	//~ {
-		//~ pin_mode(rts, PullUp);
-		//~ pin_mode(cts, PullUp );
-		//~ obj->hw_flowcontrol = UART_HWCONTROL_RTS_CTS;
-	//~ }
-	//~ else 
     if ( cts != NC )
 	{
         pinmap_pinout(cts, PinMap_UART_CTS);
 		pin_mode(cts, PullUp );
 		obj->hw_flowcontrol = UART_HWCONTROL_CTS;
 	}
-	//~ else if ( rts != NC )
-	//~ {
-		//~ pin_mode(rts, PullUp);
-		//~ obj->hw_flowcontrol = UART_HWCONTROL_RTS;
-	//~ }
 	else
 	{
 		obj->hw_flowcontrol = UART_HWCONTROL_NONE;
@@ -548,7 +535,21 @@ void serial_send_string( serial_t *obj, const char *str )
 {
 	int status;
     int len = strlen(str);
+#ifndef POST_TX_WAIT
+    // Still ongoinging with job?
+    if( DMA2_Stream7->CR & DMA_SxCR_EN )
+    {
+        do {
+            status = ((__HAL_UART_GET_FLAG(&UartHandle, UART_FLAG_TXE) != RESET) ? 1 : 0);
+        } while (!status);
 
+        do {
+        	status = (DMA2->HISR & DMA_HISR_TCIF7 );
+        } while (!status);
+        DMA2_Stream7->CR &= ~DMA_SxCR_EN;
+        USART1->CR3 &= ~USART_CR3_DMAT;
+    }
+#endif
     // Clear /half/complete/ flags from last tx..
     DMA2->HIFCR |= DMA_HISR_TCIF7 | DMA_HISR_HTIF7;
 
@@ -567,17 +568,18 @@ void serial_send_string( serial_t *obj, const char *str )
 
     DMA2_Stream7->CR |= DMA_SxCR_EN;
     USART1->CR3 |= USART_CR3_DMAT;
-
+#ifdef POST_TX_WAIT
     // wait for dma and then tx to finish
     do {
     	status = (DMA2->HISR & DMA_HISR_TCIF7 );
     } while (!status);
-
+#if 0
     do {
         status = ((__HAL_UART_GET_FLAG(&UartHandle, UART_FLAG_TC) != RESET) ? 1 : 0);
     } while (!status);
-
+#endif
     USART1->CR3 &= ~USART_CR3_DMAT;
+#endif
 }
 
 int serial_get_dma_buffer_index(serial_t *obj)

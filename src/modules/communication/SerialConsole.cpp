@@ -30,8 +30,16 @@ unsigned char rx_buff[RX_BUFF_SIZE];
 SerialConsole::SerialConsole( PinName rx_pin, PinName tx_pin, PinName rts_pin, PinName cts_pin, int baud_rate ){
     this->serial = new mbed::Serial( rx_pin, tx_pin, rts_pin, cts_pin );
     this->serial->baud(baud_rate);
+
+    if ( rts_pin )
+    {
+        flow_control = true;
+        rts_signal = 0;
+    }
+    else
+        flow_control = false;
+
     rts_signal_is_set = false;
-    rts_signal = 0;
 }
 
 // Called when the module has just been loaded
@@ -75,8 +83,11 @@ void SerialConsole::manage_buffer( void )
 
     if (free_space <= RX_BUFF_SIZE/2 ) // Ask other end to relax a bit while we deal with this interrupt!
     {
-        rts_signal_is_set = true;
-        rts_signal = 1; 
+        if (flow_control)
+        {
+            rts_signal_is_set = true;
+            rts_signal = 1; 
+        }
     }
     
     do
@@ -109,8 +120,11 @@ void SerialConsole::manage_buffer( void )
             }
             else // no space in secondary buffer, so wait for application to consume!
             {    // (application needs to release rts!)
-                rts_signal_is_set = true;
-                rts_signal = 1;
+                if (flow_control)
+                {
+                    rts_signal_is_set = true;
+                    rts_signal = 1;
+                }
                 done = true;
                 break;
             }

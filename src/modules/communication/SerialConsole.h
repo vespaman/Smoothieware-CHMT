@@ -46,6 +46,7 @@ class SerialConsole : public Module, public StreamOutput {
     private:
         void manage_buffer(void);
         bool rts_signal_is_set;
+        bool flow_control;
 };
 
 #endif
