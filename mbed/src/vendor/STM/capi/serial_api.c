@@ -329,8 +329,8 @@ static void uart_irq(UARTName name, int id)
         }
 
         if (__HAL_UART_GET_FLAG(&UartHandle, UART_FLAG_IDLE) != RESET) {
-            irq_handler(serial_irq_ids[id], RxIdleIrq);
             __HAL_UART_CLEAR_IDLEFLAG(&UartHandle);
+            irq_handler(serial_irq_ids[id], RxIdleIrq);
         }
         
     }
