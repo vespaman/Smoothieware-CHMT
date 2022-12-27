@@ -2,14 +2,15 @@
 
 ### This fork is about DMA on the serial/RS232 hardware with (or without) handshaking and increased + more reliable throughput. 
 
-With this branch, DMA is implemented on rx as well as tx with hardware flow control. Hardware flow control can be disabled by setting rts_cts_handshake to false in config.defaults (However this is not tested yet). So in theory, this branch should work with stock machine, up to 921600 Baud, as long as confirmation flow control is still enabled in OpenPnP. This may depend on the serial-USB adapter though, as it need to have enough rx buffer at these speeds.
+With this branch, DMA is implemented on rx as well as tx with hardware flow control.
+Hardware flow control can be disabled by setting rts_cts_handshake to false in config.defaults. So in theory, this branch should work with stock machine, up to 115200 Baud (CHM-T36), as long as confirmation flow control is still enabled in OpenPnP. (115200 comes from the limitation of the rs232 level shifter, U33, populated on the controller board). A CHM-T48 should be able to achieve 480kBaud.
+Note; the author has long since updated his machine to RTS/CTS and non-RS232 levels, so using a stock machine is currently untested. 
 
 In order to benefit from higher thoughput and hardware flow control, you will need to modify your control board.
 The changes needed can be defined in two; one for the actual hardware flow control, and one for increased bitrate.
 The latter probably needs the former to be useful.
 
-If you want achieve >1Mbit, you will also need to remove the rs232 signalling level, and connect the USB-serial uart directly to the isolators.
-OpenPnP can currently do up to 4MBaud so this is the standard rate.
+This guide presumes that you want to go all in, and go for logic signalling levels directly to the isolators. Normally 3.3V signalling level.
 
 Both 36 and 48 models share the same control board, with a little difference; the 48 has a native rs422 interface populated, whereas the 36 has rs232.
 #### For the 48 models, the following needs to be done;
@@ -21,11 +22,9 @@ Both 36 and 48 models share the same control board, with a little difference; th
 * Pull two wires from an unpopulated U18 pin 4 & 1 (SO8) (rs485 transciever) to pin 2 & 3 of the new isosolator chip. These are the RTS/CTS signals.
 * Move the 0R resistor from position R132 to position R131. This will connect the rx signal from the rs232 input instead of the original rs422.
 
-With this change, you will no longer have the extra rs232 for debug available, if this is important for you. If if is, the debug could instead be moved to the rs422 interface. 
-
 
 #### For the 36 models, which already have the rs232 you need to;
-* Remove U33 (see above)
+* Remove U33 (see above) and connect 4 wires in its place.
 * disconnect pin 2 & 3 on U31 from board pads.
 * Pull the two wires as described.
 * Remove (or keep) the ESD protection network close to the connectors. (See benefits above).
