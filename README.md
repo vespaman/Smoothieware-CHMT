@@ -1,14 +1,15 @@
 
 
-### This fork is about DMA on the serial/RS232 hardware with handshaking and increased + more reliable throughput. 
+### This fork is about DMA on the serial/RS232 hardware with (or without) handshaking and increased + more reliable throughput. 
 
-With this branch, DMA is implemented on rx as well as tx with hardware flow control. 
+With this branch, DMA is implemented on rx as well as tx with hardware flow control. Hardware flow control can be disabled by setting rts_cts_handshake to false in config.defaults (However this is not tested yet). So in theory, this branch should work with stock machine, up to 921600 Baud, as long as confirmation flow control is still enabled in OpenPnP. This may depend on the serial-USB adapter though, as it need to have enough rx buffer at these speeds.
+
 In order to benefit from higher thoughput and hardware flow control, you will need to modify your control board.
 The changes needed can be defined in two; one for the actual hardware flow control, and one for increased bitrate.
-The latter needs the former to be useful.
+The latter probably needs the former to be useful.
 
 If you want achieve >1Mbit, you will also need to remove the rs232 signalling level, and connect the USB-serial uart directly to the isolators.
-
+OpenPnP can currently do up to 4MBaud so this is the standard rate.
 
 Both 36 and 48 models share the same control board, with a little difference; the 48 has a native rs422 interface populated, whereas the 36 has rs232.
 #### For the 48 models, the following needs to be done;
@@ -44,14 +45,15 @@ A picture of the patch prior removing the rs232 (U33) chip;
 
 #### Things that can be improved in code 
 * The buffer management in this implementation is not very optimized, since it uses the original buffer as a secondary rx buffer. It would be more efficient to keep everything in the DMA buffer, with the main loop retreiving data directly from it. Or at least some more optimized secondary buffer. Not sure if this extra complexity is needed though.
-* The tx routing is waiting for DMA to finish, in order to mimic the original code. This might not be necessary. If so, the check that DMA and UART Tx is done could be checked before doing a tx.
-* Rx DMA is not using DMA FIFO, so DMA will use unnecessary much of the memory bus bandwidth. (tx DMA is already using DMA FIFO)
+* Rx DMA is not using DMA FIFO, so DMA will use unnecessary much of the memory bus bandwidth. (Tx DMA is already using DMA FIFO)
 
 #### Also included in this branch is;
 * Based on Chris Riegel's fork
 * Jan's (janm012012) additions for ligthing for down camera, and increased z-limits etc.
-* A reboot check in gcode dispatch, that will halt the machine if a software/watchdog etc reset has occurred. (non-power on start) and send a message why onto OpenPnP. (Clear with M999).
+* A reboot check in gcode dispatch, that will halt the machine if a software/watchdog etc reset has occurred. (non-power on start) and send a message why onto OpenPnP. (Clear HALT with M999).
 * A minor memory leak fix from smootheware upstream (M115)
+
+
 
 
 ## Old STM32/CHMT Notes from upstream
