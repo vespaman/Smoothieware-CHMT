@@ -30,6 +30,10 @@
 #define panel_display_message_checksum CHECKSUM("display_message")
 #define panel_checksum             CHECKSUM("panel")
 
+
+
+
+
 // goes in Flash, list of Mxxx codes that are allowed when in Halted state
 static const int allowed_mcodes[]= {2,5,9,30,105,114,115,119,80,81,911,503,106,107}; // get temp, get pos, get endstops etc
 static bool is_allowed_mcode(int m) {
@@ -64,7 +68,8 @@ void GcodeDispatch::on_console_line_received(void *line)
     if ( !THEKERNEL->was_normal_power_on_reset() )
     {
     	if(!THEKERNEL->is_halted()) {
-            new_message.stream->printf("Not POWER ON RESET, Halting Kernel! Power cycle or M999 to continue\r\n" );
+            string reset_reason = THEKERNEL->get_reset_info();
+            new_message.stream->printf(";Last reset was %s, Halting Kernel! Power cycle or M999 to continue\r\n", THEKERNEL->get_reset_info().c_str() );
     		THEKERNEL->call_event(ON_HALT, nullptr);
     	}
         THEKERNEL->clear_reset_reason();
