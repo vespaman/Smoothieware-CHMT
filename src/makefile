@@ -45,7 +45,7 @@ endif
 
 # generate a git version string
 ifneq "$(OS)" "Windows_NT"
-DEFINES += -D__GITVERSIONSTRING__=\"$(shell ./generate-version.sh)\"
+DEFINES += -D__GITVERSIONSTRING__=\"$(shell sh ./generate-version.sh)\"
 else
 DEFINES += -D__GITVERSIONSTRING__=\"$(shell generate-version.bat)\"
 endif
