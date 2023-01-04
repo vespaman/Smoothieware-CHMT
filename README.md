@@ -3,36 +3,46 @@
 ### This fork is about DMA on the serial/RS232 hardware with (or without) handshaking and increased + more reliable throughput. 
 
 With this branch, DMA is implemented on rx as well as tx with hardware flow control.
-Hardware flow control can be disabled by setting rts_cts_handshake to false in config.defaults. So in theory, this branch should work with stock machine, up to 115200 Baud (CHM-T36), as long as confirmation flow control is still enabled in OpenPnP. (115200 comes from the limitation of the rs232 level shifter, U33, populated on the controller board). A CHM-T48 should be able to achieve 480kBaud.
-Note; the author has long since updated his machine to RTS/CTS and non-RS232 levels, so using a stock machine is currently untested. 
+Hardware flow control can be disabled by setting rts_cts_handshake to false in config.defaults. So in theory, this branch should work with stock machine, up to 115200 Baud (CHM-T36), as long as confirmation flow control is still enabled in OpenPnP. (115200 comes from the limitation of the rs232 level shifter, U33, populated on the controller board). A CHM-T48 should be able to achieve 480kBaud, limited by the rs422 level shifter.
+Note; the author has long since updated his machine to RTS/CTS and non-RS232/422 levels, so using a stock machine is currently untested. 
+
+There are still benefits to use this code on a stock machine, just not very noticable.
+
 
 In order to benefit from higher thoughput and hardware flow control, you will need to modify your control board.
-The changes needed can be defined in two; one for the actual hardware flow control, and one for increased bitrate.
+The changes needed, can be defined in two groups; one for the actual hardware flow control, and one for increased bitrate.
 The latter probably needs the former to be useful.
 
 This guide presumes that you want to go all in, and go for logic signalling levels directly to the isolators. Normally 3.3V signalling level.
 
 Both 36 and 48 models share the same control board, with a little difference; the 48 has a native rs422 interface populated, whereas the 36 has rs232.
 #### For the 48 models, the following needs to be done;
-* Add a 1+1 channel isolator chip to unpopulated position U31 e.g. ADUM121NOBRZ-RL7. Note; put a piece of kapton tape on pads 2 & 3, since they shall not be soldered to the board pads, but instead be connected to the wires described below.
-* Position U33 is made for a rs232 level shifter. The rx/tx/rts/cts path needs to be connected by wires, since we don't want 232 levels, in order to achieve higher speeds.
+* Add a 1+1 channel isolator chip to unpopulated position U31 e.g. ADUM121NOBRZ-RL7. Note; put a piece of kapton tape on pads 2 & 3, since they shall not be soldered to the board pads, but instead be connected to the rts/cts wires described below.
+* Pull two wires from an unpopulated U18 pin 4 & 1 (SO8) (rs485 transciever) to pin 2 & 3 of the new isosolator chip (not to the pads!). These are the RTS/CTS signals.
+* Position U33 is made for a rs232 level shifter. The rx/tx/rts/cts path needs to be connected by wires, since we don't want 232 levels, in order to achieve higher speeds. See picture. 
 * Add a 4 pole through hole mount JST connector (board uses China brand Yeonho Electronics SMW250/SMH250 throughout, so if you have those at hand that would be nicer, but the JST are very similar in all aspects but the locking).
-* Add ESD protection components to the 'new' connector. Or simply make sure the signals comes out like I did in the picture.. :) 
-    Update: If you aim for highter speeds, I would recommend removing the ESD protection resistors, and possibly also the tranzil, since the signal integrity will be slightly better without, and anyway, the USB interface will anyway be between the surrounding world and the rs232 interface on this board.
-* Pull two wires from an unpopulated U18 pin 4 & 1 (SO8) (rs485 transciever) to pin 2 & 3 of the new isosolator chip. These are the RTS/CTS signals.
 * Move the 0R resistor from position R132 to position R131. This will connect the rx signal from the rs232 input instead of the original rs422.
-
+* Remove (or keep) the ESD protection network close to the connectors. (See benefits below).
 
 #### For the 36 models, which already have the rs232 you need to;
-* Remove U33 (see above) and connect 4 wires in its place.
 * disconnect pin 2 & 3 on U31 from board pads.
-* Pull the two wires as described.
-* Remove (or keep) the ESD protection network close to the connectors. (See benefits above).
+* Pull two wires from an unpopulated U18 pin 4 & 1 (SO8) (rs485 transciever) to pin 2 & 3 of U31 (not to the pads!). These are the RTS/CTS signals.
+* Remove U33 (see above) and connect 4 wires in its place.
+* Remove (or keep) the ESD protection network close to the connectors. (See benefits below).
+
+#### For both machines;
+* The USB-serial adapter is best kept as close to the controller boardd as possible, this is especially true if you decide to go for 3.3V signalling since it is very fast and more susceptible to external noise. 
+* I have tested several USB-serial adapters (bridges), and found that the ones based on XR21B1420 works best (tested in linux only). So far I have been using a XR21B1420IL28-0A-EVB, that I have stuffed just beside the control board with short wires. The serial adapter needs to power the isolators (needs be the same Volage as the signalling level of the serial bridge) e.g. 3.3V.
+* The ESD protection components are meant to protect the interface. This is needed especially if RS232 signalling levels are selected, and the RS232 are pulled outside the chmt casing. If 3,3V signalling levels, you probably should remove them, since the USB interface will be the interface to the outer world, and normally it already has protection. I have not tested to run my board with the ESD components fitted, so I don't know if it will work with them in place. But remember that orignial machine was for 115kbits, now we are running several mbits. If you remove them, you still need to make sure to put 0R resistors or solder blobs to complete the signal path.
+* Option: If you like to stay with rs232 levels for whatever reason, you can populate U33 with e.g. SN65C3232EDR instead, which will allow speeds up to 921600bps. You then also will need to add a few SMD 100nF caps around U33 on the unpopulated posistions.
+
 
 #### How to configure the serial port 
+If you did add RTS/CTS signals above;
 In config.default there are two relevant lines; one for specifying the baudrate you wish to run, and one setting for enabling RTS/CTS hardware flow control.
-
 In OpenPnP you will need to select RTS/CTS flow control, and uncheck the "Confirmation Flow Control" since we will not need it any more.
+
+If you have a standard board, you need to set the baudrate to 115200/460k and set flow control to false in the config.defaults.
 
 #### A note of warning 
 Chmt is rather noisy, and chasing higer bitrates might mean that the serial lines gets disturbed. Keep the wires between the USB-Serial board and the the mainboard as short as possible.
@@ -43,7 +53,6 @@ A picture of the patch prior removing the rs232 (U33) chip;
 
 
 #### Things that can be improved in code 
-* The buffer management in this implementation is not very optimized, since it uses the original buffer as a secondary rx buffer. It would be more efficient to keep everything in the DMA buffer, with the main loop retreiving data directly from it. Or at least some more optimized secondary buffer. Not sure if this extra complexity is needed though.
 * Rx DMA is not using DMA FIFO, so DMA will use unnecessary much of the memory bus bandwidth. (Tx DMA is already using DMA FIFO)
 
 #### Also included in this branch is;
