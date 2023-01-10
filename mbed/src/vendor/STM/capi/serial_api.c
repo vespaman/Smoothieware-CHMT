@@ -584,7 +584,7 @@ void serial_send_string( serial_t *obj, const char *str )
 
 int serial_get_dma_buffer_index(serial_t *obj)
 {
-    return (int)(DMA2_Stream2->CR & DMA_SxCR_EN)?(int)DMA2_Stream2->NDTR:-1;
+    return DMA2_Stream2->NDTR;
 }
 
 int serial_readable(serial_t *obj)

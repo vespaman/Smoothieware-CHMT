@@ -16,9 +16,11 @@
 using std::string;
 #include "libs/RingBuffer.h"
 #include "libs/StreamOutput.h"
-
+#include "libs/gpio.h"
 
 #define baud_rate_setting_checksum CHECKSUM("baud_rate")
+
+#define RX_BUFF_SIZE 512
 
 class SerialConsole : public Module, public StreamOutput {
     public:
@@ -26,23 +28,18 @@ class SerialConsole : public Module, public StreamOutput {
 
         void on_module_loaded();
         void on_main_loop(void * argument);
-        void on_idle(void * argument);
-        int  has_char(char letter);
 
         void on_line_idle( void ) { manage_buffer(); }
         void on_buffer_half_full(void) { manage_buffer(); }
         void on_buffer_full(void) { manage_buffer(); }
 
         int puts(const char*);
-        //string receive_buffer;                 // Received chars are stored here until a newline character is received
-        //vector<std::string> received_lines;    // Received lines are stored here until they are requested
-        RingBuffer<char,256> buffer;             // Receive buffer
         mbed::Serial* serial;
+        GPIO *rts_signal;
 
-        struct {
-          bool query_flag:1;
-          bool halt_flag:1;
-        };
+        unsigned char rx_buff[RX_BUFF_SIZE];
+        unsigned char *tail = rx_buff;
+        
     private:
         void manage_buffer(void);
         bool rts_signal_is_set;

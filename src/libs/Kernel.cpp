@@ -107,7 +107,7 @@ Kernel::Kernel()
     //this->serial = new SerialConsole(PD_5, PD_6, NC, NC, DEFAULT_SERIAL_BAUD_RATE);
     GPIO rs422en = GPIO(PC_1);
     rs422en.write(1);
-    this->serial = new SerialConsole(PA_9, PA_10, NC, NC, DEFAULT_SERIAL_BAUD_RATE);
+    //this->serial = new SerialConsole(PA_9, PA_10, NC, NC, DEFAULT_SERIAL_BAUD_RATE);
 
     // Config next, but does not load cache yet
     this->config = new Config();
@@ -119,7 +119,7 @@ Kernel::Kernel()
 
     // ..but we have to wait until it is all transmitted
     
-    delete this->serial;
+    //delete this->serial;
     this->serial = NULL;
 
     this->streams = new StreamOutputPool();
