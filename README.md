@@ -1,13 +1,14 @@
 
 
-### This fork is about DMA on the serial/RS232 hardware with (or without) handshaking and increased + more reliable throughput. 
+### This fork is about DMA on the serial/RS232 hardware with (or without) handshaking and increased + more reliable throughput, as well as drag pin enhancements. 
 
 With this branch, DMA is implemented on rx as well as tx with hardware flow control.
 Hardware flow control can be disabled by setting rts_cts_handshake to false in config.defaults. So in theory, this branch should work with stock machine, up to 115200 Baud (CHM-T36), as long as confirmation flow control is still enabled in OpenPnP. (115200 comes from the limitation of the rs232 level shifter, U33, populated on the controller board). A CHM-T48 should be able to achieve 480kBaud, limited by the rs422 level shifter.
-Note; the author has long since updated his machine to RTS/CTS and non-RS232/422 levels, so using a stock machine is currently untested. 
+
+Note; the author has long since updated his machine to RTS/CTS and non-RS232/422 levels, bitrate of 4mbit, so using a stock machine is currently untested. 
 
 There are still benefits to use this code on a stock machine, just not very noticable. 
-In theory, a CHMT36 should be able to be set-up to use RTS control without doing any board changes, by specifying the UART2 tx pin in Kernel.cpp as rts pin (set cts to NC). This has (yet) been tested. The you would at least no longer need "Confirmation Flow Control".
+In theory, a CHMT36 should be able to be set-up to use RTS control without doing any board changes, by specifying the UART2 tx pin in Kernel.cpp as rts pin (set cts to NC). This has (not yet) been tested. Then you would at least no longer need "Confirmation Flow Control".
 
 
 In order to benefit from higher thoughput and hardware flow control, you will need to modify your control board.
