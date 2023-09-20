@@ -30,6 +30,10 @@
 #define panel_display_message_checksum CHECKSUM("display_message")
 #define panel_checksum             CHECKSUM("panel")
 
+// remove when tested!
+//~ #include "gpio.h"
+//~ GPIO general_debug_pin( PG_10 );
+//~ #define SET_GENERAL_DEBUG_PIN(n) {if(n) general_debug_pin.set(); else general_debug_pin.clear(); }
 
 
 
@@ -54,6 +58,11 @@ GcodeDispatch::GcodeDispatch()
 void GcodeDispatch::on_module_loaded()
 {
     this->register_for_event(ON_CONSOLE_LINE_RECEIVED);
+#ifdef SET_GENERAL_DEBUG_PIN
+    general_debug_pin.output();
+    general_debug_pin= 0;
+#endif
+    
 }
 
 // When a command is received, if it is a Gcode, dispatch it as an object via an event
@@ -386,14 +395,6 @@ try_again:
                                 gcode->add_nl= true;
                                 break; // fall through to process by modules
                             }
-                            #if 0
-                            case 444: {
-                                delete gcode;
-                                new_message.stream->printf("12345678UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n\r" );
-                                return;
-                            }
-                            #endif
-
                         }
                     }
 
@@ -496,8 +497,10 @@ try_again:
 
 
     } else {
+        //SET_GENERAL_DEBUG_PIN(1);
         // an uppercase non command word on its own (except XYZF) just returns ok, we could add an error but no hosts expect that.
-        new_message.stream->printf("ok - ignored\n");
+        new_message.stream->printf("ok - ignored %c %x\n", first_char, first_char);
+        //SET_GENERAL_DEBUG_PIN(0);
     }
 }
 
