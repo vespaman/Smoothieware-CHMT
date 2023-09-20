@@ -56,7 +56,7 @@ A picture of the patch prior removing the rs232 (U33) chip;
 
 
 #### Also included in this branch is;
-* Drag pin deactivation now waits for drag pin to arrive up, before returning ok to openpnp, waiting up to 1 second, before giving up.
+* Drag pin deactivation now waits for drag pin to arrive up, before returning ok to openpnp, waiting up to 1 second, before giving up. Be sure to add a booelan into config file, "dragpin true", to let the code know that the actuator infact is a drag pin, and that it should wait for it coming up.
 * Actuators are now not waiting for motion queues to be empty before actuating. This along with drag pin enhancement above generally saves about 500ms on a typical drag/feed operation.
 * Based on Chris Riegel's fork
 * Jan's (janm012012) additions for ligthing for down camera, and increased z-limits etc.
