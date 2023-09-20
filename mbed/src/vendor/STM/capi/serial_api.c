@@ -530,7 +530,7 @@ void serial_putc(serial_t *obj, int c)
     uart->DR = (uint32_t)(c & 0x1FF);
 }
 
-
+#define POST_TX_WAIT /* To remedy txt_after_ok, such as vacuum */
 void serial_send_string( serial_t *obj, const char *str )
 {
 	int status;
