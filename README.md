@@ -56,6 +56,8 @@ A picture of the patch prior removing the rs232 (U33) chip;
 
 
 #### Also included in this branch is;
+* Drag pin deactivation now waits for drag pin to arrive up, before returning ok to openpnp, waiting up to 1 second, before giving up.
+* Actuators are now not waiting for motion queues to be empty before actuating. This along with drag pin enhancement above generally saves about 500ms on a typical drag/feed operation.
 * Based on Chris Riegel's fork
 * Jan's (janm012012) additions for ligthing for down camera, and increased z-limits etc.
 * A reboot check in gcode dispatch, that will halt the machine if a software/watchdog etc reset has occurred. (non-power on start) and send a message why onto OpenPnP. (Clear HALT with M999).
