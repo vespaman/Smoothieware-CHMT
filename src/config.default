@@ -20,7 +20,7 @@ beta_steps_per_mm                            31.94            # Steps per mm for
 gamma_steps_per_mm                           4.4444           # Steps per mm for gamma stepper
 
 # Planner module configuration : Look-ahead and acceleration configuration
-planner_queue_size                           128              # according to Arthur this value can be increased until the controller runs out of memory
+planner_queue_size                           160              # according to Arthur this value can be increased until the controller runs out of memory
                                                               # At present each element requires 92byte ABH0 and 400byte heap. AHB0 is the limiting factor
                                                               # but could be shifted if stack or others would be shifted to CCM
 acceleration                                 10000            # Acceleration in mm/second/second.
@@ -100,16 +100,16 @@ zeta_acceleration                            10000            # mm/sec^2
 zeta_enable                                  true
 
 # D axis: RPEELER
-#eta_steps_per_mm                             69.2642          # may be steps per degree for example
-#eta_step_pin                                 5.7              # Pin for delta stepper step signal
-#eta_dir_pin                                  5.6              # Pin for delta stepper direction
-#eta_en_pin                                   nc               # Pin for delta enable
-#eta_current                                  0.5              # Z stepper motor current
-#eta_max_rate                                 100000           # mm/min
-#eta_acceleration                             10000            # mm/sec^2
-#eta_enable                                   true
+eta_steps_per_mm                             69.2642          # may be steps per degree for example
+eta_step_pin                                 5.7              # Pin for delta stepper step signal
+eta_dir_pin                                  5.6              # Pin for delta stepper direction
+eta_en_pin                                   nc               # Pin for delta enable
+eta_current                                  0.5              # Z stepper motor current
+eta_max_rate                                 100000           # mm/min
+eta_acceleration                             10000            # mm/sec^2
+eta_enable                                   true
 
-extruder.f2.enable                           true             # Whether to activate the extruder module at all. All configuration is ignored if false
+extruder.f2.enable                           false             # Whether to activate the extruder module at all. All configuration is ignored if false
 extruder.f2.steps_per_mm                     69.2642          # Steps per mm for peeler stepper # 1/8 ms # linear distance of tape at 25mm min diameter
 extruder.f2.default_feed_rate                20000            # Default rate ( mm/minute ) for moves where only the extruder moves
 extruder.f2.acceleration                     1000             # Acceleration for the stepper motor, as of 0.6, arbitrary ratio
@@ -121,7 +121,7 @@ extruder.f2.en_pin                           nc               # Pin for extruder
 
 
 # Serial communications configuration ( baud rate default to 9600 if undefined )
-uart0.baud_rate                              921600 #4000000          # Baud rate for the default hardware serial port.
+uart0.baud_rate                              4000000          # Baud rate for the default hardware serial port.
 rts_cts_handshake                            true             # use rts/cts signals for handshake. (Needs patched pcb) false will disable handshake.
 second_usb_serial_enable                     true             # This enables a second usb serial port (to have both pronterface
                                                               # and a terminal connected)
@@ -160,7 +160,7 @@ beta_max_travel                              475
 
 # Z
 gamma_min_endstop                            2.13!^           # 
-gamma_max_endstop                            4.2!^            #
+gamma_max_endstop                            4.2!^            # CHMT drag pin sensor
 gamma_homing_direction                       home_to_min      # if z is parked it will not move (0mm retract)
 gamma_min                                    0                # if its not parked, it will advance until it skips
 gamma_max                                    46               # and spring will return to 0
@@ -243,6 +243,7 @@ switch.leddown.output_type                   hwpwm
 switch.leddown.pwm_period_ms                 0.0625 # 16kHz
 
 switch.dragpin.enable                        true
+switch.dragpin.dragpin                       true #define as dragpin -> wait for pin up
 switch.dragpin.input_on_command              M816
 switch.dragpin.input_off_command             M817
 switch.dragpin.output_pin                    3.14
