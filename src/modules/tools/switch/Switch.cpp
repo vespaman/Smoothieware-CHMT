@@ -106,8 +106,7 @@ void Switch::on_config_reload(void *argument)
     this->input_pin_behavior = (ipb == "momentary") ? momentary_checksum : toggle_checksum;
 #ifdef WAIT_FOR_DRAG_PIN_UP
     this->wait_confirm= THEKERNEL->config->value(switch_checksum, this->name_checksum, dragpin_checksum )->by_default(false)->as_bool();
-//    this->dragpin.from_string_no_init( "4.2" );
-    this->dragpin.from_string_no_init( THEKERNEL->config->value(gamma_max_endstop_checksum)->by_default("nc" )->as_string())->as_input();
+    this->dragpin.from_string_no_init( "4.2" );
 #endif    
                                                                 
 
