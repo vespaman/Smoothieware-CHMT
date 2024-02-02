@@ -1,14 +1,22 @@
 
 
-### This fork is about DMA on the serial/RS232 hardware with (or without) handshaking and increased + more reliable throughput, as well as drag pin enhancements. 
+### This fork started as DMA on the serial/RS232 hardware with (or without) handshaking and increased + more reliable throughput, but has evolved further from that. Current changes includes:
+* Serial bitrate up to 4Mbit with or without RTS/CTS
+* Removed machine coordination of actuators in FW, letting OpenPnP deal with them as it should be. Original code always waited for machine to be still before enabling e.g. down led.
+* Drag pin inactivation are now handled smartly, by actually sensing if pin is up before sending acknowledge; this means that static delays are no longer needed in OpenPnP setup, and a  much more robust drag pin operation.
+* Anti Stiction Wiggle (ASW). If dragpin gets stuck, FW automatically tries to free it by quickly moving dragpin in a X/Y back/forth/left/righ pattern until it is free (or give up if it is not freed). At any time ASW has been engaged, the 'ok' back to OpenPnP has a comment attached to it, detailing what the ASW result was - e.g. "2023-12-13 11:22:54.328 GcodeDriver$ReaderThread TRACE: [GcodeDriver:ttyUSB0] << ok  ; ASW: l1,t4 (G1 X-0.1 Y-0.05)".
+* Improved vacuum sensing. With all the speed-up, the vacuum sensing gave away that it dit not actually update the value very often (only every 50ms), rendering it useless. Now it is updated every millisecond.
 
+ASW is dependant on the smart drag pin activation code. Both can be enabled by adding a new property "switch.dragpin.dragpin true" to the group of switch.dragpin in the config.default. This property tells the generic code, that this pin is connected to a dragpin, and to activate the advanced mechanisms. Setting its value to false disables andy advanced logic.
+
+#### Serial hardware modifications 
 With this branch, DMA is implemented on rx as well as tx with hardware flow control.
-Hardware flow control can be disabled by setting rts_cts_handshake to false in config.defaults. So in theory, this branch should work with stock machine, up to 115200 Baud (CHM-T36), as long as confirmation flow control is still enabled in OpenPnP. (115200 comes from the limitation of the rs232 level shifter, U33, populated on the controller board). A CHM-T48 should be able to achieve 480kBaud, limited by the rs422 level shifter.
+Hardware flow control can be disabled by setting rts_cts_handshake to false in config.defaults. So in theory, this branch should work with stock machine, up to 115200 Baud (CHM-T36), as long as confirmation flow control is still enabled in OpenPnP. (115200 comes from the limitation of the rs232 level shifter, U33, populated on the controller board). A CHM-T48 should be able to achieve 480kBaud, limited by the rs422 interface driver.
 
 Note; the author has long since updated his machine to RTS/CTS and non-RS232/422 levels, bitrate of 4mbit, so using a stock machine is currently untested. 
 
-There are still benefits to use this code on a stock machine, just not very noticable. 
-In theory, a CHMT36 should be able to be set-up to use RTS control without doing any board changes, by specifying the UART2 tx pin in Kernel.cpp as rts pin (set cts to NC). This has (not yet) been tested. Then you would at least no longer need "Confirmation Flow Control".
+There are still benefits to use this serial code on a stock machine, just not very noticable. 
+In theory, a CHMT36 should be able to be set-up to use RTS control without doing any board changes, by specifying the UART2 tx pin in Kernel.cpp as rts pin (set cts to NC). This has not yet been tested. Then you would at least no longer need "Confirmation Flow Control".
 
 
 In order to benefit from higher thoughput and hardware flow control, you will need to modify your control board.
@@ -33,10 +41,10 @@ Both 36 and 48 models share the same control board, with a little difference; th
 * Remove (or keep) the ESD protection network close to the connectors. (See benefits below).
 
 #### For both machines;
-* The USB-serial adapter is best kept as close to the controller boardd as possible, this is especially true if you decide to go for 3.3V signalling since it is very fast and more susceptible to external noise. 
-* I have tested several USB-serial adapters (bridges), and found that the ones based on XR21B1420 works best (tested in linux only). So far I have been using a XR21B1420IL28-0A-EVB, that I have stuffed just beside the control board with short wires. The serial adapter needs to power the isolators (needs be the same Volage as the signalling level of the serial bridge) e.g. 3.3V.
+* The USB-serial adapter is best kept as close to the controller board as possible, this is especially true if you decide to go for 3.3V signalling since it is very fast and more susceptible to external noise. 
+* I have tested several USB-serial adapters (bridges), and found that the ones based on XR21B1420 (and siblings) works best (tested in linux only) because of very low latency. So far I have been using a XR21B1420IL28-0A-EVB, that I have stuffed just beside the control board with short wires. The serial adapter needs to power the isolators (needs be the same Volage as the signalling level of the serial bridge) e.g. 3.3V. Others usb-serial bridges may work, but introduce serious delays for short messages.
 * The ESD protection components are meant to protect the interface. This is needed especially if RS232 signalling levels are selected, and the RS232 are pulled outside the chmt casing. If 3,3V signalling levels, you probably should remove them, since the USB interface will be the interface to the outer world, and normally it already has protection. I have not tested to run my board with the ESD components fitted, so I don't know if it will work with them in place. But remember that orignial machine was for 115kbits, now we are running several mbits. If you remove them, you still need to make sure to put 0R resistors or solder blobs to complete the signal path.
-* Option: If you like to stay with rs232 levels for whatever reason, you can populate U33 with e.g. SN65C3232EDR instead, which will allow speeds up to 921600bps. You then also will need to add a few SMD 100nF caps around U33 on the unpopulated posistions.
+* Option: If you like to stay with rs232 levels for whatever reason, you can populate U33 with e.g. SN65C3232EDR instead, which will allow speeds up to 921600bps. You then also will need to add a few SMD 100nF caps around U33 on the unpopulated positions.
 
 
 #### How to configure the serial port 
@@ -46,8 +54,6 @@ In OpenPnP you will need to select RTS/CTS flow control, and uncheck the "Confir
 
 If you have a standard board, you need to set the baudrate to 115200/460k and set flow control to false in the config.defaults.
 
-#### A note of warning 
-Chmt is rather noisy, and chasing higer bitrates might mean that the serial lines gets disturbed. Keep the wires between the USB-Serial board and the the mainboard as short as possible.
 
 
 A picture of the patch prior removing the rs232 (U33) chip;
@@ -56,18 +62,16 @@ A picture of the patch prior removing the rs232 (U33) chip;
 
 
 #### Also included in this branch is;
-* Drag pin deactivation now waits for drag pin to arrive up, before returning ok to openpnp, waiting up to 1 second, before giving up. Be sure to add a booelan into config file, "dragpin true", to let the code know that the actuator infact is a drag pin, and that it should wait for it coming up.
-* Actuators are now not waiting for motion queues to be empty before actuating. This along with drag pin enhancement above generally saves about 500ms on a typical drag/feed operation.
-* Based on Chris Riegel's fork
 * Jan's (janm012012) additions for ligthing for down camera, and increased z-limits etc.
 * A reboot check in gcode dispatch, that will halt the machine if a software/watchdog etc reset has occurred. (non-power on start) and send a message why onto OpenPnP. (Clear HALT with M999).
 * A minor memory leak fix from smootheware upstream (M115)
-
-
-
-
+  
+***  
+***   
+****
+ 
 ## Old STM32/CHMT Notes from upstream
-
+***
 To build, follow normal smoothie build process to get setup.  Then checkout chmt branch and rebuild.
 
 ### Port Status:

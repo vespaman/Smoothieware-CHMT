@@ -95,8 +95,8 @@ zeta_step_pin                                5.3              # Pin for delta st
 zeta_dir_pin                                 5.2              # Pin for delta stepper direction
 zeta_en_pin                                  nc               # Pin for delta enable
 zeta_current                                 0.5              # Z stepper motor current
-zeta_max_rate                                100000           # mm/min
-zeta_acceleration                            10000            # mm/sec^2
+zeta_max_rate                                120000           # mm/min
+zeta_acceleration                            30000            # mm/sec^2
 zeta_enable                                  true
 
 # D axis: RPEELER
@@ -105,8 +105,8 @@ eta_step_pin                                 5.7              # Pin for delta st
 eta_dir_pin                                  5.6              # Pin for delta stepper direction
 eta_en_pin                                   nc               # Pin for delta enable
 eta_current                                  0.5              # Z stepper motor current
-eta_max_rate                                 100000           # mm/min
-eta_acceleration                             10000            # mm/sec^2
+eta_max_rate                                 120000           # mm/min
+eta_acceleration                             30000            # mm/sec^2
 eta_enable                                   true
 
 extruder.f2.enable                           false             # Whether to activate the extruder module at all. All configuration is ignored if false
@@ -123,7 +123,7 @@ extruder.f2.en_pin                           nc               # Pin for extruder
 # Serial communications configuration ( baud rate default to 9600 if undefined )
 uart0.baud_rate                              4000000          # Baud rate for the default hardware serial port.
 rts_cts_handshake                            true             # use rts/cts signals for handshake. (Needs patched pcb) false will disable handshake.
-second_usb_serial_enable                     true             # This enables a second usb serial port (to have both pronterface
+#second_usb_serial_enable                     true             # This enables a second usb serial port (to have both pronterface
                                                               # and a terminal connected)
 msd_disable                                  true             # disable the MSD (USB SDCARD) when set to true (needs special binary)
 dfu_enable                                   false            # for linux developers, set to true to enable DFU
