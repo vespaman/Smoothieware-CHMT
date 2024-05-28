@@ -232,7 +232,7 @@
             <cam-wheel-gap value="0.0" units="Millimeters"/>
          </axis>
          <axis class="org.openpnp.machine.reference.axis.ReferenceCamClockwiseAxis" id="AXS16426decf93aa21c" name="Z2" type="Z" input-axis-id="AXS16426decf9372a38"/>
-         <axis class="org.openpnp.machine.reference.axis.ReferenceControllerAxis" id="AXS16426decf96801bc" name="C1" type="Rotation" driver-id="DRV16426decf5f501b0" letter="A" backlash-compensation-method="None" backlash-speed-factor="0.0" limit-rotation="false" wrap-around-rotation="true" invert-linear-rotational="true" soft-limit-low-enabled="false" soft-limit-high-enabled="false" safe-zone-low-enabled="false" safe-zone-high-enabled="false" version="2.0">
+         <axis class="org.openpnp.machine.reference.axis.ReferenceControllerAxis" id="AXS16426decf96801bc" name="C1" type="Rotation" driver-id="DRV16426decf5f501b0" letter="A" backlash-compensation-method="None" backlash-speed-factor="0.0" limit-rotation="true" wrap-around-rotation="true" invert-linear-rotational="true" soft-limit-low-enabled="false" soft-limit-high-enabled="false" safe-zone-low-enabled="false" safe-zone-high-enabled="false" version="2.0">
             <home-coordinate value="0.0" units="Millimeters"/>
             <acceptable-tolerance value="0.025" units="Millimeters"/>
             <backlash-offset value="0.0" units="Millimeters"/>
@@ -247,7 +247,7 @@
             <jerk-per-second-3 value="0.0" units="Millimeters"/>
             <resolution>0.112501</resolution>
          </axis>
-         <axis class="org.openpnp.machine.reference.axis.ReferenceControllerAxis" id="AXS16426decf9692970" name="C2" type="Rotation" driver-id="DRV16426decf5f501b0" letter="B" backlash-compensation-method="None" backlash-speed-factor="0.0" limit-rotation="false" wrap-around-rotation="true" invert-linear-rotational="true" soft-limit-low-enabled="false" soft-limit-high-enabled="false" safe-zone-low-enabled="false" safe-zone-high-enabled="false" version="2.0">
+         <axis class="org.openpnp.machine.reference.axis.ReferenceControllerAxis" id="AXS16426decf9692970" name="C2" type="Rotation" driver-id="DRV16426decf5f501b0" letter="B" backlash-compensation-method="None" backlash-speed-factor="0.0" limit-rotation="true" wrap-around-rotation="true" invert-linear-rotational="true" soft-limit-low-enabled="false" soft-limit-high-enabled="false" safe-zone-low-enabled="false" safe-zone-high-enabled="false" version="2.0">
             <home-coordinate value="0.0" units="Millimeters"/>
             <acceptable-tolerance value="0.025" units="Millimeters"/>
             <backlash-offset value="0.0" units="Millimeters"/>
@@ -294,17 +294,18 @@
       <heads>
          <head class="org.openpnp.machine.reference.ReferenceHead" id="H1" name="H1" vacuum-pump-control="TaskDuration" pump-on-wait-milliseconds="1000" visual-homing-method="ResetToFiducialLocation" nozzle-solution="DualCam" nozzle-solutions-multiplier="1">
             <nozzles>
-               <nozzle class="org.openpnp.machine.reference.ContactProbeNozzle" axis-X-id="AXS16426decf928a508" axis-Y-id="AXS16426decf933bf9c" axis-Z-id="AXS16426decf9372a38" axis-rotation-id="AXS16426decf96801bc" id="N1" name="N1" rotation-mode="MinimalRotation" aligning-rotation-mode="true" max-pick-articulation-angle="15.0" max-alignment-articulation-angle="30.0" pick-dwell-milliseconds="0" place-dwell-milliseconds="40" current-nozzle-tip-id="TIP174709524fec4b88" changer-enabled="false" nozzle-tip-changed-on-manual-feed="true" enable-dynamic-safe-z="false" blow-off-closing-valve="false" version="200" limit-rotation="true" contact-probe-speed="0.05" sniffle-dwell-time="250" contact-probe-method="None" feeder-height-probing="EachTime" part-height-probing="EachTime" discard-probing="false" max-Z-offset-mm="2.0">
+               <nozzle class="org.openpnp.machine.reference.ContactProbeNozzle" axis-X-id="AXS16426decf928a508" axis-Y-id="AXS16426decf933bf9c" axis-Z-id="AXS16426decf9372a38" axis-rotation-id="AXS16426decf96801bc" id="N1" name="N1" rotation-mode="MinimalRotation" aligning-rotation-mode="true" max-pick-articulation-angle="15.0" max-alignment-articulation-angle="30.0" pick-dwell-milliseconds="0" place-dwell-milliseconds="40" current-nozzle-tip-id="TIP16cb0e83fd4ff8dc" changer-enabled="false" nozzle-tip-changed-on-manual-feed="true" enable-dynamic-safe-z="false" blow-off-closing-valve="false" version="200" limit-rotation="true" contact-probe-speed="0.05" sniffle-dwell-time="250" contact-probe-method="None" feeder-height-probing="EachTime" part-height-probing="EachTime" discard-probing="false" max-Z-offset-mm="2.0">
                   <compatible-nozzle-tip-ids class="java.util.ArrayList">
-                     <string>TIP1734109f58be78aa</string>
-                     <string>TIP16cb0e83fd4ff8dc</string>
-                     <string>TIP174708e686ee1e00</string>
-                     <string>TIP176120e657ee851d</string>
                      <string>TIP173410c58c7ee74f</string>
+                     <string>TIP174708e686ee1e00</string>
+                     <string>TIP16cb0e83fd4ff8dc</string>
+                     <string>TIP176120e657ee851d</string>
+                     <string>TIP17c12fe4fc5680c2</string>
+                     <string>TIP1734109f58be78aa</string>
                      <string>TIP174709524fec4b88</string>
                   </compatible-nozzle-tip-ids>
                   <head-offsets units="Millimeters" x="33.992033681561075" y="-18.272821161949988" z="0.0" rotation="341.79151552941914"/>
-                  <manual-nozzle-tip-change-location units="Millimeters" x="73.568" y="-10.305" z="-0.067" rotation="0.0"/>
+                  <manual-nozzle-tip-change-location units="Millimeters" x="50.478" y="-10.31" z="-0.477" rotation="0.0"/>
                   <vacuum-sense-actuator-name>AVACS1</vacuum-sense-actuator-name>
                   <vacuum-actuator-name>AVAC1</vacuum-actuator-name>
                   <blow-off-actuator-name>BLOW</blow-off-actuator-name>
@@ -315,14 +316,15 @@
                   <probed-feeder-height-offsets/>
                   <probed-part-height-offsets/>
                </nozzle>
-               <nozzle class="org.openpnp.machine.reference.ContactProbeNozzle" axis-X-id="AXS16426decf928a508" axis-Y-id="AXS16426decf933bf9c" axis-Z-id="AXS16426decf93aa21c" axis-rotation-id="AXS16426decf9692970" id="N2" name="N2" rotation-mode="MinimalRotation" aligning-rotation-mode="true" max-pick-articulation-angle="15.0" max-alignment-articulation-angle="30.0" pick-dwell-milliseconds="0" place-dwell-milliseconds="40" current-nozzle-tip-id="TIP1734109f58be78aa" changer-enabled="false" nozzle-tip-changed-on-manual-feed="true" enable-dynamic-safe-z="false" blow-off-closing-valve="false" version="200" limit-rotation="true" contact-probe-speed="0.05" sniffle-dwell-time="250" contact-probe-method="None" feeder-height-probing="EachTime" part-height-probing="EachTime" discard-probing="false" max-Z-offset-mm="2.0">
+               <nozzle class="org.openpnp.machine.reference.ContactProbeNozzle" axis-X-id="AXS16426decf928a508" axis-Y-id="AXS16426decf933bf9c" axis-Z-id="AXS16426decf93aa21c" axis-rotation-id="AXS16426decf9692970" id="N2" name="N2" rotation-mode="MinimalRotation" aligning-rotation-mode="true" max-pick-articulation-angle="15.0" max-alignment-articulation-angle="30.0" pick-dwell-milliseconds="0" place-dwell-milliseconds="40" current-nozzle-tip-id="TIP176120e657ee851d" changer-enabled="false" nozzle-tip-changed-on-manual-feed="true" enable-dynamic-safe-z="false" blow-off-closing-valve="false" version="200" limit-rotation="true" contact-probe-speed="0.05" sniffle-dwell-time="250" contact-probe-method="None" feeder-height-probing="EachTime" part-height-probing="EachTime" discard-probing="false" max-Z-offset-mm="2.0">
                   <compatible-nozzle-tip-ids class="java.util.ArrayList">
+                     <string>TIP173410c58c7ee74f</string>
+                     <string>TIP174708e686ee1e00</string>
                      <string>TIP176120e657ee851d</string>
                      <string>TIP16cb0e83fd4ff8dc</string>
-                     <string>TIP174709524fec4b88</string>
-                     <string>TIP174708e686ee1e00</string>
-                     <string>TIP173410c58c7ee74f</string>
+                     <string>TIP17c12fe4fc5680c2</string>
                      <string>TIP1734109f58be78aa</string>
+                     <string>TIP174709524fec4b88</string>
                   </compatible-nozzle-tip-ids>
                   <head-offsets units="Millimeters" x="57.08206110104835" y="-18.267404097055422" z="-0.5443521194780097" rotation="0.0"/>
                   <manual-nozzle-tip-change-location units="Millimeters" x="73.568" y="-10.305" z="-0.067" rotation="0.0"/>
@@ -408,6 +410,17 @@
                      <confirmation-pattern><![CDATA[1]]></confirmation-pattern>
                   </interlock-monitor>
                   <head-offsets units="Millimeters" x="0.0" y="0.0" z="0.0" rotation="0.0"/>
+               </actuator>
+               <actuator class="org.openpnp.machine.reference.ReferenceActuator" id="ACT17c0f49bddf61e4a" name="Feed (No peel)" value-type="Profile" value-type-confirmed="true" default-on-double="0.0" default-on-string="" default-off-double="0.0" default-off-string="" interlock-actuator="false" driver-id="DRV16426decf5f501b0" coordinated-before-actuate="true" coordinated-after-actuate="false" coordinated-before-read="false" enabled-actuation="AssumeUnknown" homed-actuation="LeaveAsIs" disabled-actuation="LeaveAsIs" index="0">
+                  <head-offsets units="Millimeters" x="45.6" y="18.9" z="0.0" rotation="0.0"/>
+                  <actuator-profiles actuator-1-id="ACT1785f2470d4af383">
+                     <profiles>
+                        <profile name="ON" default-on="true" default-off="false">
+                           <value-1 class="java.lang.Boolean">true</value-1>
+                        </profile>
+                        <profile name="OFF" default-on="false" default-off="true"/>
+                     </profiles>
+                  </actuator-profiles>
                </actuator>
             </actuators>
             <cameras>
@@ -496,7 +509,7 @@
       </heads>
       <signalers/>
       <feeders>
-         <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR1734f4db51e05c7e" name="ReferencePushPullFeeder1" enabled="true" part-id="C0402-100n/50V" retry-count="3" feed-retry-count="3" pick-retry-count="0" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="true" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="2726" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="SwapOrCreate" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="false" calibration-count="30" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="UntilConfident">
+         <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR1734f4db51e05c7e" name="ReferencePushPullFeeder1" enabled="true" part-id="C0402-100n/50V" retry-count="3" feed-retry-count="3" pick-retry-count="0" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="true" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="2749" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="SwapOrCreate" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="false" calibration-count="31" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="UntilConfident">
             <location units="Millimeters" x="57.618575393341914" y="36.98389765212774" z="-10.3" rotation="0.0"/>
             <hole-1-location units="Millimeters" x="57.618575393341914" y="40.48389765212774" z="-0.0" rotation="-0.0"/>
             <hole-2-location units="Millimeters" x="61.618575393341914" y="40.48389765212774" z="0.0" rotation="-0.0"/>
@@ -531,8 +544,8 @@
                <lower-left-corner units="Millimeters" x="-15.20968556042227" y="-4.800219910913412" z="0.0" rotation="0.0"/>
             </ocr-region>
             <precision-wanted value="0.05" units="Millimeters"/>
-            <sum-of-errors value="1.1648896905043142" units="Millimeters"/>
-            <sum-of-error-squares value="0.059177063308431255" units="Millimeters"/>
+            <sum-of-errors value="1.204208770387889" units="Millimeters"/>
+            <sum-of-error-squares value="0.060723053351322186" units="Millimeters"/>
          </feeder>
          <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR1748dfdebc4dc97a" name="ReferencePushPullFeeder2" enabled="true" part-id="C0402-10n/50V" retry-count="3" feed-retry-count="3" pick-retry-count="0" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="false" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="138" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="SwapOrCreate" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="false" calibration-count="3" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="OnEachTapeFeed">
             <location units="Millimeters" x="57.93130952991045" y="49.93987600385395" z="-10.3" rotation="0.0"/>
@@ -648,7 +661,7 @@
             <sum-of-errors value="1.0395885491349963" units="Millimeters"/>
             <sum-of-error-squares value="0.05082652281725738" units="Millimeters"/>
          </feeder>
-         <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR1748e051eb45e59b" name="ReferencePushPullFeeder5" enabled="true" part-id="SOD323-RB751V" retry-count="3" feed-retry-count="3" pick-retry-count="0" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="false" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="619" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="None" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="true" calibration-count="607" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="OnEachTapeFeed">
+         <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR1748e051eb45e59b" name="ReferencePushPullFeeder5" enabled="true" part-id="SOD323-RB751V" retry-count="3" feed-retry-count="3" pick-retry-count="0" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="false" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="622" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="None" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="true" calibration-count="613" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="OnEachTapeFeed">
             <location units="Millimeters" x="59.93397835172626" y="89.01730328745586" z="-10.3" rotation="0.0"/>
             <hole-1-location units="Millimeters" x="57.93397835172626" y="92.51730328745586" z="-0.0" rotation="-0.0"/>
             <hole-2-location units="Millimeters" x="61.93397835172626" y="92.51730328745586" z="0.0" rotation="-0.0"/>
@@ -683,8 +696,8 @@
                <lower-left-corner units="Millimeters" x="-4.841915189039433" y="2.8257011830649637" z="0.0" rotation="0.0"/>
             </ocr-region>
             <precision-wanted value="0.1" units="Millimeters"/>
-            <sum-of-errors value="20.811572124773928" units="Millimeters"/>
-            <sum-of-error-squares value="3.410186246335978" units="Millimeters"/>
+            <sum-of-errors value="20.89555746848041" units="Millimeters"/>
+            <sum-of-error-squares value="3.415854876493243" units="Millimeters"/>
          </feeder>
          <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR1748e9014699f43b" name="ReferencePushPullFeeder6" enabled="true" part-id="R0402-5K6" retry-count="3" feed-retry-count="3" pick-retry-count="0" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="false" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="525" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="SwapOrCreate" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="false" calibration-count="2" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="UntilConfident">
             <location units="Millimeters" x="58.705150155897925" y="101.85496517971708" z="-10.3" rotation="0.0"/>
@@ -724,7 +737,7 @@
             <sum-of-errors value="0.06797862753046514" units="Millimeters"/>
             <sum-of-error-squares value="0.002662538407201046" units="Millimeters"/>
          </feeder>
-         <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR1748ea41acafc783" name="ReferencePushPullFeeder7" enabled="true" part-id="R0402-8K2" retry-count="3" feed-retry-count="3" pick-retry-count="2" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="true" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="1879" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="SwapOrCreate" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="false" calibration-count="236" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="UntilConfident">
+         <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR1748ea41acafc783" name="ReferencePushPullFeeder7" enabled="true" part-id="R0402-8K2" retry-count="3" feed-retry-count="3" pick-retry-count="2" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="true" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="1890" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="SwapOrCreate" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="false" calibration-count="236" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="UntilConfident">
             <location units="Millimeters" x="58.03554818364172" y="114.94598706180014" z="-10.3" rotation="0.0"/>
             <hole-1-location units="Millimeters" x="58.03554818364172" y="118.44598706180014" z="-0.0" rotation="0.0"/>
             <hole-2-location units="Millimeters" x="62.03554818364172" y="118.44598706180014" z="0.0" rotation="0.0"/>
@@ -838,7 +851,7 @@
             <sum-of-errors value="1.8818340032754186" units="Millimeters"/>
             <sum-of-error-squares value="0.5577415347895593" units="Millimeters"/>
          </feeder>
-         <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR1748eb33af516f44" name="ReferencePushPullFeeder10" enabled="true" part-id="C0402-1u/6V3" retry-count="3" feed-retry-count="3" pick-retry-count="0" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="true" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="307" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="SwapOrCreate" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="false" calibration-count="142" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="OnEachTapeFeed">
+         <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR1748eb33af516f44" name="ReferencePushPullFeeder10" enabled="true" part-id="C0402-1u/6V3" retry-count="3" feed-retry-count="3" pick-retry-count="0" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="true" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="308" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="SwapOrCreate" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="false" calibration-count="144" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="OnEachTapeFeed">
             <location units="Millimeters" x="58.61057539334196" y="153.81975693834843" z="-10.3" rotation="0.0"/>
             <hole-1-location units="Millimeters" x="58.61057539334196" y="157.31975693834843" z="-0.0" rotation="-0.0"/>
             <hole-2-location units="Millimeters" x="62.61057539334196" y="157.31975693834843" z="0.0" rotation="-0.0"/>
@@ -873,8 +886,8 @@
                <lower-left-corner units="Millimeters" x="-15.20968556042227" y="-4.800219910913412" z="0.0" rotation="0.0"/>
             </ocr-region>
             <precision-wanted value="0.1" units="Millimeters"/>
-            <sum-of-errors value="7.482099331584549" units="Millimeters"/>
-            <sum-of-error-squares value="3.2998298582141605" units="Millimeters"/>
+            <sum-of-errors value="7.5306250942559405" units="Millimeters"/>
+            <sum-of-error-squares value="3.301032294914187" units="Millimeters"/>
          </feeder>
          <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR1748ec898b6b3a82" name="ReferencePushPullFeeder11" enabled="true" part-id="R0402-2K49" retry-count="3" feed-retry-count="3" pick-retry-count="0" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="false" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="22" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="SwapOrCreate" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="false" calibration-count="22" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="OnEachTapeFeed">
             <location units="Millimeters" x="58.04444057305904" y="166.77152730578769" z="-10.3" rotation="0.0"/>
@@ -914,7 +927,7 @@
             <sum-of-errors value="0.9969095996824191" units="Millimeters"/>
             <sum-of-error-squares value="0.16694371405476513" units="Millimeters"/>
          </feeder>
-         <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR1748eca3dd43d058" name="ReferencePushPullFeeder12" enabled="true" part-id="C0402-100p/50V" retry-count="3" feed-retry-count="3" pick-retry-count="0" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="true" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="1866" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="SwapOrCreate" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="false" calibration-count="876" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="OnEachTapeFeed">
+         <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR1748eca3dd43d058" name="ReferencePushPullFeeder12" enabled="true" part-id="C0402-100p/50V" retry-count="3" feed-retry-count="3" pick-retry-count="0" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="true" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="1874" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="SwapOrCreate" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="false" calibration-count="880" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="OnEachTapeFeed">
             <location units="Millimeters" x="58.52105015289963" y="179.77081154992374" z="-10.3" rotation="0.0"/>
             <hole-1-location units="Millimeters" x="58.52105015289963" y="183.27081154992374" z="-0.0" rotation="-0.0"/>
             <hole-2-location units="Millimeters" x="62.52105015289963" y="183.27081154992374" z="0.0" rotation="-0.0"/>
@@ -949,10 +962,10 @@
                <lower-left-corner units="Millimeters" x="-15.20968556042227" y="-4.800219910913412" z="0.0" rotation="0.0"/>
             </ocr-region>
             <precision-wanted value="0.1" units="Millimeters"/>
-            <sum-of-errors value="27.19852745113397" units="Millimeters"/>
-            <sum-of-error-squares value="5.099446371951655" units="Millimeters"/>
+            <sum-of-errors value="27.32488568828756" units="Millimeters"/>
+            <sum-of-error-squares value="5.103740788737463" units="Millimeters"/>
          </feeder>
-         <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR1748ecb71144bf82" name="ReferencePushPullFeeder13" enabled="true" part-id="C0603-10u/35V" retry-count="3" feed-retry-count="3" pick-retry-count="2" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="true" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="1134" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="None" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="true" calibration-count="835" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="OnEachTapeFeed">
+         <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR1748ecb71144bf82" name="ReferencePushPullFeeder13" enabled="true" part-id="C0603-10u/35V" retry-count="3" feed-retry-count="3" pick-retry-count="2" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="true" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="1139" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="None" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="true" calibration-count="846" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="OnEachTapeFeed">
             <location units="Millimeters" x="60.00450873443271" y="192.73651387669685" z="-10.3" rotation="0.0"/>
             <hole-1-location units="Millimeters" x="58.00450873443271" y="196.23651387669685" z="-0.0" rotation="-0.0"/>
             <hole-2-location units="Millimeters" x="62.00450873443271" y="196.23651387669685" z="0.0" rotation="-0.0"/>
@@ -982,13 +995,13 @@
                </stages>
             </pipeline>
             <ocr-region rectify="false">
-               <upper-left-corner units="Millimeters" x="-5.097050246708954" y="-6.18023551981798" z="0.0" rotation="0.0"/>
-               <upper-right-corner units="Millimeters" x="-14.318909754654458" y="-5.924046471821234" z="0.0" rotation="0.0"/>
-               <lower-left-corner units="Millimeters" x="-4.841807418649408" y="2.8258858424460565" z="0.0" rotation="0.0"/>
+               <upper-left-corner units="Millimeters" x="-13.790182855781262" y="4.819149922719258" z="0.0" rotation="0.0"/>
+               <upper-right-corner units="Millimeters" x="-4.151883010342745" y="4.893290690761093" z="0.0" rotation="0.0"/>
+               <lower-left-corner units="Millimeters" x="-13.790182855781262" y="-4.22602377838458" z="0.0" rotation="0.0"/>
             </ocr-region>
             <precision-wanted value="0.1" units="Millimeters"/>
-            <sum-of-errors value="30.666417616905303" units="Millimeters"/>
-            <sum-of-error-squares value="9.620867813579247" units="Millimeters"/>
+            <sum-of-errors value="30.804612104223455" units="Millimeters"/>
+            <sum-of-error-squares value="9.624990453693622" units="Millimeters"/>
          </feeder>
          <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR174977e6acb73f0c" name="ReferencePushPullFeeder14" enabled="true" part-id="R0402-150R" retry-count="3" feed-retry-count="3" pick-retry-count="2" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="true" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="484" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="SwapOrCreate" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="false" calibration-count="23" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="UntilConfident">
             <location units="Millimeters" x="57.923473796701856" y="205.72874611421156" z="-10.3" rotation="0.0"/>
@@ -1066,7 +1079,7 @@
             <sum-of-errors value="12.703123890836595" units="Millimeters"/>
             <sum-of-error-squares value="5.8054502760612765" units="Millimeters"/>
          </feeder>
-         <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR1749795ed654824d" name="ReferencePushPullFeeder16" enabled="true" part-id="C0603-22u/6V3" retry-count="3" feed-retry-count="3" pick-retry-count="2" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="true" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="907" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="None" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="true" calibration-count="888" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="OnEachTapeFeed">
+         <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR1749795ed654824d" name="ReferencePushPullFeeder16" enabled="true" part-id="C0603-22u/6V3" retry-count="3" feed-retry-count="3" pick-retry-count="2" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="true" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="910" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="None" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="true" calibration-count="892" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="OnEachTapeFeed">
             <location units="Millimeters" x="60.34588093449445" y="231.6877365896081" z="-10.3" rotation="0.0"/>
             <hole-1-location units="Millimeters" x="58.34588093449445" y="235.1877365896081" z="-0.0" rotation="-0.0"/>
             <hole-2-location units="Millimeters" x="62.34588093449445" y="235.1877365896081" z="0.0" rotation="-0.0"/>
@@ -1096,13 +1109,13 @@
                </stages>
             </pipeline>
             <ocr-region rectify="false">
-               <upper-left-corner units="Millimeters" x="-14.77820511899185" y="4.422674524661795" z="0.0" rotation="0.0"/>
-               <upper-right-corner units="Millimeters" x="-5.1777652971650285" y="4.260869359125388" z="0.0" rotation="0.0"/>
-               <lower-left-corner units="Millimeters" x="-15.047880394885864" y="-4.908090021271017" z="0.0" rotation="0.0"/>
+               <upper-left-corner units="Millimeters" x="-14.679872072283278" y="4.300164546426415" z="0.0" rotation="0.0"/>
+               <upper-right-corner units="Millimeters" x="-5.338135299012102" y="4.151883010342745" z="0.0" rotation="0.0"/>
+               <lower-left-corner units="Millimeters" x="-14.902294376408783" y="-4.819149922719258" z="0.0" rotation="0.0"/>
             </ocr-region>
             <precision-wanted value="0.1" units="Millimeters"/>
-            <sum-of-errors value="27.824026296916912" units="Millimeters"/>
-            <sum-of-error-squares value="1.6894487328006216" units="Millimeters"/>
+            <sum-of-errors value="27.92688752582306" units="Millimeters"/>
+            <sum-of-error-squares value="1.6932278195721326" units="Millimeters"/>
          </feeder>
          <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR1749d5b0b14665c5" name="ReferencePushPullFeeder17" enabled="true" part-id="US6-SSM6N7002" retry-count="3" feed-retry-count="3" pick-retry-count="0" rotation-in-feeder="0.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="false" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Left side peel)" feed-count="23" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="None" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="true" calibration-count="3" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="UntilConfident">
             <location units="Millimeters" x="60.84927478282994" y="244.67884572618888" z="-10.3" rotation="0.0"/>
@@ -1446,7 +1459,7 @@
             <sum-of-errors value="0.0" units="Millimeters"/>
             <sum-of-error-squares value="0.0" units="Millimeters"/>
          </feeder>
-         <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR174a701fca1110a2" name="ReferencePushPullFeeder36" enabled="true" part-id="TSOP6-NLAST4599" retry-count="3" feed-retry-count="3" pick-retry-count="0" rotation-in-feeder="0.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="true" calibrate-motion-x="false" calibrate-motion-y="false" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Right side peel)" feed-count="7" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="None" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="true" calibration-count="9" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="UntilConfident">
+         <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR174a701fca1110a2" name="ReferencePushPullFeeder36" enabled="true" part-id="TSOP6-NLAST4599" retry-count="3" feed-retry-count="3" pick-retry-count="0" rotation-in-feeder="0.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="false" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="true" actuator-name="Feed (Right side peel)" feed-count="7" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="None" ocr-discover-on-job-start="true" ocr-stop-after-wrong-part="true" calibration-count="9" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="UntilConfident">
             <location units="Millimeters" x="505.0" y="39.43722141337784" z="-10.3" rotation="180.0"/>
             <hole-1-location units="Millimeters" x="507.0" y="35.93722141337784" z="-0.0" rotation="0.0"/>
             <hole-2-location units="Millimeters" x="503.0" y="35.93722141337784" z="0.0" rotation="0.0"/>
@@ -3000,7 +3013,7 @@
                </stages>
             </pipeline>
          </feeder>
-         <feeder class="org.openpnp.machine.reference.feeder.ReferenceStripFeeder" version="1.1" id="FDR176132af25e6715b" name="ReferenceStripFeeder108" enabled="true" part-id="PTS45-PTS647SM38" retry-count="3" feed-retry-count="3" pick-retry-count="0" tape-type="ClearPlastic" standard-eia-481="true" vision-enabled="false" feed-count="3" max-feed-count="11">
+         <feeder class="org.openpnp.machine.reference.feeder.ReferenceStripFeeder" version="1.1" id="FDR176132af25e6715b" name="ReferenceStripFeeder108" enabled="true" part-id="PTS45-PTS647SM38" retry-count="3" feed-retry-count="3" pick-retry-count="0" tape-type="ClearPlastic" standard-eia-481="true" vision-enabled="false" feed-count="4" max-feed-count="11">
             <location units="Millimeters" x="0.0" y="0.0" z="0.0" rotation="-90.0"/>
             <reference-hole-location units="Millimeters" x="412.8834566897516" y="100.77247743283884" z="-12.0" rotation="0.0"/>
             <last-hole-location units="Millimeters" x="412.63304770177035" y="108.73551152258257" z="0.0" rotation="0.0"/>
@@ -3224,6 +3237,58 @@
                </stages>
             </pipeline>
          </feeder>
+         <feeder class="org.openpnp.machine.reference.feeder.ReferencePushPullFeeder" version="1.1" id="FDR17c005700da4d74f" name="PocketFeeder" enabled="false" part-id="LD3528-IN-P32TATRGB" retry-count="3" feed-retry-count="3" pick-retry-count="0" rotation-in-feeder="-90.0" normalize-pick-location="true" snap-to-axis="true" used-as-template="false" calibrate-motion-x="false" calibrate-motion-y="false" feed-multiplier="1" feed-speed-push-2="1.0" feed-speed-push-3="1.0" feed-speed-push-end="1.0" feed-speed-pull-3="1.0" feed-speed-pull-2="1.0" feed-speed-pull-1="1.0" feed-speed-pull-0="1.0" included-push-1="false" included-push-2="false" included-push-3="true" included-push-end="true" included-multi-0="false" included-multi-1="false" included-multi-2="false" included-multi-3="false" included-multi-end="false" included-pull-0="false" included-pull-1="false" included-pull-2="false" included-pull-3="false" additive-rotation="false" actuator-name="Feed (Left side peel)" feed-count="13" pipeline-type="CircularSymmetry" ocr-font-name="[Barcode]" ocr-font-size-pt="7.0" ocr-wrong-part-action="None" ocr-discover-on-job-start="false" ocr-stop-after-wrong-part="false" calibration-count="16" calibration-tolerance-mm="1.95" sprocket-hole-tolerance-mm="0.6" row-location-tolerance-mm="4.0" row-Z-location-tolerance-mm="1.0" calibrate-max-passes="3" calibrate-tolerance-mm="0.3" calibrate-min-statistic="2" calibration-trigger="OnEachTapeFeed">
+            <location units="Millimeters" x="76.844" y="20.815" z="-10.3" rotation="90.0"/>
+            <hole-1-location units="Millimeters" x="73.25" y="19.018" z="-0.0" rotation="-0.0"/>
+            <hole-2-location units="Millimeters" x="73.25" y="23.018" z="0.0" rotation="-0.0"/>
+            <feed-start-location units="Millimeters" x="73.25" y="19.018" z="0.0" rotation="0.0"/>
+            <feed-mid-1-location units="Millimeters" x="0.0" y="0.0" z="0.0" rotation="0.0"/>
+            <feed-mid-2-location units="Millimeters" x="0.0" y="0.0" z="0.0" rotation="0.0"/>
+            <feed-mid-3-location units="Millimeters" x="73.25" y="23.218" z="0.0" rotation="0.0"/>
+            <feed-end-location units="Millimeters" x="73.25" y="23.018" z="0.0" rotation="0.0"/>
+            <part-pitch value="4.0" units="Millimeters"/>
+            <feed-pitch value="4.0" units="Millimeters"/>
+            <feed-speed-push-1>1.0</feed-speed-push-1>
+            <pipeline>
+               <stages>
+                  <cv-stage class="org.openpnp.vision.pipeline.stages.ImageCapture" name="0" enabled="true" default-light="true" settle-option="Settle" count="1"/>
+                  <cv-stage class="org.openpnp.vision.pipeline.stages.ImageWriteDebug" name="deb0" enabled="false" prefix="push_pull_" suffix=".png"/>
+                  <cv-stage class="org.openpnp.vision.pipeline.stages.BlurGaussian" name="1" enabled="true" kernel-size="5" property-name="BlurGaussian"/>
+                  <cv-stage class="org.openpnp.vision.pipeline.stages.AffineWarp" name="2" enabled="true" length-unit="Millimeters" x-0="0.0" y-0="0.0" x-1="0.0" y-1="0.0" x-2="0.0" y-2="0.0" scale="1.0" rectify="true" region-of-interest-property="regionOfInterest"/>
+                  <cv-stage class="org.openpnp.vision.pipeline.stages.ConvertColor" name="3" enabled="true" conversion="Bgr2Gray"/>
+                  <cv-stage class="org.openpnp.vision.pipeline.stages.SimpleOcr" name="OCR" enabled="true" alphabet="0123456789.-+_RCLDQYXJIVAFH%GMKkmuµnp" font-name="Liberation Mono" font-size-pt="7.0" font-max-pixel-size="20" auto-detect-size="false" threshold="0.75" draw-style="OverOriginalImage" debug="false" property-name="SimpleOcr"/>
+                  <cv-stage class="org.openpnp.vision.pipeline.stages.ImageRecall" name="5" enabled="true" image-stage-name="0"/>
+                  <cv-stage class="org.openpnp.vision.pipeline.stages.DetectCircularSymmetry" name="results" enabled="true" min-diameter="10" max-diameter="100" max-distance="100" search-width="0" search-height="0" max-target-count="10" min-symmetry="1.2" corr-symmetry="0.2" outer-margin="0.3" inner-margin="0.1" sub-sampling="8" super-sampling="1" symmetry-score="RingMedianVarianceVsRingVarianceSum" property-name="sprocketHole" diagnostics="false" heat-map="false"/>
+                  <cv-stage class="org.openpnp.vision.pipeline.stages.ImageRecall" name="7" enabled="false" image-stage-name="0"/>
+                  <cv-stage class="org.openpnp.vision.pipeline.stages.DrawCircles" name="8" enabled="false" circles-stage-name="results" thickness="1">
+                     <color r="255" g="0" b="0" a="255"/>
+                  </cv-stage>
+                  <cv-stage class="org.openpnp.vision.pipeline.stages.ImageWriteDebug" name="deb1" enabled="false" prefix="push_pull_result_" suffix=".png"/>
+               </stages>
+            </pipeline>
+            <ocr-region rectify="false">
+               <upper-left-corner units="Millimeters" x="-4.893290690761093" y="0.8155484484601822" z="0.0" rotation="0.0"/>
+               <upper-right-corner units="Millimeters" x="-4.819149922719258" y="-7.933062180476317" z="0.0" rotation="0.0"/>
+               <lower-left-corner units="Millimeters" x="4.151883010342745" y="0.8896892165020169" z="0.0" rotation="0.0"/>
+               <offsets units="Millimeters" x="2.520786113422375" y="-6.89509142789063" z="0.0" rotation="0.0"/>
+            </ocr-region>
+            <precision-wanted value="0.1" units="Millimeters"/>
+            <sum-of-errors value="2.7413681902273126" units="Millimeters"/>
+            <sum-of-error-squares value="0.9967341359858368" units="Millimeters"/>
+         </feeder>
+         <feeder class="org.openpnp.machine.reference.feeder.ReferenceDragFeeder" version="1.1" id="FDR17c0f2b64cc55f5d" name="ReferenceDragFeeder" enabled="false" part-id="LD3528-IN-P32TATRGB" retry-count="3" feed-retry-count="3" pick-retry-count="0" actuator-name="DRAGPIN">
+            <location units="Millimeters" x="120.785" y="21.131" z="-10.0" rotation="0.0"/>
+            <feed-start-location units="Millimeters" x="117.21" y="19.09" z="-10.0" rotation="0.0"/>
+            <feed-end-location units="Millimeters" x="117.21" y="23.096" z="-10.0" rotation="0.0"/>
+            <part-pitch value="4.0" units="Millimeters"/>
+            <feed-speed>1.0</feed-speed>
+            <vision enabled="false">
+               <area-of-interest x="0" y="0" width="0" height="0"/>
+               <template-image-top-left units="Millimeters" x="0.0" y="0.0" z="0.0" rotation="0.0"/>
+               <template-image-bottom-right units="Millimeters" x="0.0" y="0.0" z="0.0" rotation="0.0"/>
+            </vision>
+            <backoff-distance value="0.0" units="Millimeters"/>
+         </feeder>
       </feeders>
       <cameras>
          <camera class="org.openpnp.machine.reference.camera.OpenPnpCaptureCamera" id="CAM16b429a6111738f0" name="Up Locking" looking="Up" auto-visible="true" shown-in-multi-camera-view="true" before-capture-light-on="true" user-action-light-on="true" after-capture-light-off="true" anti-glare-light-off="false" enable-units-per-pixel-3-d="false" auto-view-plane-z="false" max-relative-motion="0.05" min-motion-template-match-score="0.9" min-contrast-range="16.0" settle-method="Motion" settle-time-ms="250" settle-timeout-ms="600" settle-threshold="1.0" settle-debounce="2" settle-full-color="false" settle-gaussian-blur="13" settle-gradients="false" settle-mask-circle="0.0" settle-contrast-enhance="0.0" settle-diagnostics="true" fps="6.0" suspend-preview-in-tasks="true" capture-try-count="4" capture-try-timeout-ms="2000" rotation="0.0" flip-x="true" flip-y="false" offset-x="0" offset-y="0" crop-width="1080" crop-height="0" scale-width="0" scale-height="0" red-balance="1.0" green-balance="1.0" blue-balance="1.0" red-gamma="1.0" green-gamma="1.0" blue-gamma="1.0" deinterlace="false" light-actuator-id="ACT1579799618401" allow-machine-actuators="false" focus-sensing-method="None" white-balance-lead-fractile="0.8" white-balance-clip-fractile="0.99" white-balance-gamma-fractile="0.5" unique-id="3.0 USB Camera: 3.0 USB Camera usb-0000:05:00.3-2" format-id="0" freeze-properties="true">
@@ -3329,7 +3394,7 @@
             <simulated line-ending-type="LF"/>
             <homing-fiducial-location units="Millimeters" x="0.0" y="0.0" z="0.0" rotation="0.0"/>
             <detected-firmware><![CDATA[FIRMWARE_NAME:Smoothieware, FIRMWARE_URL:http://smoothieware.org, X-SOURCE_CODE_URL:https://github.com/vespaman/Smoothieware-CHMT, X-HARDWARE:CHMT, FIRMWARE_VERSION:serial-dma-6df6447, X-FIRMWARE_BUILD_DATE:Jan 17 2024 14:46:03, X-SYSTEM_CLOCK:168MHz, X-AXES:7, X-PAXES:7, X-GRBL_MODE:0, X-SERIAL_FLOW:RTS/CTS, X-CNC:0, X-MSD:1]]></detected-firmware>
-            <reported-axes><![CDATA[ok C: X:0.0000 Y:0.0000 Z:0.0000 A:0.0000 B:0.0000 C:0.0000 D:0.0000]]></reported-axes>
+            <reported-axes><![CDATA[ok C: X:133.9000 Y:45.8600 Z:-0.2000 A:180.0000 B:0.0000 C:0.0000 D:0.0000]]></reported-axes>
             <command type="COMMAND_CONFIRM_REGEX">
                <text><![CDATA[^ok.*]]></text>
             </command>
@@ -3660,7 +3725,7 @@
          </entry>
       </properties>
       <nozzle-tips>
-         <nozzle-tip class="org.openpnp.machine.reference.ReferenceNozzleTip" id="TIP16cb0e83fd4ff8dc" name="502" pick-dwell-milliseconds="20" place-dwell-milliseconds="0" place-blow-off-level="2.0" vision-calibration="None" vision-calibration-trigger="Manual" vision-match-minimum-score="0.2" vision-calibration-max-passes="3" z-calibration-trigger="Manual" z-calibration-fail-homing="true" template-nozzle-tip="false" template-locked="false" establish-part-on-level="true" establish-part-off-level="false" part-off-probing-milliseconds="0" part-off-dwell-milliseconds="0" is-push-and-drag-allowed="false">
+         <nozzle-tip class="org.openpnp.machine.reference.ReferenceNozzleTip" id="TIP16cb0e83fd4ff8dc" name="502" pick-dwell-milliseconds="20" place-dwell-milliseconds="0" place-blow-off-level="0.5" vision-calibration="None" vision-calibration-trigger="Manual" vision-match-minimum-score="0.2" vision-calibration-max-passes="3" z-calibration-trigger="Manual" z-calibration-fail-homing="true" template-nozzle-tip="false" template-locked="false" establish-part-on-level="true" establish-part-off-level="false" part-off-probing-milliseconds="0" part-off-dwell-milliseconds="0" is-push-and-drag-allowed="false">
             <changer-start-location units="Millimeters" x="0.0" y="0.0" z="0.0" rotation="0.0"/>
             <changer-start-to-mid-speed>1.0</changer-start-to-mid-speed>
             <changer-mid-location units="Millimeters" x="0.0" y="0.0" z="0.0" rotation="0.0"/>
@@ -3678,7 +3743,7 @@
             <max-part-diameter value="3.0" units="Millimeters"/>
             <max-part-height value="1.0" units="Millimeters"/>
             <max-pick-tolerance value="0.3" units="Millimeters"/>
-            <calibration angle-subdivisions="6" allow-misdetections="0" angle-start="-180.0" angle-stop="180.0" excenter-ratio="0.25" enabled="true" fail-homing="true" runout-compensation-algorithm="ModelCameraOffsetAffine" version="2.1" recalibration-trigger="NozzleTipChangeInJob" background-calibration-method="BrightnessAndKeyColor" background-min-hue="101" background-max-hue="115" background-tol-hue="8" background-min-saturation="158" background-max-saturation="252" background-tol-saturation="8" background-min-value="80" background-max-value="164" background-tol-value="8" background-diagnostics="&lt;html&gt;Non-color-keyed background elements are sufficiently dark. &lt;br/&gt;&lt;hr/&gt;The key color is very consistent. Perfect!&lt;br/&gt;&lt;hr/&gt;The key color is sufficiently saturated.&lt;br/&gt;&lt;/html&gt;" min-background-mask-value="32" max-background-mask-value="128" background-worst-saturation="63" background-worst-hue-span="42" background-worst-value="127" offset-threshold="0.0" detection-threshold-margin="0.4">
+            <calibration angle-subdivisions="6" allow-misdetections="0" angle-start="-180.0" angle-stop="180.0" excenter-ratio="0.25" enabled="true" fail-homing="true" runout-compensation-algorithm="ModelCameraOffsetAffine" version="2.1" recalibration-trigger="NozzleTipChangeInJob" background-calibration-method="BrightnessAndKeyColor" background-min-hue="102" background-max-hue="114" background-tol-hue="8" background-min-saturation="160" background-max-saturation="247" background-tol-saturation="8" background-min-value="97" background-max-value="163" background-tol-value="8" background-diagnostics="&lt;html&gt;Non-color-keyed background elements are sufficiently dark. &lt;br/&gt;&lt;hr/&gt;The key color is very consistent. Perfect!&lt;br/&gt;&lt;hr/&gt;The key color is very vivid. Perfect!&lt;br/&gt;&lt;/html&gt;" min-background-mask-value="32" max-background-mask-value="128" background-worst-saturation="63" background-worst-hue-span="42" background-worst-value="127" offset-threshold="0.0" detection-threshold-margin="0.4">
                <pipeline>
                   <stages>
                      <cv-stage class="org.openpnp.vision.pipeline.stages.ImageCapture" name="0" enabled="true" default-light="false" settle-option="Settle" count="1">
@@ -3697,7 +3762,7 @@
                <runout-compensation-lookup class="java.util.HashMap">
                   <entry>
                      <string>N1</string>
-                     <runout-compensation class="org.openpnp.machine.reference.ReferenceNozzleTipCalibration$ModelBasedRunoutCameraOffsetCompensation" center-x="-0.049106866739892924" center-y="1.983401549048918E-18" radius="0.022387889855704758" phase-shift="153.434948822922" units="Millimeters" peak-error="0.015873799602794496" rms-error="0.0112063719104154"/>
+                     <runout-compensation class="org.openpnp.machine.reference.ReferenceNozzleTipCalibration$ModelBasedRunoutCameraOffsetCompensation" center-x="-0.02455343336994647" center-y="-0.0638389267618608" radius="0.06716366956711427" phase-shift="-45.0" units="Millimeters" peak-error="0.02224231370093183" rms-error="0.013863894499608028"/>
                   </entry>
                </runout-compensation-lookup>
                <minimum-detail-size value="0.1" units="Millimeters"/>
@@ -3736,11 +3801,11 @@
             <vision-template-dimension-y value="10.0" units="Millimeters"/>
             <vision-template-tolerance value="4.0" units="Millimeters"/>
             <vision-calibration-tolerance value="0.7" units="Millimeters"/>
-            <min-part-diameter value="1.8" units="Millimeters"/>
+            <min-part-diameter value="2.0" units="Millimeters"/>
             <max-part-diameter value="7.0" units="Millimeters"/>
             <max-part-height value="2.0" units="Millimeters"/>
             <max-pick-tolerance value="0.9" units="Millimeters"/>
-            <calibration angle-subdivisions="6" allow-misdetections="0" angle-start="-180.0" angle-stop="180.0" excenter-ratio="0.25" enabled="true" fail-homing="false" runout-compensation-algorithm="ModelCameraOffsetAffine" version="2.1" recalibration-trigger="NozzleTipChangeInJob" background-calibration-method="BrightnessAndKeyColor" background-min-hue="92" background-max-hue="114" background-tol-hue="8" background-min-saturation="152" background-max-saturation="255" background-tol-saturation="8" background-min-value="64" background-max-value="195" background-tol-value="8" background-diagnostics="&lt;html&gt;Non-color-keyed background elements are sufficiently dark. &lt;br/&gt;&lt;hr/&gt;The key color is sufficiently consistent.&lt;br/&gt;&lt;hr/&gt;The key color is sufficiently saturated.&lt;br/&gt;&lt;/html&gt;" min-background-mask-value="32" max-background-mask-value="128" background-worst-saturation="63" background-worst-hue-span="42" background-worst-value="127" offset-threshold="0.0" detection-threshold-margin="0.4">
+            <calibration angle-subdivisions="6" allow-misdetections="0" angle-start="-180.0" angle-stop="180.0" excenter-ratio="0.25" enabled="true" fail-homing="false" runout-compensation-algorithm="ModelCameraOffsetAffine" version="2.1" recalibration-trigger="NozzleTipChangeInJob" background-calibration-method="BrightnessAndKeyColor" background-min-hue="92" background-max-hue="114" background-tol-hue="8" background-min-saturation="151" background-max-saturation="255" background-tol-saturation="8" background-min-value="65" background-max-value="195" background-tol-value="8" background-diagnostics="&lt;html&gt;Non-color-keyed background elements are sufficiently dark. &lt;br/&gt;&lt;hr/&gt;The key color is sufficiently consistent.&lt;br/&gt;&lt;hr/&gt;The key color is sufficiently saturated.&lt;br/&gt;&lt;/html&gt;" min-background-mask-value="32" max-background-mask-value="128" background-worst-saturation="63" background-worst-hue-span="42" background-worst-value="127" offset-threshold="0.0" detection-threshold-margin="0.4">
                <pipeline>
                   <stages>
                      <cv-stage class="org.openpnp.vision.pipeline.stages.ImageCapture" name="0" enabled="true" default-light="false" settle-option="Settle" count="1">
@@ -3763,7 +3828,7 @@
                   </entry>
                   <entry>
                      <string>N2</string>
-                     <runout-compensation class="org.openpnp.machine.reference.ReferenceNozzleTipCalibration$ModelBasedRunoutCameraOffsetCompensation" center-x="-0.014732060021967884" center-y="-0.02455343336994645" radius="0.12860863579988918" phase-shift="72.89727103094764" units="Millimeters" peak-error="0.029971445742901743" rms-error="0.020318117455841958"/>
+                     <runout-compensation class="org.openpnp.machine.reference.ReferenceNozzleTipCalibration$ModelBasedRunoutCameraOffsetCompensation" center-x="-0.02455343336994645" center-y="-0.08839236013180726" radius="0.08670792456787048" phase-shift="173.6598082540901" units="Millimeters" peak-error="0.015425973120095112" rms-error="0.011013624515177595"/>
                   </entry>
                </runout-compensation-lookup>
                <minimum-detail-size value="0.2" units="Millimeters"/>
@@ -3806,7 +3871,7 @@
             <max-part-diameter value="8.0" units="Millimeters"/>
             <max-part-height value="4.0" units="Millimeters"/>
             <max-pick-tolerance value="0.9" units="Millimeters"/>
-            <calibration angle-subdivisions="6" allow-misdetections="0" angle-start="-180.0" angle-stop="180.0" excenter-ratio="0.25" enabled="true" fail-homing="false" runout-compensation-algorithm="ModelCameraOffsetAffine" version="2.1" recalibration-trigger="NozzleTipChangeInJob" background-calibration-method="BrightnessAndKeyColor" background-min-hue="94" background-max-hue="125" background-tol-hue="8" background-min-saturation="145" background-max-saturation="255" background-tol-saturation="8" background-min-value="47" background-max-value="200" background-tol-value="8" background-diagnostics="&lt;html&gt;Non-color-keyed background elements are quite dark. Perfect!&lt;br/&gt;&lt;hr/&gt;The key color is sufficiently consistent.&lt;br/&gt;&lt;hr/&gt;The key color is sufficiently saturated.&lt;br/&gt;&lt;/html&gt;" min-background-mask-value="32" max-background-mask-value="128" background-worst-saturation="63" background-worst-hue-span="42" background-worst-value="127" offset-threshold="0.0" detection-threshold-margin="0.4">
+            <calibration angle-subdivisions="6" allow-misdetections="0" angle-start="-180.0" angle-stop="180.0" excenter-ratio="0.25" enabled="true" fail-homing="false" runout-compensation-algorithm="ModelCameraOffsetAffine" version="2.1" recalibration-trigger="NozzleTipChangeInJob" background-calibration-method="BrightnessAndKeyColor" background-min-hue="92" background-max-hue="124" background-tol-hue="8" background-min-saturation="141" background-max-saturation="255" background-tol-saturation="8" background-min-value="43" background-max-value="201" background-tol-value="8" background-diagnostics="&lt;html&gt;Non-color-keyed background elements are quite dark. Perfect!&lt;br/&gt;&lt;hr/&gt;The key color is sufficiently consistent.&lt;br/&gt;&lt;hr/&gt;The key color is sufficiently saturated.&lt;br/&gt;&lt;/html&gt;" min-background-mask-value="32" max-background-mask-value="128" background-worst-saturation="63" background-worst-hue-span="42" background-worst-value="127" offset-threshold="0.0" detection-threshold-margin="0.4">
                <pipeline>
                   <stages>
                      <cv-stage class="org.openpnp.vision.pipeline.stages.ImageCapture" name="0" enabled="true" default-light="false" settle-option="Settle" count="1">
@@ -3829,7 +3894,7 @@
                   </entry>
                   <entry>
                      <string>N2</string>
-                     <runout-compensation class="org.openpnp.machine.reference.ReferenceNozzleTipCalibration$ModelBasedRunoutCameraOffsetCompensation" center-x="-0.06383892676186079" center-y="-0.11785648017574304" radius="0.1246504952975567" phase-shift="-137.48955292199915" units="Millimeters" peak-error="0.04790036166188584" rms-error="0.03559827778580729"/>
+                     <runout-compensation class="org.openpnp.machine.reference.ReferenceNozzleTipCalibration$ModelBasedRunoutCameraOffsetCompensation" center-x="-0.06383892676186079" center-y="-0.09330304680579656" radius="0.118465577875401" phase-shift="-171.2538377374448" units="Millimeters" peak-error="0.0538490168091328" rms-error="0.03597401278540988"/>
                   </entry>
                </runout-compensation-lookup>
                <minimum-detail-size value="0.2" units="Millimeters"/>
@@ -3934,7 +3999,7 @@
             <max-part-diameter value="30.0" units="Millimeters"/>
             <max-part-height value="4.0" units="Millimeters"/>
             <max-pick-tolerance value="1.2" units="Millimeters"/>
-            <calibration angle-subdivisions="6" allow-misdetections="0" angle-start="-180.0" angle-stop="180.0" excenter-ratio="0.25" enabled="true" fail-homing="false" runout-compensation-algorithm="ModelCameraOffsetAffine" version="2.1" recalibration-trigger="MachineHome" background-calibration-method="BrightnessAndKeyColor" background-min-hue="82" background-max-hue="124" background-tol-hue="8" background-min-saturation="73" background-max-saturation="249" background-tol-saturation="8" background-min-value="127" background-max-value="189" background-tol-value="8" background-diagnostics="&lt;html&gt;Non-color-keyed background elements are sufficiently dark. &lt;br/&gt;&lt;hr/&gt;The key color is not consistent enough.&lt;br/&gt;Check camera white balance (see the Wiki).&lt;br/&gt;Clean the nozzle tip. If it is shiny, make it dull.&lt;br/&gt;Eliminate light sources that reflect on the nozzle tip..&lt;br/&gt;&lt;/html&gt;" min-background-mask-value="32" max-background-mask-value="128" background-worst-saturation="63" background-worst-hue-span="42" background-worst-value="127" offset-threshold="0.0" detection-threshold-margin="0.4">
+            <calibration angle-subdivisions="6" allow-misdetections="0" angle-start="-180.0" angle-stop="180.0" excenter-ratio="0.25" enabled="true" fail-homing="false" runout-compensation-algorithm="ModelCameraOffsetAffine" version="2.1" recalibration-trigger="MachineHome" background-calibration-method="BrightnessAndKeyColor" background-min-hue="78" background-max-hue="120" background-tol-hue="8" background-min-saturation="63" background-max-saturation="204" background-tol-saturation="8" background-min-value="128" background-max-value="187" background-tol-value="8" background-diagnostics="&lt;html&gt;Non-color-keyed background elements are too bright.&lt;br/&gt;Try to eliminate highlights and reflections.&lt;br/&gt;Use a shade behind the nozzle.&lt;br/&gt;Renew the blackening of dark parts of the nozzle tip.&lt;br/&gt;Clean the nozzle tip. If it is shiny, make it dull.&lt;br/&gt;Eliminate light sources that reflect on the nozzle tip.&lt;/html&gt;" min-background-mask-value="32" max-background-mask-value="128" background-worst-saturation="63" background-worst-hue-span="42" background-worst-value="127" offset-threshold="0.0" detection-threshold-margin="0.4">
                <pipeline>
                   <stages>
                      <cv-stage class="org.openpnp.vision.pipeline.stages.ImageCapture" name="0" enabled="true" default-light="false" settle-option="Settle" count="1">
@@ -3953,7 +4018,7 @@
                <runout-compensation-lookup class="java.util.HashMap">
                   <entry>
                      <string>N1</string>
-                     <runout-compensation class="org.openpnp.machine.reference.ReferenceNozzleTipCalibration$ModelBasedRunoutCameraOffsetCompensation" center-x="-0.03928549339191433" center-y="-0.014732060021967872" radius="0.08174901525940383" phase-shift="123.69006752597979" units="Millimeters" peak-error="0.04749702638915225" rms-error="0.03476260039626811"/>
+                     <runout-compensation class="org.openpnp.machine.reference.ReferenceNozzleTipCalibration$ModelBasedRunoutCameraOffsetCompensation" center-x="0.024553433369946462" center-y="-0.16205266024164666" radius="0.05483890656410834" phase-shift="29.74488129694223" units="Millimeters" peak-error="0.23675936548364748" rms-error="0.1383679788015918"/>
                   </entry>
                </runout-compensation-lookup>
                <minimum-detail-size value="0.2" units="Millimeters"/>
@@ -3978,7 +4043,7 @@
             <vacuum-difference-part-off-high>0.0</vacuum-difference-part-off-high>
             <diameter-low value="0.0" units="Millimeters"/>
          </nozzle-tip>
-         <nozzle-tip class="org.openpnp.machine.reference.ReferenceNozzleTip" id="TIP176120e657ee851d" name="502b" pick-dwell-milliseconds="20" place-dwell-milliseconds="0" place-blow-off-level="2.0" vision-calibration="None" vision-calibration-trigger="Manual" vision-match-minimum-score="0.2" vision-calibration-max-passes="3" z-calibration-trigger="Manual" z-calibration-fail-homing="true" template-nozzle-tip="false" template-locked="false" establish-part-on-level="true" establish-part-off-level="false" part-off-probing-milliseconds="0" part-off-dwell-milliseconds="0" is-push-and-drag-allowed="false">
+         <nozzle-tip class="org.openpnp.machine.reference.ReferenceNozzleTip" id="TIP176120e657ee851d" name="502b" pick-dwell-milliseconds="20" place-dwell-milliseconds="0" place-blow-off-level="0.5" vision-calibration="None" vision-calibration-trigger="Manual" vision-match-minimum-score="0.2" vision-calibration-max-passes="3" z-calibration-trigger="Manual" z-calibration-fail-homing="true" template-nozzle-tip="false" template-locked="false" establish-part-on-level="true" establish-part-off-level="false" part-off-probing-milliseconds="0" part-off-dwell-milliseconds="0" is-push-and-drag-allowed="false">
             <changer-start-location units="Millimeters" x="0.0" y="0.0" z="0.0" rotation="0.0"/>
             <changer-start-to-mid-speed>1.0</changer-start-to-mid-speed>
             <changer-mid-location units="Millimeters" x="0.0" y="0.0" z="0.0" rotation="0.0"/>
@@ -3996,7 +4061,7 @@
             <max-part-diameter value="2.0" units="Millimeters"/>
             <max-part-height value="1.0" units="Millimeters"/>
             <max-pick-tolerance value="0.3" units="Millimeters"/>
-            <calibration angle-subdivisions="6" allow-misdetections="1" angle-start="-180.0" angle-stop="180.0" excenter-ratio="0.25" enabled="true" fail-homing="true" runout-compensation-algorithm="ModelCameraOffsetAffine" version="2.1" recalibration-trigger="NozzleTipChangeInJob" background-calibration-method="BrightnessAndKeyColor" background-min-hue="90" background-max-hue="114" background-tol-hue="8" background-min-saturation="146" background-max-saturation="255" background-tol-saturation="8" background-min-value="47" background-max-value="159" background-tol-value="8" background-diagnostics="&lt;html&gt;Non-color-keyed background elements are quite dark. Perfect!&lt;br/&gt;&lt;hr/&gt;The key color is sufficiently consistent.&lt;br/&gt;&lt;hr/&gt;The key color is sufficiently saturated.&lt;br/&gt;&lt;/html&gt;" min-background-mask-value="32" max-background-mask-value="128" background-worst-saturation="63" background-worst-hue-span="42" background-worst-value="127" offset-threshold="0.0" detection-threshold-margin="0.4">
+            <calibration angle-subdivisions="6" allow-misdetections="1" angle-start="-180.0" angle-stop="180.0" excenter-ratio="0.25" enabled="true" fail-homing="true" runout-compensation-algorithm="ModelCameraOffsetAffine" version="2.1" recalibration-trigger="NozzleTipChangeInJob" background-calibration-method="BrightnessAndKeyColor" background-min-hue="92" background-max-hue="114" background-tol-hue="8" background-min-saturation="144" background-max-saturation="255" background-tol-saturation="8" background-min-value="47" background-max-value="164" background-tol-value="8" background-diagnostics="&lt;html&gt;Non-color-keyed background elements are quite dark. Perfect!&lt;br/&gt;&lt;hr/&gt;The key color is sufficiently consistent.&lt;br/&gt;&lt;hr/&gt;The key color is sufficiently saturated.&lt;br/&gt;&lt;/html&gt;" min-background-mask-value="32" max-background-mask-value="128" background-worst-saturation="63" background-worst-hue-span="42" background-worst-value="127" offset-threshold="0.0" detection-threshold-margin="0.4">
                <pipeline>
                   <stages>
                      <cv-stage class="org.openpnp.vision.pipeline.stages.ImageCapture" name="0" enabled="true" default-light="false" settle-option="Settle" count="1">
@@ -4015,7 +4080,7 @@
                <runout-compensation-lookup class="java.util.HashMap">
                   <entry>
                      <string>N2</string>
-                     <runout-compensation class="org.openpnp.machine.reference.ReferenceNozzleTipCalibration$ModelBasedRunoutCameraOffsetCompensation" center-x="-0.019642746695957163" center-y="-0.029464120043935744" radius="0.12860863579988918" phase-shift="130.36453657309735" units="Millimeters" peak-error="0.027376389726497165" rms-error="0.017084938473702148"/>
+                     <runout-compensation class="org.openpnp.machine.reference.ReferenceNozzleTipCalibration$ModelBasedRunoutCameraOffsetCompensation" center-x="-0.004910686673989277" center-y="-0.11294579350175374" radius="0.1236411629346417" phase-shift="-144.46232220802563" units="Millimeters" peak-error="0.015279422878429276" rms-error="0.011707029263514784"/>
                   </entry>
                </runout-compensation-lookup>
                <minimum-detail-size value="0.1" units="Millimeters"/>
@@ -4029,6 +4094,68 @@
             <part-on-check-before-place>false</part-on-check-before-place>
             <vacuum-level-part-on-low>137.3</vacuum-level-part-on-low>
             <vacuum-level-part-on-high>200.0</vacuum-level-part-on-high>
+            <vacuum-difference-part-on-low>0.0</vacuum-difference-part-on-low>
+            <vacuum-difference-part-on-high>0.0</vacuum-difference-part-on-high>
+            <method-part-off>None</method-part-off>
+            <part-off-check-after-place>true</part-off-check-after-place>
+            <part-off-check-before-pick>true</part-off-check-before-pick>
+            <vacuum-level-part-off-low>0.0</vacuum-level-part-off-low>
+            <vacuum-level-part-off-high>0.0</vacuum-level-part-off-high>
+            <vacuum-difference-part-off-low>0.0</vacuum-difference-part-off-low>
+            <vacuum-difference-part-off-high>0.0</vacuum-difference-part-off-high>
+            <diameter-low value="0.0" units="Millimeters"/>
+         </nozzle-tip>
+         <nozzle-tip class="org.openpnp.machine.reference.ReferenceNozzleTip" id="TIP17c12fe4fc5680c2" name="503b" pick-dwell-milliseconds="100" place-dwell-milliseconds="10" place-blow-off-level="0.1" vision-calibration="None" vision-calibration-trigger="Manual" vision-match-minimum-score="0.2" vision-calibration-max-passes="3" z-calibration-trigger="Manual" z-calibration-fail-homing="true" template-nozzle-tip="false" template-locked="false" establish-part-on-level="true" establish-part-off-level="false" part-off-probing-milliseconds="0" part-off-dwell-milliseconds="0" is-push-and-drag-allowed="false">
+            <changer-start-location units="Millimeters" x="0.0" y="0.0" z="0.0" rotation="0.0"/>
+            <changer-start-to-mid-speed>1.0</changer-start-to-mid-speed>
+            <changer-mid-location units="Millimeters" x="0.0" y="0.0" z="0.0" rotation="0.0"/>
+            <changer-mid-to-mid-2-speed>1.0</changer-mid-to-mid-2-speed>
+            <changer-mid-location-2 units="Millimeters" x="0.0" y="0.0" z="0.0" rotation="0.0"/>
+            <changer-mid-2-to-end-speed>1.0</changer-mid-2-to-end-speed>
+            <changer-end-location units="Millimeters" x="0.0" y="0.0" z="0.0" rotation="0.0"/>
+            <touch-location units="Millimeters" x="0.0" y="0.0" z="0.0" rotation="0.0"/>
+            <vision-calibration-Z-adjust value="0.0" units="Millimeters"/>
+            <vision-template-dimension-x value="10.0" units="Millimeters"/>
+            <vision-template-dimension-y value="10.0" units="Millimeters"/>
+            <vision-template-tolerance value="4.0" units="Millimeters"/>
+            <vision-calibration-tolerance value="0.7" units="Millimeters"/>
+            <min-part-diameter value="2.0" units="Millimeters"/>
+            <max-part-diameter value="7.0" units="Millimeters"/>
+            <max-part-height value="2.0" units="Millimeters"/>
+            <max-pick-tolerance value="0.9" units="Millimeters"/>
+            <calibration angle-subdivisions="6" allow-misdetections="0" angle-start="-180.0" angle-stop="180.0" excenter-ratio="0.25" enabled="true" fail-homing="false" runout-compensation-algorithm="ModelCameraOffsetAffine" version="2.1" recalibration-trigger="MachineHome" background-calibration-method="BrightnessAndKeyColor" background-min-hue="90" background-max-hue="108" background-tol-hue="8" background-min-saturation="152" background-max-saturation="255" background-tol-saturation="8" background-min-value="65" background-max-value="195" background-tol-value="8" background-diagnostics="&lt;html&gt;Non-color-keyed background elements are sufficiently dark. &lt;br/&gt;&lt;hr/&gt;The key color is very consistent. Perfect!&lt;br/&gt;&lt;hr/&gt;The key color is sufficiently saturated.&lt;br/&gt;&lt;/html&gt;" min-background-mask-value="32" max-background-mask-value="128" background-worst-saturation="63" background-worst-hue-span="42" background-worst-value="127" offset-threshold="0.0" detection-threshold-margin="0.4">
+               <pipeline>
+                  <stages>
+                     <cv-stage class="org.openpnp.vision.pipeline.stages.ImageCapture" name="0" enabled="true" default-light="false" settle-option="Settle" count="1">
+                        <light class="java.lang.Boolean">true</light>
+                     </cv-stage>
+                     <cv-stage class="org.openpnp.vision.pipeline.stages.ImageWriteDebug" name="deb1" enabled="false" prefix="runout_calibration_source_" suffix=".png"/>
+                     <cv-stage class="org.openpnp.vision.pipeline.stages.BlurGaussian" name="2" enabled="false" kernel-size="7" property-name="BlurGaussian"/>
+                     <cv-stage class="org.openpnp.vision.pipeline.stages.DetectCircularSymmetry" name="results" enabled="true" min-diameter="30" max-diameter="50" max-distance="200" search-width="0" search-height="0" max-target-count="1" min-symmetry="1.2" corr-symmetry="0.0" outer-margin="0.2" inner-margin="0.4" sub-sampling="8" super-sampling="1" symmetry-score="OverallVarianceVsRingVarianceSum" property-name="nozzleTip" diagnostics="false" heat-map="false"/>
+                     <cv-stage class="org.openpnp.vision.pipeline.stages.DrawCircles" name="4" enabled="true" circles-stage-name="results" thickness="2">
+                        <color r="255" g="0" b="51" a="255"/>
+                        <center-color r="0" g="204" b="255" a="255"/>
+                     </cv-stage>
+                     <cv-stage class="org.openpnp.vision.pipeline.stages.ImageWriteDebug" name="deb1" enabled="false" prefix="runout_calibration_result_" suffix=".png"/>
+                  </stages>
+               </pipeline>
+               <runout-compensation-lookup class="java.util.HashMap">
+                  <entry>
+                     <string>N1</string>
+                     <runout-compensation class="org.openpnp.machine.reference.ReferenceNozzleTipCalibration$ModelBasedRunoutCameraOffsetCompensation" center-x="-0.0589282400878715" center-y="-0.05892824008787153" radius="0.10658767538041067" phase-shift="-100.30484646876604" units="Millimeters" peak-error="0.008964226950456365" rms-error="0.007710219783950819"/>
+                  </entry>
+               </runout-compensation-lookup>
+               <minimum-detail-size value="0.2" units="Millimeters"/>
+               <offset-threshold-length value="0.5" units="Millimeters"/>
+               <calibration-Z-offset value="0.0" units="Millimeters"/>
+               <calibration-tip-diameter value="0.5892824008787152" units="Millimeters"/>
+            </calibration>
+            <method-part-on>Absolute</method-part-on>
+            <part-on-check-after-pick>true</part-on-check-after-pick>
+            <part-on-check-align>false</part-on-check-align>
+            <part-on-check-before-place>false</part-on-check-before-place>
+            <vacuum-level-part-on-low>145.0</vacuum-level-part-on-low>
+            <vacuum-level-part-on-high>250.0</vacuum-level-part-on-high>
             <vacuum-difference-part-on-low>0.0</vacuum-difference-part-on-low>
             <vacuum-difference-part-on-high>0.0</vacuum-difference-part-on-high>
             <method-part-off>None</method-part-off>
