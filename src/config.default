@@ -49,16 +49,16 @@ z_axis_max_speed                             60000            # mm/min
 # X axis
 alpha_step_pin                               5.5              # Pin for alpha stepper step signal # TBD
 alpha_dir_pin                                5.0!             # Pin for alpha stepper direction
-alpha_en_pin                                 6.1!             # Pin for alpha enable pin # XYZ EN
-alpha_max_rate                               126000.0         # mm/min 132000 did stall (2200 in OpenPnP)
-alpha_acceleration                           23000.0          # 24500 did stall; 24000 does not usually stall
+alpha_en_pin                                 nc               # Pin for alpha enable pin 
+alpha_max_rate                               200000.0         #126000.0         # mm/min 132000 did stall (2200 in OpenPnP)
+alpha_acceleration                           50000.0          #23000.0          # 24500 did stall; 24000 does not usually stall
 
 # Y axis
 beta_step_pin                                5.4              # Pin for beta stepper step signal
 beta_dir_pin                                 5.1!             # Pin for beta stepper direction
 beta_en_pin                                  nc               # Pin for beta enable # unused
-beta_max_rate                                90000.0          # mm/min 102000 is ok (1700 in OpenPnP) Y is acceleration limited, not speed limited
-beta_acceleration                            7000.0           # 8250 did stall; 7875 does not usually stall
+beta_max_rate                                200000.0         #90000.0          # mm/min 102000 is ok (1700 in OpenPnP) Y is acceleration limited, not speed limited
+beta_acceleration                            50000.0          #7000.0           # 8250 did stall; 7875 does not usually stall
 
 # Z axis
 gamma_step_pin                               5.13             # Pin for gamma stepper step signal
@@ -91,9 +91,9 @@ epsilon_enable                               true
 
 # C axis: LPEELER
 zeta_steps_per_mm                            69.2642          # may be steps per degree for example
-zeta_step_pin                                5.3              # Pin for delta stepper step signal
-zeta_dir_pin                                 5.2              # Pin for delta stepper direction
-zeta_en_pin                                  nc               # Pin for delta enable
+zeta_step_pin                                5.3!             # Pin for delta stepper step signal
+zeta_dir_pin                                 5.2!             # Pin for delta stepper direction
+zeta_en_pin                                  6.1              # Pin for delta enable # XYZ EN
 zeta_current                                 0.5              # Z stepper motor current
 zeta_max_rate                                120000           # mm/min
 zeta_acceleration                            30000            # mm/sec^2
@@ -101,8 +101,8 @@ zeta_enable                                  true
 
 # D axis: RPEELER
 eta_steps_per_mm                             69.2642          # may be steps per degree for example
-eta_step_pin                                 5.7              # Pin for delta stepper step signal
-eta_dir_pin                                  5.6              # Pin for delta stepper direction
+eta_step_pin                                 5.7!             # Pin for delta stepper step signal
+eta_dir_pin                                  5.6!             # Pin for delta stepper direction
 eta_en_pin                                   nc               # Pin for delta enable
 eta_current                                  0.5              # Z stepper motor current
 eta_max_rate                                 120000           # mm/min
@@ -130,7 +130,7 @@ dfu_enable                                   false            # for linux develo
 
 kill_button_enable                           true             # set to true to enable a kill button
 kill_button_pin                              0.3              # kill button pin. default is same as pause button 2.12 (2.11 is another good choice)
-
+kill_button_poll_frequency                   20               # How often to poll. Default 5Hz, but if alarm is used on alpha/beta, we might want this higher.
 
 # Endstops
 endstops_enable                              true             # the endstop module is enabled by default and can be disabled here
@@ -146,6 +146,9 @@ alpha_fast_homing_rate_mm_s                  100               # feedrates in mm
 alpha_slow_homing_rate_mm_s                  25               # "
 alpha_homing_retract_mm                      5                # distance in mm
 alpha_max_travel                             525
+alpha_alarm_input_enable                     true             # set to true to enable a halt if driver issues alarm
+alpha_alarm_input_pin                        4.0              # alarm input pin. Handled like kill button.
+alpha_inpos_pin                              4.1              # driver in position
 
 # Y
 beta_min_endstop                             4.3!^            #
@@ -157,6 +160,9 @@ beta_fast_homing_rate_mm_s                   100              #
 beta_slow_homing_rate_mm_s                   25               #
 beta_homing_retract_mm                       5                #
 beta_max_travel                              475
+beta_alarm_input_enable                      true             # set to true to enable a halt if driver issues alarm
+beta_alarm_input_pin                         1.8              # alarm input pin. Handled like kill button.
+beta_inpos_pin                               1.9              # driver in position
 
 # Z
 gamma_min_endstop                            2.13!^           # 
@@ -212,6 +218,7 @@ switch.vac.input_off_command                 M809
 switch.vac.output_pin                        4.5!
 switch.vac.output_type                       hwpwm
 switch.vac.pwm_period_ms                     0.0625 # 16kHz
+switch.vac.input_pin                         2.0!^                # VAC Pump inhibit, active high
 
 switch.ledup.enable                          true
 switch.ledup.input_on_command                M810

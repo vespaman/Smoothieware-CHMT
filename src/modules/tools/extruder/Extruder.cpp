@@ -34,6 +34,7 @@
 #define step_pin_checksum                    CHECKSUM("step_pin")
 #define dir_pin_checksum                     CHECKSUM("dir_pin")
 #define en_pin_checksum                      CHECKSUM("en_pin")
+#define inpos_pin_checksum                   CHECKSUM("inpos_pin")
 #define max_speed_checksum                   CHECKSUM("max_speed")
 #define x_offset_checksum                    CHECKSUM("x_offset")
 #define y_offset_checksum                    CHECKSUM("y_offset")
@@ -88,11 +89,12 @@ void Extruder::on_module_loaded()
 void Extruder::config_load()
 {
 
-    Pin step_pin, dir_pin, en_pin;
+    Pin step_pin, dir_pin, en_pin, inpos_pin;
     step_pin.from_string( THEKERNEL->config->value(extruder_checksum, this->identifier, step_pin_checksum          )->by_default("nc" )->as_string())->as_output();
     dir_pin.from_string(  THEKERNEL->config->value(extruder_checksum, this->identifier, dir_pin_checksum           )->by_default("nc" )->as_string())->as_output();
     en_pin.from_string(   THEKERNEL->config->value(extruder_checksum, this->identifier, en_pin_checksum            )->by_default("nc" )->as_string())->as_output();
-
+    inpos_pin.from_string(THEKERNEL->config->value(extruder_checksum, this->identifier, inpos_pin_checksum         )->by_default("nc" )->as_string())->as_output();
+    
     float steps_per_millimeter = THEKERNEL->config->value(extruder_checksum, this->identifier, steps_per_mm_checksum)->by_default(1)->as_number();
     float acceleration         = THEKERNEL->config->value(extruder_checksum, this->identifier, acceleration_checksum)->by_default(1000)->as_number();
 
@@ -113,7 +115,7 @@ void Extruder::config_load()
     }
 
     // Stepper motor object for the extruder
-    stepper_motor = new StepperMotor(step_pin, dir_pin, en_pin);
+    stepper_motor = new StepperMotor(step_pin, dir_pin, en_pin, inpos_pin);
     motor_id = THEROBOT->register_motor(stepper_motor);
 
     stepper_motor->set_max_rate(THEKERNEL->config->value(extruder_checksum, this->identifier, max_speed_checksum)->by_default(1000)->as_number());

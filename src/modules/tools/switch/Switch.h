@@ -46,6 +46,7 @@ class Switch : public Module {
         void dragpin_try_release(void *argument);
         Pin       input_pin;
         float     switch_value;
+        float     v_save;
         OUTPUT_TYPE output_type;
         union {
             Pin          *digital_pin;

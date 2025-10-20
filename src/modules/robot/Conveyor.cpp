@@ -27,6 +27,11 @@
 
 #include "mbed.h"
 
+// remove when tested!
+//~ #include "gpio.h"
+//~ GPIO general_debug_pin( PG_10 );
+//~ #define SET_GENERAL_DEBUG_PIN(n) {if(n) general_debug_pin.set(); else general_debug_pin.clear(); }
+
 #define planner_queue_size_checksum CHECKSUM("planner_queue_size")
 #define queue_delay_time_ms_checksum CHECKSUM("queue_delay_time_ms")
 
@@ -74,6 +79,11 @@ void Conveyor::on_module_loaded()
     //THEKERNEL->step_ticker->finished_fnc = std::bind( &Conveyor::all_moves_finished, this);
     queue_size = THEKERNEL->config->value(planner_queue_size_checksum)->by_default(32)->as_number();
     queue_delay_time_ms = THEKERNEL->config->value(queue_delay_time_ms_checksum)->by_default(100)->as_number();
+//~ #ifdef SET_GENERAL_DEBUG_PIN
+    //~ general_debug_pin.output();
+    //~ general_debug_pin= 0;
+//~ #endif
+    
 }
 
 // we allocate the queue here after config is completed so we do not run out of memory during config
@@ -118,7 +128,7 @@ bool Conveyor::is_idle() const
 {
     if(queue.is_empty()) {
         for(auto &a : THEROBOT->actuators) {
-            if(a->is_moving()) return false;
+            if(a->is_moving() || !a->inpos() ) return false;
         }
         return true;
     }
@@ -155,6 +165,7 @@ void Conveyor::queue_head_block()
 {
     // upstream caller will block on this until there is room in the queue
     while (queue.is_full() && !THEKERNEL->is_halted()) {
+//        SET_GENERAL_DEBUG_PIN(1);
         //check_queue();
         THEKERNEL->call_event(ON_IDLE, this); // will call check_queue();
     }
@@ -165,7 +176,7 @@ void Conveyor::queue_head_block()
         queue.head_ref()->clear();
         return; // if we got a halt then we are done here
     }
-
+//    SET_GENERAL_DEBUG_PIN(0);
     queue.produce_head();
 
     // not sure if this is the correct place but we need to turn on the motors if they were not already on

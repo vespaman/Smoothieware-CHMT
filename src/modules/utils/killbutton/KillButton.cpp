@@ -19,6 +19,10 @@ using namespace std;
 #define pause_button_pin_checksum    CHECKSUM("pause_button_pin")
 #define kill_button_pin_checksum     CHECKSUM("kill_button_pin")
 #define poll_frequency_checksum      CHECKSUM("kill_button_poll_frequency")
+#define alpha_alarm_input_enable_checksum     CHECKSUM("alpha_alarm_input_enable")
+#define alpha_alarm_input_pin_checksum        CHECKSUM("alpha_alarm_input_pin")
+#define beta_alarm_input_enable_checksum      CHECKSUM("beta_alarm_input_enable")
+#define beta_alarm_input_pin_checksum         CHECKSUM("beta_alarm_input_pin")
 
 KillButton::KillButton()
 {
@@ -35,17 +39,20 @@ void KillButton::on_module_loaded()
     }
     this->unkill_enable = THEKERNEL->config->value( unkill_checksum )->by_default(true)->as_bool();
     this->toggle_enable = THEKERNEL->config->value( toggle_checksum )->by_default(false)->as_bool();
-
+    this->alpha_alarm_enable = THEKERNEL->config->value( alpha_alarm_input_enable_checksum )->by_default(true)->as_bool();
+    this->beta_alarm_enable = THEKERNEL->config->value( beta_alarm_input_enable_checksum )->by_default(true)->as_bool(); 
     Pin pause_button;
     pause_button.from_string( THEKERNEL->config->value( pause_button_pin_checksum )->by_default("2.12")->as_string())->as_input(); // @DEPRECATED
     this->kill_button.from_string( THEKERNEL->config->value( kill_button_pin_checksum )->by_default("nc")->as_string())->as_input();
+    this->alpha_alarm.from_string( THEKERNEL->config->value( alpha_alarm_input_pin_checksum )->by_default("nc")->as_string())->as_input();
+    this->beta_alarm.from_string( THEKERNEL->config->value( beta_alarm_input_pin_checksum )->by_default("nc")->as_string())->as_input();
 
     if(!this->kill_button.connected() && pause_button.connected()) {
         // use pause button for kill button if kill button not specifically defined
         this->kill_button = pause_button;
     }
 
-    if(!this->kill_button.connected()) {
+    if(!this->kill_button.connected() && !this->alpha_alarm_enable && !this->beta_alarm_enable) {
         delete this;
         return;
     }
@@ -83,6 +90,8 @@ uint32_t KillButton::button_tick(uint32_t dummy)
     switch(state) {
             case IDLE:
                 if(!this->kill_button.get()) state= KILL_BUTTON_DOWN;
+                else if(this->alpha_alarm_enable && !this->alpha_alarm.get()) state= KILL_BUTTON_DOWN;
+                else if(this->beta_alarm_enable && !this->beta_alarm.get()) state= KILL_BUTTON_DOWN;
                 else if(unkill_enable && !toggle_enable && killed) state= KILLED_BUTTON_UP; // allow kill button to unkill if kill was created from some other source
                 break;
             case KILL_BUTTON_DOWN:

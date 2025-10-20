@@ -12,6 +12,8 @@ class KillButton : public Module {
 
     private:
         Pin kill_button;
+        Pin alpha_alarm;
+        Pin beta_alarm;
         enum STATE {
             IDLE,
             KILL_BUTTON_DOWN,
@@ -28,6 +30,8 @@ class KillButton : public Module {
             volatile STATE state:4;
             bool unkill_enable:1;
             bool toggle_enable:1;
+            bool alpha_alarm_enable:1;
+            bool beta_alarm_enable:1;
         };
         
         uint32_t poll_frequency;

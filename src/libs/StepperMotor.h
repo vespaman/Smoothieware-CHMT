@@ -12,7 +12,7 @@
 
 class StepperMotor  : public Module {
     public:
-        StepperMotor(Pin& step, Pin& dir, Pin& en);
+        StepperMotor(Pin& step, Pin& dir, Pin& en, Pin& inpos);
         ~StepperMotor();
 
         void set_motor_id(uint8_t id) { motor_id= id; }
@@ -28,6 +28,7 @@ class StepperMotor  : public Module {
         void enable(bool state) { en_pin.set(!state); };
         bool is_enabled() const { return !en_pin.get(); };
         bool is_moving() const { return moving; };
+        bool inpos() { return inpos_pin.connected()?!inpos_pin.get():true; };
         void start_moving() { moving= true; }
         void stop_moving() { moving= false; }
 
@@ -64,6 +65,7 @@ class StepperMotor  : public Module {
         Pin step_pin;
         Pin dir_pin;
         Pin en_pin;
+        Pin inpos_pin;
 
         float steps_per_second;
         float steps_per_mm;

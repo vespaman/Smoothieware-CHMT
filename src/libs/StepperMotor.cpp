@@ -13,7 +13,7 @@
 #include <math.h>
 #include "mbed.h"
 
-StepperMotor::StepperMotor(Pin &step, Pin &dir, Pin &en) : step_pin(step), dir_pin(dir), en_pin(en)
+StepperMotor::StepperMotor(Pin &step, Pin &dir, Pin &en, Pin &inpos) : step_pin(step), dir_pin(dir), en_pin(en), inpos_pin(inpos)
 {
     if(en.connected()) {
         set_high_on_debug(en.port_number, en.pin);

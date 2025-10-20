@@ -137,6 +137,7 @@ void Robot::on_module_loaded()
     CHECKSUM(X "_step_pin"),        \
     CHECKSUM(X "_dir_pin"),         \
     CHECKSUM(X "_en_pin"),          \
+    CHECKSUM(X "_inpos_pin"),       \
     CHECKSUM(X "_steps_per_mm"),    \
     CHECKSUM(X "_max_rate"),        \
     CHECKSUM(X "_acceleration")     \
@@ -231,12 +232,12 @@ void Robot::load_config()
 
     // make each motor
     for (size_t a = 0; a < MAX_ROBOT_ACTUATORS; a++) {
-        Pin pins[3]; //step, dir, enable
-        for (size_t i = 0; i < 3; i++) {
+        Pin pins[4]; //step, dir, enable, inpos
+        for (size_t i = 0; i < 4; i++) {
             pins[i].from_string(THEKERNEL->config->value(motor_checksums[a][i])->by_default("nc")->as_string())->as_output();
         }
 
-        if(!pins[0].connected() || !pins[1].connected()) { // step and dir must be defined, but enable is optional
+        if(!pins[0].connected() || !pins[1].connected()) { // step and dir must be defined, but enable and 'in position' is optional
             if(a <= Z_AXIS) {
                 THEKERNEL->streams->printf("FATAL: motor %c is not defined in config\n", 'X'+a);
                 n_motors= a; // we only have this number of motors
@@ -245,7 +246,7 @@ void Robot::load_config()
             break; // if any pin is not defined then the axis is not defined (and axis need to be defined in contiguous order)
         }
 
-        StepperMotor *sm = new StepperMotor(pins[0], pins[1], pins[2]);
+        StepperMotor *sm = new StepperMotor(pins[0], pins[1], pins[2], pins[3]);
         // register this motor (NB This must be 0,1,2) of the actuators array
         uint8_t n= register_motor(sm);
         if(n != a) {
@@ -254,9 +255,9 @@ void Robot::load_config()
             return;
         }
 
-        actuators[a]->change_steps_per_mm(THEKERNEL->config->value(motor_checksums[a][3])->by_default(a == 2 ? 2560.0F : 80.0F)->as_number());
-        actuators[a]->set_max_rate(THEKERNEL->config->value(motor_checksums[a][4])->by_default(30000.0F)->as_number()/60.0F); // it is in mm/min and converted to mm/sec
-        actuators[a]->set_acceleration(THEKERNEL->config->value(motor_checksums[a][5])->by_default(NAN)->as_number()); // mm/secs²
+        actuators[a]->change_steps_per_mm(THEKERNEL->config->value(motor_checksums[a][4])->by_default(a == 2 ? 2560.0F : 80.0F)->as_number());
+        actuators[a]->set_max_rate(THEKERNEL->config->value(motor_checksums[a][5])->by_default(30000.0F)->as_number()/60.0F); // it is in mm/min and converted to mm/sec
+        actuators[a]->set_acceleration(THEKERNEL->config->value(motor_checksums[a][6])->by_default(NAN)->as_number()); // mm/secs²
     }
 
     check_max_actuator_speeds(); // check the configs are sane

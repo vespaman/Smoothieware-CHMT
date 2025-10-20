@@ -283,10 +283,13 @@ void Switch::on_gcode_received(void *argument)
                 float v = gcode->get_value('S');
                 if(v > 100) v= 100;
                 else if(v < 0) v= 0;
+                this->v_save = v;
                 this->pwm_write(v/100.0F);
                 this->switch_state= (v != 0);
                 if (this->is_a_dragpin)
                     this->activation_start_time = 0;
+                if(this->input_pin.connected())
+                    this->switch_value = v;
             } else {
                 if (this->is_a_dragpin)
                 {
